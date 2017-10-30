@@ -2,11 +2,14 @@
 
 set -e
 
+cd /root/devdemo/skate
+
 # Build the project and docker images
 mvn clean install
 
 # Export the active docker machine IP
-export DOCKER_IP=$(docker-machine ip $(docker-machine active))
+#export DOCKER_IP=$(docker-machine ip $(docker-machine active))
+export DOCKER_IP=192.168.31.46
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
 DOCKER_IP=${DOCKER_IP:-0.0.0.0}
