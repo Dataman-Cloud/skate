@@ -1,8 +1,8 @@
 // Author: linzhaoming
 // Date: 2017-01-05
-// Usage: JenkinsµÄ×Ô¶¯Pipeline¹¹½¨½Å±¾
+// Usage: Jenkinsçš„è‡ªåŠ¨Pipelineæ„å»ºè„šæœ¬
 
-//¶¨Òå³£Á¿ºÍ±äÁ¿
+//å®šä¹‰å¸¸é‡å’Œå˜é‡
 def projectName = "skate"
 def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
 def registryUrl = "192.168.31.34";
@@ -11,7 +11,7 @@ def registryUsername = "gzteam"
 def registryPassword = "Dataman1234"
 def recvEmail = "dxlu@dataman-inc.com"
 
-//¶¨Òå°ó¶¨Óò±äÁ¿
+//å®šä¹‰ç»‘å®šåŸŸå˜é‡
 publicRegistryUrl = "demoregistry.dataman-inc.com"
 publicImagePrefix = "${publicRegistryUrl}/skate"
 publicRegistryUsername = "guangzhou"
@@ -21,12 +21,12 @@ publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releas
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 dockfilepath = "/src/main/docker/"
 
-node("build") {
+node("master") {
     stage("Common") {
         echo "Environment: ${ENV}, Version: ${VERSION}, SubProject: ${SUB_PROJECT}"
-//hygieiaDeployPublishStep applicationName: 'skate', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: '¹¹½¨´úÂë'
-        //Ç°ÖÃ¼ì²é
-        //1. develop·ÖÖ§²»Ğè´øÉÏ°æ±¾ºÅ, master·ÖÖ§ĞèÒª´øÉÏ°æ±¾ºÅ
+//hygieiaDeployPublishStep applicationName: 'skate', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: 'æ„å»ºä»£ç '
+        //å‰ç½®æ£€æŸ¥
+        //1. developåˆ†æ”¯ä¸éœ€å¸¦ä¸Šç‰ˆæœ¬å·, masteråˆ†æ”¯éœ€è¦å¸¦ä¸Šç‰ˆæœ¬å·
         if (params.BRANCH != "origin/master") {
             if (params.VERSION != "") {
                 error("Only [master] branch can have version. Please check your input!")
@@ -41,20 +41,20 @@ node("build") {
             }
         }
 
-        //2. »·¾³¼ì²é
+        //2. ç¯å¢ƒæ£€æŸ¥
         if (params.ENV != "test" && params.ENV != "release") {
             error("[Environment] should be test, release")
         }
 
-        //3. ·¢²¼masterµ½Éú²úÖ®Ç°½øĞĞ¶ş´ÎÈ·ÈÏ
+        //3. å‘å¸ƒmasteråˆ°ç”Ÿäº§ä¹‹å‰è¿›è¡ŒäºŒæ¬¡ç¡®è®¤
         if (params.ENV == "release") {
             try {
                 timeout(time: 15, unit: 'SECONDS') {
-                    input message: '½«»áÖ±½ÓÖ±½Ó·¢²¼Release, È·¶¨Òª·¢²¼Âğ',
+                    input message: 'å°†ä¼šç›´æ¥ç›´æ¥å‘å¸ƒRelease, ç¡®å®šè¦å‘å¸ƒå—',
                             parameters: [[$class      : 'BooleanParameterDefinition',
                                           defaultValue: false,
-                                          description : 'µã»÷½«»á·¢²¼Release',
-                                          name        : '·¢²¼Release']]
+                                          description : 'ç‚¹å‡»å°†ä¼šå‘å¸ƒRelease',
+                                          name        : 'å‘å¸ƒRelease']]
                 }
             } catch (err) {
                 def user = err.getCauses()[0].getUser()
@@ -64,16 +64,16 @@ node("build") {
     }
 }
 
-//1. Ê¹ÓÃ¹¹½¨Node½øĞĞ¹¹½¨
+//1. ä½¿ç”¨æ„å»ºNodeè¿›è¡Œæ„å»º
 if (params.ENV != "release") {
-    node("build") {
+    node("master") {
         stage("Test-Build") {
-//	hygieiaDeployPublishStep applicationName: 'skate', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: '¹¹½¨³ÌĞò°ü'
-            // 1. ´ÓGitÖĞclone´úÂë
+//	hygieiaDeployPublishStep applicationName: 'skate', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: 'æ„å»ºç¨‹åºåŒ…'
+            // 1. ä»Gitä¸­cloneä»£ç 
             git branch: "dev", url: "${gitRepo}"
 
             if (params.SUB_PROJECT == "all") {
-                // 2. ÔËĞĞMaven¹¹½¨
+                // 2. è¿è¡ŒMavenæ„å»º
                 sh "mvn clean package deploy -Dspring.profiles.active=docker"
             } else {
                 sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=docker"
@@ -127,7 +127,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "config-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("Img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -135,7 +135,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "discovery-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("Img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -143,16 +143,16 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "hystrix-dashboard") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("Img-Hystrix") {
-                // 4. ¹¹½¨Image, ²¢pushµ½RegistryÖĞ
+                // 4. æ„å»ºImage, å¹¶pushåˆ°Registryä¸­
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "edge-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
             stage("Img-Edge") {
                 sh "docker build -t ${imagePrefix}/edge-service edge-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -160,7 +160,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "user-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
             stage("Img-User") {
                 sh "docker build -t ${imagePrefix}/user-service user-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -168,7 +168,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "account-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
             stage("Img-Account") {
                 sh "docker build -t ${imagePrefix}/account-service account-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -176,7 +176,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "shopping-cart-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
             stage("Img-ShoopingCart") {
                 sh "docker build -t ${imagePrefix}/shopping-cart-service shopping-cart-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -184,7 +184,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "catalog-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
             stage("Img-Catalog") {
                 sh "docker build -t ${imagePrefix}/catalog-service catalog-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -192,15 +192,15 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "inventory-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
             stage("Img-Inventory") {
-								sh "docker build -t ${imagePrefix}/inventory-service inventory-service/{dockfilepath}"
-								sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker build -t ${imagePrefix}/inventory-service inventory-service/{dockfilepath}"
+                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/inventory-service"
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "order-service") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
             stage("Img-Order") {
                 sh "docker build -t ${imagePrefix}/order-service order-service/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -208,7 +208,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" or params.SUB_PROJECT == "online-store-web") ) {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
             stage("Img-Online-Store") {
                 sh "docker build -t ${imagePrefix}/online-store-web online-store-web/{dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
@@ -218,7 +218,7 @@ if (params.ENV != "release") {
     }
 }
 
-//3. ·¢²¼µ½²âÊÔ(test)»·¾³: Swarm¼¯Èº
+//3. å‘å¸ƒåˆ°æµ‹è¯•(test)ç¯å¢ƒ: Swarmé›†ç¾¤
 if (params.ENV == "test") {
     node("skate-test") {
         git branch: "dev", url: "${gitRepo}"
@@ -226,87 +226,87 @@ if (params.ENV == "test") {
         sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
-              sh "docker-compose -f docker-compose.yml pull config-service"
-              sh "docker-compose -f docker-compose.yml stop config-service"
-              sh "docker-compose -f docker-compose.yml rm -f config-service"
-              sh "docker-compose -f docker-compose.yml up -d config-service"
+            sh "docker-compose -f docker-compose.yml pull config-service"
+            sh "docker-compose -f docker-compose.yml stop config-service"
+            sh "docker-compose -f docker-compose.yml rm -f config-service"
+            sh "docker-compose -f docker-compose.yml up -d config-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service") {
-              sh "docker-compose -f docker-compose.yml pull discovery-service"
-              sh "docker-compose -f docker-compose.yml stop discovery-service"
-              sh "docker-compose -f docker-compose.yml rm -f discovery-service"
-              sh "docker-compose -f docker-compose.yml up -d discovery-service"
+            sh "docker-compose -f docker-compose.yml pull discovery-service"
+            sh "docker-compose -f docker-compose.yml stop discovery-service"
+            sh "docker-compose -f docker-compose.yml rm -f discovery-service"
+            sh "docker-compose -f docker-compose.yml up -d discovery-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-dashboard") {
-              sh "docker-compose -f docker-compose.yml pull edge-dashboard"
-              sh "docker-compose -f docker-compose.yml stop edge-dashboard"
-              sh "docker-compose -f docker-compose.yml rm -f edge-dashboard"
-              sh "docker-compose -f docker-compose.yml up -d edge-dashboard"
+            sh "docker-compose -f docker-compose.yml pull edge-dashboard"
+            sh "docker-compose -f docker-compose.yml stop edge-dashboard"
+            sh "docker-compose -f docker-compose.yml rm -f edge-dashboard"
+            sh "docker-compose -f docker-compose.yml up -d edge-dashboard"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
-              sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
-              sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
-              sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
-              sh "docker-compose -f docker-compose.yml up -d hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml up -d hystrix-dashboard"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
-              sh "docker-compose -f docker-compose.yml pull user-service"
-              sh "docker-compose -f docker-compose.yml stop user-service"
-              sh "docker-compose -f docker-compose.yml rm -f user-service"
-              sh "docker-compose -f docker-compose.yml up -d user-service"
+            sh "docker-compose -f docker-compose.yml pull user-service"
+            sh "docker-compose -f docker-compose.yml stop user-service"
+            sh "docker-compose -f docker-compose.yml rm -f user-service"
+            sh "docker-compose -f docker-compose.yml up -d user-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
-              sh "docker-compose -f docker-compose.yml pull account-service"
-              sh "docker-compose -f docker-compose.yml stop account-service"
-              sh "docker-compose -f docker-compose.yml rm -f account-service"
-              sh "docker-compose -f docker-compose.yml up -d account-service"
+            sh "docker-compose -f docker-compose.yml pull account-service"
+            sh "docker-compose -f docker-compose.yml stop account-service"
+            sh "docker-compose -f docker-compose.yml rm -f account-service"
+            sh "docker-compose -f docker-compose.yml up -d account-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
-              sh "docker-compose -f docker-compose.yml pull shopping-cart-service"
-              sh "docker-compose -f docker-compose.yml stop shopping-cart-service"
-              sh "docker-compose -f docker-compose.yml rm -f shopping-cart-service"
-              sh "docker-compose -f docker-compose.yml up -d shopping-cart-service"
+            sh "docker-compose -f docker-compose.yml pull shopping-cart-service"
+            sh "docker-compose -f docker-compose.yml stop shopping-cart-service"
+            sh "docker-compose -f docker-compose.yml rm -f shopping-cart-service"
+            sh "docker-compose -f docker-compose.yml up -d shopping-cart-service"
         }
 
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
-              sh "docker-compose -f docker-compose.yml pull catalog-service"
-              sh "docker-compose -f docker-compose.yml stop catalog-service"
-              sh "docker-compose -f docker-compose.yml rm -f catalog-service"
-              sh "docker-compose -f docker-compose.yml up -d catalog-service"
+            sh "docker-compose -f docker-compose.yml pull catalog-service"
+            sh "docker-compose -f docker-compose.yml stop catalog-service"
+            sh "docker-compose -f docker-compose.yml rm -f catalog-service"
+            sh "docker-compose -f docker-compose.yml up -d catalog-service"
         }
 
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
-              sh "docker-compose -f docker-compose.yml pull inventory-service"
-              sh "docker-compose -f docker-compose.yml stop inventory-service"
-              sh "docker-compose -f docker-compose.yml rm -f inventory-service"
-              sh "docker-compose -f docker-compose.yml up -d inventory-service"
+            sh "docker-compose -f docker-compose.yml pull inventory-service"
+            sh "docker-compose -f docker-compose.yml stop inventory-service"
+            sh "docker-compose -f docker-compose.yml rm -f inventory-service"
+            sh "docker-compose -f docker-compose.yml up -d inventory-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-              sh "docker-compose -f docker-compose.yml pull order-service"
-              sh "docker-compose -f docker-compose.yml stop order-service"
-              sh "docker-compose -f docker-compose.yml rm -f order-service"
-              sh "docker-compose -f docker-compose.yml up -d order-service"
+            sh "docker-compose -f docker-compose.yml pull order-service"
+            sh "docker-compose -f docker-compose.yml stop order-service"
+            sh "docker-compose -f docker-compose.yml rm -f order-service"
+            sh "docker-compose -f docker-compose.yml up -d order-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
-              sh "docker-compose -f docker-compose.yml pull online-store-web"
-              sh "docker-compose -f docker-compose.yml stop online-store-web"
-              sh "docker-compose -f docker-compose.yml rm -f online-store-web"
-              sh "docker-compose -f docker-compose.yml up -d online-store-web"
+            sh "docker-compose -f docker-compose.yml pull online-store-web"
+            sh "docker-compose -f docker-compose.yml stop online-store-web"
+            sh "docker-compose -f docker-compose.yml rm -f online-store-web"
+            sh "docker-compose -f docker-compose.yml up -d online-store-web"
         }
     }
 }
 
-/** Ìæ»»°æ±¾ºÅ*/
+/** æ›¿æ¢ç‰ˆæœ¬å·*/
 def replaceVersion() {
     sh "echo Replace master-SNAPSHOT to ${VERSION} in pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' pom.xml"
@@ -323,24 +323,24 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
 }
 
-//5. ·¢²¼µ½Éú²ú(prod)»·¾³: Ö»ÓĞ´ò°ümaster·ÖÖ§, ²Å½øĞĞprod»·¾³²¿Êğ
+//5. å‘å¸ƒåˆ°ç”Ÿäº§(prod)ç¯å¢ƒ: åªæœ‰æ‰“åŒ…masteråˆ†æ”¯, æ‰è¿›è¡Œprodç¯å¢ƒéƒ¨ç½²
 if (params.ENV == "release" && params.BRANCH == "origin/master") {
-    node("build") {
+    node("master") {
         def tagVersion = "${projectName}-V${VERSION}"
 
         stage("Prepare") {
             sh "echo Releasing for ${BRANCH}, version is ${VERSION}"
 
-            //1. ´Ódevelop·ÖÖ§ÖĞ»ñÈ¡´úÂë
+            //1. ä»developåˆ†æ”¯ä¸­è·å–ä»£ç 
             git branch: "master", url: "${gitRepo}"
             sh "git pull origin dev"
 
-            //2. Ìæ»»°æ±¾ºÅ
+            //2. æ›¿æ¢ç‰ˆæœ¬å·
             replaceVersion();
         }
 
         stage("Release-Build") {
-            //3. Maven¹¹½¨;¹¹½¨Image, ²¢pushµ½RegistryÖĞ
+            //3. Mavenæ„å»º;æ„å»ºImage, å¹¶pushåˆ°Registryä¸­
             sh "mvn -DskipTests clean package"
             sh "mvn -DskipTests deploy"
         }
@@ -380,30 +380,30 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Cleanup") {
-            //5. ´òtag
+            //5. æ‰“tag
             sh "git tag ${tagVersion} -m 'Release ${tagVersion}'"
             sh "git push origin master"
             sh "git push origin ${tagVersion}"
 
-            //6. »Ö¸´ÖØÖÃ
+            //6. æ¢å¤é‡ç½®
             sh "echo 'Reset the version to master-SNAPSHOT'"
             sh "git reset --hard"
         }
 
 
-        //ÍÆ¹«Íøimage²Ö¿â
+        //æ¨å…¬ç½‘imageä»“åº“
         //pushImageToPublicRegistry();
 
-        //ÍÆ¹«ÍøMaven²Ö¿â
+        //æ¨å…¬ç½‘Mavenä»“åº“
         //push3rdJarToPublicMaven();
     }
 
     node("skate_release") {
         stage("Prepare-Stage") {
-            //1. ´Ódevelop·ÖÖ§ÖĞ»ñÈ¡´úÂë
+            //1. ä»developåˆ†æ”¯ä¸­è·å–ä»£ç 
             git branch: "dev", url: "${gitRepo}"
 
-            //2. Ìæ»»°æ±¾ºÅ
+            //2. æ›¿æ¢ç‰ˆæœ¬å·
             replaceVersion();
         }
 
@@ -417,7 +417,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Notification") {
-//	hygieiaDeployPublishStep applicationName: 'octopus', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: '·¢ËÍÓÊ¼ş'
+//	hygieiaDeployPublishStep applicationName: 'octopus', artifactDirectory: './', artifactGroup: 'com.dataman.app', artifactName: '*.*', artifactVersion: '${VERSION}', buildStatus: 'InProgress', environmentName: 'å‘é€é‚®ä»¶'
             mail(to: "${recvEmail}",
                     subject: "Project '${env.JOB_NAME}' (${env.BUILD_NUMBER}) Release to ${VERSION}",
                     body: "Please go to ${env.BUILD_URL}.",
@@ -426,20 +426,20 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
     }
 }
 
-/** ÍÆ3rdÒÀÀµ°üµ½¹«ÍøµÄMaven²Ö¿â **/
+/** æ¨3rdä¾èµ–åŒ…åˆ°å…¬ç½‘çš„Mavenä»“åº“ **/
 def push3rdJarToPublicMaven() {
 
     if (params.IS_PUSH == "Yes") {
-        // ÍÆËÍÒÀÀµ°üµ½¹«Íø²Ö¿â£¬²»ÄÜ°üº¬ÓĞÔ´Âë
+        // æ¨é€ä¾èµ–åŒ…åˆ°å…¬ç½‘ä»“åº“ï¼Œä¸èƒ½åŒ…å«æœ‰æºç 
         stage("Push-public-parent") {
-            //ÍÆËÍskate-parent
-            //ÓÉÓÚparentÃ»ÓĞjar°ü£¬¶øÇÒmvnÃüÁîÒ»¶¨ÒªĞ´-Dfile²ÎÊı£¬ËùÒÔ-DfileÕâÀïËæ±ãĞ´Ò»¸ö£¬Êµ¼ÊÉÏ²»»áÍÆ´Ë°ü
+            //æ¨é€skate-parent
+            //ç”±äºparentæ²¡æœ‰jaråŒ…ï¼Œè€Œä¸”mvnå‘½ä»¤ä¸€å®šè¦å†™-Dfileå‚æ•°ï¼Œæ‰€ä»¥-Dfileè¿™é‡Œéšä¾¿å†™ä¸€ä¸ªï¼Œå®é™…ä¸Šä¸ä¼šæ¨æ­¤åŒ…
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=pom.xml -Dfile=octopus-api/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
             sh "echo 'push octopus-parent pom to public maven registry finish.'"
         }
 
         stage("Push-public-base") {
-            //ÍÆËÍ »ù´¡ÅäÖÃ£¬·şÎñ·¢ÏÖ
+            //æ¨é€ åŸºç¡€é…ç½®ï¼ŒæœåŠ¡å‘ç°
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=config-service/pom.xml -Dfile=config-service/target/config-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=discovery-service/pom.xml -Dfile=discovery-service/target/discovery-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=edge-service/pom.xml -Dfile=edge-service/target/edge-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
@@ -448,7 +448,7 @@ def push3rdJarToPublicMaven() {
         }
 
         stage("Push-public-biz") {
-            //ÍÆËÍ ÒµÎñ
+            //æ¨é€ ä¸šåŠ¡
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=user-service/pom.xml -Dfile=user-service/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=account-service/pom.xml -Dfile=account-service/target/account-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
             sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=shopping-cart-service/pom.xml -Dfile=shopping-cart-service/target/shopping-cart-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
@@ -462,7 +462,7 @@ def push3rdJarToPublicMaven() {
     }
 }
 
-/** ÍÆimagesµ½¹«ÍøµÄ²Ö¿â**/
+/** æ¨imagesåˆ°å…¬ç½‘çš„ä»“åº“**/
 def pushImageToPublicRegistry() {
 
     if (params.IS_PUSH == "Yes") {
