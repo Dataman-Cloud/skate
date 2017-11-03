@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kbastani</groupId>
+    <groupId>com.dataman</groupId>
     <artifactId>event-sourcing</artifactId>
     <packaging>pom</packaging>
     <version>master-SNAPSHOT</version>
@@ -75,4 +75,17 @@
             </snapshots>
         </repository>
     </repositories>
+    <!-- Maven仓库定义 -->
+    <distributionManagement>
+        <repository>
+            <id>releases-dataman</id>
+            <name>Local Nexus Repository</name>
+            <url>http://192.168.31.21:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots-dataman</id>
+            <name>Local Nexus Repository</name>
+            <url>http://192.168.31.21:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
