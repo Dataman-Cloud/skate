@@ -10,7 +10,7 @@
     <name>event-sourcing/hystrix-dashboard</name>
 
     <parent>
-        <groupId>com.dataman.skate</groupId>
+        <groupId>org.kbastani</groupId>
         <artifactId>event-sourcing</artifactId>
         <version>master-SNAPSHOT</version>
         <relativePath>../</relativePath>
