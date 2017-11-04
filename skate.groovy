@@ -76,6 +76,8 @@ if (params.ENV != "release") {
 						// 2. 运行Maven构建
             if (params.SUB_PROJECT == "all") {
                 sh "mvn clean package deploy -Dspring.profiles.active=docker"
+            } else if (params.SUB_PROJECT == "order-service") {
+                sh "mvn -f order-service clean package deploy -DskipTests -Dspring.profiles.active=docker"
             } else {
                 sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=docker"
             }
@@ -119,12 +121,12 @@ if (params.ENV != "release") {
                 sh "mvn -f inventory-service sonar:sonar"
             }
 
-            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-                sh "mvn -f order-service sonar:sonar"
-            }
-
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
                 sh "mvn -f online-store-web sonar:sonar"
+            }
+
+            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
+                sh "mvn -f order-service sonar:sonar"
             }
         }
 
@@ -291,18 +293,18 @@ if (params.ENV == "test") {
             sh "docker-compose -f docker-compose.yml up -d inventory-service"
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-            sh "docker-compose -f docker-compose.yml pull order-service"
-            sh "docker-compose -f docker-compose.yml stop order-service"
-            sh "docker-compose -f docker-compose.yml rm -f order-service"
-            sh "docker-compose -f docker-compose.yml up -d order-service"
-        }
-
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
             sh "docker-compose -f docker-compose.yml pull online-store-web"
             sh "docker-compose -f docker-compose.yml stop online-store-web"
             sh "docker-compose -f docker-compose.yml rm -f online-store-web"
             sh "docker-compose -f docker-compose.yml up -d online-store-web"
+        }
+
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
+            sh "docker-compose -f docker-compose.yml pull order-service"
+            sh "docker-compose -f docker-compose.yml stop order-service"
+            sh "docker-compose -f docker-compose.yml rm -f order-service"
+            sh "docker-compose -f docker-compose.yml up -d order-service"
         }
     }
 }
