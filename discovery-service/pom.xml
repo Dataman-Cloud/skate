@@ -4,17 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>discovery-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>master-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>event-sourcing/discovery-service</name>
 
     <parent>
-        <groupId>org.kbastani</groupId>
+        <groupId>com.dataman</groupId>
         <artifactId>event-sourcing</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>master-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>

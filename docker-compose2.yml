@@ -1,12 +1,12 @@
 config-service:
-  image: 192.168.31.34/skate/config-service
+  image: skate/config-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
   ports:
    - 8888:8888
 hystrix-dashboard:
-  image: 192.168.31.34/skate/hystrix-dashboard
+  image: skate/hystrix-dashboard
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -34,7 +34,7 @@ redis:
   ports:
    - 6379:6379
 user-service:
-  image: 192.168.31.34/skate/user-service
+  image: skate/user-service
   ports:
    - 8181:8181
   links:
@@ -45,14 +45,14 @@ user-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 discovery-service:
-  image: 192.168.31.34/skate/discovery-service
+  image: skate/discovery-service
   ports:
    - 8761:8761
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 edge-service:
-  image: 192.168.31.34/skate/edge-service
+  image: skate/edge-service
   ports:
    - 9999:9999
   links:
@@ -63,7 +63,7 @@ edge-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 account-service:
-  image: 192.168.31.34/skate/account-service
+  image: skate/account-service
   links:
    - user-service
    - discovery-service
@@ -73,7 +73,7 @@ account-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 inventory-service:
-  image: 192.168.31.34/skate/inventory-service
+  image: skate/inventory-service
   links:
    - neo4j
    - discovery-service
@@ -82,7 +82,7 @@ inventory-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 order-service:
-  image: 192.168.31.34/skate/order-service
+  image: skate/order-service
   links:
    - mongo
    - discovery-service
@@ -92,7 +92,7 @@ order-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 catalog-service:
-  image: 192.168.31.34/skate/catalog-service
+  image: skate/catalog-service
   links:
    - redis
    - mysql
@@ -102,7 +102,7 @@ catalog-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 shopping-cart-service:
-  image: 192.168.31.34/skate/shopping-cart-service
+  image: skate/shopping-cart-service
   links:
    - mysql
    - discovery-service
@@ -112,7 +112,7 @@ shopping-cart-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 online-store-web:
-  image: 192.168.31.34/skate/online-store-web
+  image: skate/online-store-web
   ports:
    - 8787:8787
   links:
