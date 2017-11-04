@@ -53,7 +53,7 @@ node("master") {
                 timeout(time: 15, unit: 'SECONDS') {
                     input message: '将会直接直接发布Release, 确定要发布吗',
                             parameters: [[$class      : 'BooleanParameterDefinition',
-                                          defaultValue: false,
+                                          defaultValue: true,
                                           description : '点击将会发布Release',
                                           name        : '发布Release']]
                 }
