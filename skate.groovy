@@ -350,101 +350,13 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
 
         stage("Prepare") {
             sh "echo Releasing for ${BRANCH}, version is ${VERSION}"
-
             //1. 从develop分支中获取代码
-            git branch: "master", url: "${gitRepo}"
-            sh "git pull origin dev"
+            //git branch: "master", url: "${gitRepo}"
+            //sh "git pull origin dev"
 
             //2. 替换版本号
-            replaceVersion();
+            //replaceVersion();
         }
-
-/*
-        stage("Release-Build") {
-            //3. Maven构建;构建Image, 并push到Registry中
-            sh "mvn -DskipTests clean package"
-            sh "mvn -DskipTests deploy"
-        }
-
-        stage("Img-Conf") {
-            sh "docker build -t ${imagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/config-service:${VERSION}"
-        }
-
-        stage("Img-Discovery") {
-            sh "docker build -t ${imagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/discovery-service:${VERSION}"
-        }
-
-        stage("Img-Edge") {
-            sh "docker build -t ${imagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/edge-service:${VERSION}"
-        }
-
-        stage("Img-Hystrix") {
-            sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/hystrix-dashboard:${VERSION}"
-        }
-
-        stage("Img-User") {
-            sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/user-service:${VERSION}"
-        }
-
-        stage("Img-Account") {
-            sh "docker build -t ${imagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/account-service:${VERSION}"
-        }
-
-        stage("Img-Shopping") {
-            sh "sh build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/shopping-cart-service:${VERSION}"
-        }
-
-        stage("Img-Catalog") {
-            sh "docker build -t ${imagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/catalog-service:${VERSION}"
-        }
-
-        stage("Img-Inventory") {
-            sh "docker build -t ${imagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/inventory-service:${VERSION}"
-        }
-
-        stage("Img-Online") {
-            sh "docker build -t ${imagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/online-store-web:${VERSION}"
-        }
-
-        stage("Img-Order") {
-            sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/order-service:${VERSION}"
-        }
-
-        stage("Cleanup") {
-						sh "echo Cleanup"
-            //5. 打tag
-            sh "git tag ${tagVersion} -m 'Release ${tagVersion}'"
-            sh "git push origin master"
-            sh "git push origin ${tagVersion}"
-
-            //6. 恢复重置
-            sh "echo 'Reset the version to master-SNAPSHOT'"
-            sh "git reset --hard"
-        }
-*/
-
 
         //推公网image仓库
         //pushImageToPublicRegistry();
