@@ -76,8 +76,6 @@ if (params.ENV != "release") {
 						// 2. 运行Maven构建
             if (params.SUB_PROJECT == "all") {
                 sh "mvn clean package deploy -Dspring.profiles.active=docker"
-            } else if (params.SUB_PROJECT == "order-service") {
-                sh "mvn -f order-service clean package"
             } else {
                 sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=docker"
             }
