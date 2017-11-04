@@ -402,7 +402,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Img-Shopping") {
-            sh "sh build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
             sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/shopping-cart-service:${VERSION}"
         }
