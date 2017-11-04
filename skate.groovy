@@ -359,6 +359,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             replaceVersion();
         }
 
+/*
         stage("Release-Build") {
             //3. Maven构建;构建Image, 并push到Registry中
             sh "mvn -DskipTests clean package"
@@ -433,7 +434,6 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
 
         stage("Cleanup") {
 						sh "echo Cleanup"
-/*
             //5. 打tag
             sh "git tag ${tagVersion} -m 'Release ${tagVersion}'"
             sh "git push origin master"
