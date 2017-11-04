@@ -19,7 +19,7 @@ publicRegistryPassword = "Gz-regsistry-2017@"
 publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
-dockfilepath = "/src/main/docker/"
+dockfilepath = "/target/docker/"
 
 node("master") {
     stage("Common") {
@@ -127,6 +127,15 @@ if (params.ENV != "release") {
             }
         }
 
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
+            stage("Img-Hystrix") {
+                // 4. 构建Image, 并push到Registry中
+                sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${dockfilepath}"
+                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker push ${imagePrefix}/hystrix-dashboard"
+            }
+        }
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("Img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${dockfilepath}"
@@ -135,20 +144,12 @@ if (params.ENV != "release") {
             }
         }
 
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("Img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/discovery-service"
-            }
-        }
-
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
-            stage("Img-Hystrix") {
-                // 4. 构建Image, 并push到Registry中
-                sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${dockfilepath}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
-                sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
         }
 
