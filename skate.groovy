@@ -73,9 +73,11 @@ if (params.ENV != "release") {
             // 1. 从Git中clone代码
             git branch: "dev", url: "${gitRepo}"
 
+						// 2. 运行Maven构建
             if (params.SUB_PROJECT == "all") {
-                // 2. 运行Maven构建
                 sh "mvn clean package deploy -Dspring.profiles.active=docker"
+            } else if (params.SUB_PROJECT == "order-service") {
+                sh "mvn -f order-service clean package"
             } else {
                 sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=docker"
             }
@@ -311,6 +313,8 @@ if (params.ENV == "test") {
 def replaceVersion() {
     sh "echo Replace master-SNAPSHOT to ${VERSION} in pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/pom.xml"
@@ -320,12 +324,22 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-api/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' shopping-cart-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' catalog-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}Dockerfile"
 
+    sh "echo Replace latest to ${VERSION} in docker-compose.yml"
+    sh "sed -i 's|:latest|:${VERSION}|g\' docker-compose.yml"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
