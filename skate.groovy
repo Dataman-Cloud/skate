@@ -442,8 +442,8 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             //6. 恢复重置
             sh "echo 'Reset the version to master-SNAPSHOT'"
             sh "git reset --hard"
-*/
         }
+*/
 
 
         //推公网image仓库
@@ -452,33 +452,6 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         //推公网Maven仓库
         //push3rdJarToPublicMaven();
     }
-/*
-    node("skate_release") {
-        stage("Prepare-Stage") {
-            //1. 从develop分支中获取代码
-            git branch: "dev", url: "${gitRepo}"
-
-            //2. 替换版本号
-            replaceVersion();
-        }
-
-        stage("Env-Stage") {
-            sh "SkateRun.sh"
-        }
-
-        stage("Cleanup-Stage") {
-            sh "echo 'Reset the version to master-SNAPSHOT'"
-            sh "git reset --hard"
-        }
-
-        stage("Notification") {
-            mail(to: "${recvEmail}",
-                    subject: "Project '${env.JOB_NAME}' (${env.BUILD_NUMBER}) Release to ${VERSION}",
-                    body: "Please go to ${env.BUILD_URL}.",
-            )
-        }
-    }
-    */
 }
 
 /** 推3rd依赖包到公网的Maven仓库 **/
