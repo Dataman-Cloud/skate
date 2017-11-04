@@ -127,9 +127,9 @@ if (params.ENV != "release") {
             }
         }
 
+				// 4. 构建Image, 并push到Registry中
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("Img-Hystrix") {
-                // 4. 构建Image, 并push到Registry中
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${dockfilepath}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
@@ -143,7 +143,6 @@ if (params.ENV != "release") {
                 sh "docker push ${imagePrefix}/config-service"
             }
         }
-
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("Img-discovery") {
@@ -226,6 +225,13 @@ if (params.ENV == "test") {
 
         sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
 
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
+            sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
+            sh "docker-compose -f docker-compose.yml up -d hystrix-dashboard"
+        }
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
             sh "docker-compose -f docker-compose.yml pull config-service"
             sh "docker-compose -f docker-compose.yml stop config-service"
@@ -245,13 +251,6 @@ if (params.ENV == "test") {
             sh "docker-compose -f docker-compose.yml stop edge-dashboard"
             sh "docker-compose -f docker-compose.yml rm -f edge-dashboard"
             sh "docker-compose -f docker-compose.yml up -d edge-dashboard"
-        }
-
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
-            sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml up -d hystrix-dashboard"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
