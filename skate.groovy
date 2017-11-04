@@ -220,7 +220,7 @@ if (params.ENV != "release") {
 
 //3. 发布到测试(test)环境: Swarm集群
 if (params.ENV == "test") {
-    node("skate-test") {
+    node("master") {
         git branch: "dev", url: "${gitRepo}"
 
         sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
