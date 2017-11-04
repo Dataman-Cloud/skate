@@ -92,7 +92,7 @@ order-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 catalog-service:
-  image: skate/catalog-service
+  image: 192.168.31.34/skate/catalog-service
   links:
    - redis
    - mysql

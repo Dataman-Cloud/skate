@@ -19,7 +19,8 @@ publicRegistryPassword = "Gz-regsistry-2017@"
 publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
-dockfilepath = "/target/docker/"
+targetdockerfile = "/target/docker/"
+sourcedockerfile = "/src/main/docker/"
 
 node("master") {
     stage("Common") {
@@ -130,7 +131,7 @@ if (params.ENV != "release") {
 				// 4. 构建Image, 并push到Registry中
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("Img-Hystrix") {
-                sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
@@ -138,7 +139,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("Img-config") {
-                sh "docker build -t ${imagePrefix}/config-service config-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/config-service"
             }
@@ -146,7 +147,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("Img-discovery") {
-                sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/discovery-service"
             }
@@ -154,7 +155,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
             stage("Img-Edge") {
-                sh "docker build -t ${imagePrefix}/edge-service edge-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/edge-service edge-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/edge-service"
             }
@@ -162,7 +163,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
             stage("Img-User") {
-                sh "docker build -t ${imagePrefix}/user-service user-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/user-service user-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/user-service"
             }
@@ -170,7 +171,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
             stage("Img-Account") {
-                sh "docker build -t ${imagePrefix}/account-service account-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/account-service account-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/account-service"
             }
@@ -178,7 +179,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
             stage("Img-ShoopingCart") {
-                sh "docker build -t ${imagePrefix}/shopping-cart-service shopping-cart-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/shopping-cart-service shopping-cart-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/shopping-cart-service"
             }
@@ -186,7 +187,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
             stage("Img-Catalog") {
-                sh "docker build -t ${imagePrefix}/catalog-service catalog-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/catalog-service catalog-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/catalog-service"
             }
@@ -194,7 +195,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
             stage("Img-Inventory") {
-                sh "docker build -t ${imagePrefix}/inventory-service inventory-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/inventory-service inventory-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/inventory-service"
             }
@@ -202,7 +203,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
             stage("Img-Order") {
-                sh "docker build -t ${imagePrefix}/order-service order-service/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/order-service order-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/order-service"
             }
@@ -210,7 +211,7 @@ if (params.ENV != "release") {
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
             stage("Img-Online-Store") {
-                sh "docker build -t ${imagePrefix}/online-store-web online-store-web/${dockfilepath}"
+                sh "docker build -t ${imagePrefix}/online-store-web online-store-web/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/online-store-web"
             }
@@ -321,6 +322,10 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
+
+    sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-api/Dockerfile"
+
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
@@ -346,10 +351,10 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Img-base") {
-            sh "docker build -t ${imagePrefix}/config-service:${VERSION} config-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/discovery-service:${VERSION} discovery-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/edge-service:${VERSION} edge-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${dockfilepath}"
+            sh "docker build -t ${imagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
 
             sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
 
@@ -360,13 +365,13 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Img-biz") {
-            sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/account-service:${VERSION} account-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/catalog-service:${VERSION} catalog-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/inventory-service:${VERSION} inventory-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${dockfilepath}"
-            sh "docker build -t ${imagePrefix}/online-store-web:${VERSION} online-store-web/${dockfilepath}"
+            sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
+            sh "docker build -t ${imagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
 
             sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
 
@@ -478,13 +483,13 @@ def pushImageToPublicRegistry() {
         }
 
         stage("Push-image-biz") {
-            sh "docker build -f user-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
-            sh "docker build -f account-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
-            sh "docker build -f shopping-cart-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
-            sh "docker build -f catalog-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
-            sh "docker build -f inventory-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
-            sh "docker build -f order-service/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
-            sh "docker build -f online-store-web/${dockfilepath}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
+            sh "docker build -f user-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
+            sh "docker build -f account-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
+            sh "docker build -f shopping-cart-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
+            sh "docker build -f catalog-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
+            sh "docker build -f inventory-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
+            sh "docker build -f order-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
+            sh "docker build -f online-store-web/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
 
             sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
 
