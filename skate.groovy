@@ -399,6 +399,8 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
         }
 
         stage("Cleanup") {
+						sh "echo Cleanup"
+/*						
             //5. 打tag
             sh "git tag ${tagVersion} -m 'Release ${tagVersion}'"
             sh "git push origin master"
@@ -407,6 +409,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             //6. 恢复重置
             sh "echo 'Reset the version to master-SNAPSHOT'"
             sh "git reset --hard"
+*/
         }
 
 
