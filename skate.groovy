@@ -247,11 +247,11 @@ if (params.ENV == "test") {
             sh "docker-compose -f docker-compose.yml up -d discovery-service"
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-dashboard") {
-            sh "docker-compose -f docker-compose.yml pull edge-dashboard"
-            sh "docker-compose -f docker-compose.yml stop edge-dashboard"
-            sh "docker-compose -f docker-compose.yml rm -f edge-dashboard"
-            sh "docker-compose -f docker-compose.yml up -d edge-dashboard"
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
+            sh "docker-compose -f docker-compose.yml pull edge-service"
+            sh "docker-compose -f docker-compose.yml stop edge-service"
+            sh "docker-compose -f docker-compose.yml rm -f edge-service"
+            sh "docker-compose -f docker-compose.yml up -d edge-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
