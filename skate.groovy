@@ -46,14 +46,14 @@ node("master") {
         if (params.ENV != "test" && params.ENV != "release") {
             error("[Environment] should be test, release")
         }
-/*
+
         //3. 发布master到生产之前进行二次确认
         if (params.ENV == "release") {
             try {
                 timeout(time: 15, unit: 'SECONDS') {
                     input message: '将会直接直接发布Release, 确定要发布吗',
                             parameters: [[$class      : 'BooleanParameterDefinition',
-                                          defaultValue: true,
+                                          defaultValue: false,
                                           description : '点击将会发布Release',
                                           name        : '发布Release']]
                 }
@@ -62,11 +62,10 @@ node("master") {
                 error "Aborted by:\n ${user}"
             }
         }
-        */
     }
 }
 
-//1. 使用构建Node进行构建
+//1. 使用构建节点node(xxx")进行构建
 if (params.ENV != "release") {
     node("master") {
         stage("Test-Build") {
@@ -76,11 +75,9 @@ if (params.ENV != "release") {
 
 						// 2. 运行Maven构建
             if (params.SUB_PROJECT == "all") {
-                sh "mvn clean package deploy -Dspring.profiles.active=docker"
-            } else if (params.SUB_PROJECT == "order-service") {
-                sh "mvn -f order-service clean package deploy -DskipTests -Dspring.profiles.active=docker"
+                sh "mvn clean package deploy -Dspring.profiles.active=development"
             } else {
-                sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=docker"
+                sh "mvn -f ${SUB_PROJECT} clean package deploy -Dspring.profiles.active=development"
             }
         }
 
@@ -133,7 +130,7 @@ if (params.ENV != "release") {
 
 				// 4. 构建Image, 并push到Registry中
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
-            stage("Img-hystrix") {
+            stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
@@ -141,7 +138,7 @@ if (params.ENV != "release") {
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
-            stage("Img-config") {
+            stage("img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/config-service"
@@ -149,7 +146,7 @@ if (params.ENV != "release") {
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
-            stage("Img-discovery") {
+            stage("img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/discovery-service"
@@ -157,7 +154,7 @@ if (params.ENV != "release") {
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
-            stage("Img-edge") {
+            stage("img-edge") {
                 sh "docker build -t ${imagePrefix}/edge-service edge-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/edge-service"
@@ -165,7 +162,7 @@ if (params.ENV != "release") {
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
-            stage("Img-user") {
+            stage("img-user") {
                 sh "docker build -t ${imagePrefix}/user-service user-service/${targetdockerfile}"
                 sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/user-service"
@@ -250,11 +247,11 @@ if (params.ENV == "test") {
             sh "docker-compose -f docker-compose.yml up -d discovery-service"
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-dashboard") {
-            sh "docker-compose -f docker-compose.yml pull edge-dashboard"
-            sh "docker-compose -f docker-compose.yml stop edge-dashboard"
-            sh "docker-compose -f docker-compose.yml rm -f edge-dashboard"
-            sh "docker-compose -f docker-compose.yml up -d edge-dashboard"
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
+            sh "docker-compose -f docker-compose.yml pull edge-service"
+            sh "docker-compose -f docker-compose.yml stop edge-service"
+            sh "docker-compose -f docker-compose.yml rm -f edge-service"
+            sh "docker-compose -f docker-compose.yml up -d edge-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
@@ -278,14 +275,12 @@ if (params.ENV == "test") {
             sh "docker-compose -f docker-compose.yml up -d shopping-cart-service"
         }
 
-
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
             sh "docker-compose -f docker-compose.yml pull catalog-service"
             sh "docker-compose -f docker-compose.yml stop catalog-service"
             sh "docker-compose -f docker-compose.yml rm -f catalog-service"
             sh "docker-compose -f docker-compose.yml up -d catalog-service"
         }
-
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
             sh "docker-compose -f docker-compose.yml pull inventory-service"
