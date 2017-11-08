@@ -7,7 +7,7 @@ def projectName = "skate"
 def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
 def registryUrl = "192.168.31.34";
 def imagePrefix = "${registryUrl}/skate"
-def registryUsername = "gzteam"
+def regHarborUsername = "gzteam"
 def registryPassword = "Dataman1234"
 def recvEmail = "dxlu@dataman-inc.com"
 
@@ -132,7 +132,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
         }
@@ -140,7 +140,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/config-service"
             }
         }
@@ -148,7 +148,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/discovery-service"
             }
         }
@@ -156,7 +156,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
             stage("img-edge") {
                 sh "docker build -t ${imagePrefix}/edge-service edge-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/edge-service"
             }
         }
@@ -164,7 +164,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
             stage("img-user") {
                 sh "docker build -t ${imagePrefix}/user-service user-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/user-service"
             }
         }
@@ -172,7 +172,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
             stage("img-account") {
                 sh "docker build -t ${imagePrefix}/account-service account-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/account-service"
             }
         }
@@ -180,7 +180,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
             stage("img-shoopingcart") {
                 sh "docker build -t ${imagePrefix}/shopping-cart-service shopping-cart-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/shopping-cart-service"
             }
         }
@@ -188,7 +188,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
             stage("img-catalog") {
                 sh "docker build -t ${imagePrefix}/catalog-service catalog-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/catalog-service"
             }
         }
@@ -196,7 +196,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
             stage("img-inventory") {
                 sh "docker build -t ${imagePrefix}/inventory-service inventory-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/inventory-service"
             }
         }
@@ -204,7 +204,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
             stage("img-order") {
                 sh "docker build -t ${imagePrefix}/order-service order-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/order-service"
             }
         }
@@ -212,7 +212,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
             stage("img-online-store") {
                 sh "docker build -t ${imagePrefix}/online-store-web online-store-web/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/online-store-web"
             }
         }
@@ -224,7 +224,7 @@ if (params.ENV == "test") {
     node("master") {
         git branch: "dev", url: "${gitRepo}"
 
-        sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+        sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
             sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
@@ -362,67 +362,67 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
 
         stage("Img-Conf") {
             sh "docker build -t ${imagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/config-service:${VERSION}"
         }
 
         stage("Img-Discovery") {
             sh "docker build -t ${imagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/discovery-service:${VERSION}"
         }
 
         stage("Img-Edge") {
             sh "docker build -t ${imagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/edge-service:${VERSION}"
         }
 
         stage("Img-Hystrix") {
             sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/hystrix-dashboard:${VERSION}"
         }
 
         stage("Img-User") {
             sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/user-service:${VERSION}"
         }
 
         stage("Img-Account") {
             sh "docker build -t ${imagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/account-service:${VERSION}"
         }
 
         stage("Img-Shopping") {
             sh "docker build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/shopping-cart-service:${VERSION}"
         }
 
         stage("Img-Catalog") {
             sh "docker build -t ${imagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/catalog-service:${VERSION}"
         }
 
         stage("Img-Inventory") {
             sh "docker build -t ${imagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/inventory-service:${VERSION}"
         }
 
         stage("Img-Online") {
             sh "docker build -t ${imagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/online-store-web:${VERSION}"
         }
 
         stage("Img-Order") {
             sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/order-service:${VERSION}"
         }
 
