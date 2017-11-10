@@ -2,24 +2,30 @@
 
 set -e
 
-# Build the project and docker images
-#mvn clean install
-
 # Export the active docker machine IP
 
 #请修改对应images的版本号
-export SKATE_VERSION=latest
+SKATE_VERSION=${PUBLISH_VERSION:-latest}
+
+#填入相应的影像前缀
+IMAGE_PREFIX_ID=demoregistry.dataman-inc.com
+
+HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+
+#缺省WEB界面的访问IP地址，有需要则修改
+WEB_IP=106.75.90.26
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
-DOCKER_IP=${DOCKER_IP:-192.168.31.46}
-PUBLIC_IP=${PUBLIC_IP:-106.75.90.26}
+DOCKER_IP=${HOST_IP:-10.3.8.23}
+PUBLIC_IP=${WEB_IP:-106.75.90.26}
+IMAGE_PREFIX=${IMAGE_PREFIX_ID:-demoregistry.dataman-inc.com}
 
 # Remove existing containers
-docker-compose stop
-docker-compose rm -f
+docker-compose -f docker-compose_pub.yml stop
+docker-compose -f docker-compose_pub.yml rm -f
 
 # Start the config service first and wait for it to become available
-docker-compose up -d config-service
+docker-compose -f docker-compose_pub.yml up -d config-service
 
 while [ -z ${CONFIG_SERVICE_READY} ]; do
   echo "Waiting for config service..."
@@ -30,7 +36,7 @@ while [ -z ${CONFIG_SERVICE_READY} ]; do
 done
 
 # Start the discovery service next and wait
-docker-compose up -d discovery-service
+docker-compose -f docker-compose_pub.yml up -d discovery-service
 
 while [ -z ${DISCOVERY_SERVICE_READY} ]; do
   echo "Waiting for discovery service..."
@@ -41,7 +47,7 @@ while [ -z ${DISCOVERY_SERVICE_READY} ]; do
 done
 
 # Start the other containers
-docker-compose up -d
+docker-compose -f docker-compose_pub.yml up -d
 
 # Attach to the log output of the cluster
-docker-compose logs
+# docker-compose -f docker-compose_pub.yml logs
