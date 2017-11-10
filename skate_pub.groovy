@@ -7,18 +7,38 @@ publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
-node("master") {
-    stage("Common") {
-        echo "Environment: Version: ${VERSION}"
-        //前置检查
-        //1. develop分支不需带上版本号, master分支需要带上版本号
-          if (params.VERSION != "") {
-              error("Only [master] branch can have version. Please check your input!")
-          }
-    }
+    node("master") {
+        stage("Prepare") {
+            sh "echo version is ${VERSION}, IS_PUSH is ${IS_PUSH}"
+
+            git branch: "master", url: "${gitRepo}"
+            sh "git pull origin develop"
+
+            replaceVersion()
+        }
+
+        stage("Release-Build") {
+            sh "mvn -DskipTests clean package"
+        }
+
+				if (params.VERSION != "") {
+						error("Only [master] branch can have version. Please check your input!")
+				}
+
+        //调整到push tag 后，确保推内网所有操作成功
         //推公网image仓库
-		pushImageToPublicRegistry();
-}
+        pushImageToPublicRegistry()
+
+        //推公网Maven仓库
+        //push3rdJarToPublicMaven()
+
+        stage("Cleanup") {
+            //恢复重置
+            sh "echo 'Reset the version to master-SNAPSHOT'"
+            sh "git reset --hard"
+        }
+    }
+
 /** 推3rd依赖包到公网的Maven仓库 **/
 def push3rdJarToPublicMaven() {
 

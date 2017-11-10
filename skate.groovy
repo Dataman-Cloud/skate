@@ -12,9 +12,10 @@ def regHarborUsername = "gzteam"
 def registryPassword = "Dataman1234"
 def recvEmail = "dxlu@dataman-inc.com"
 def publicIp="106.75.90.26"
-def targetdockerfile = "target/docker/"
-def sourcedockerfile = "src/main/docker"
 def test_Node_IP="192.168.31.46"
+
+targetdockerfile = "target/docker/"
+sourcedockerfile = "src/main/docker"
 
 
 node("master") {
@@ -310,7 +311,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
-
+/*
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}/Dockerfile"
@@ -323,8 +324,9 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
+*/
 }
-
+：
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
 if (params.ENV == "release" && params.BRANCH == "origin/master") {
     node("master") {
