@@ -78,11 +78,10 @@ if (params.ENV != "release") {
 
 				// 3. sonar
         stage("Sonar") {
-/*
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
                 sh "mvn -f hystrix-dashboard sonar:sonar"
             }
-*/
+
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
                 sh "mvn -f config-service sonar:sonar"
             }
@@ -125,7 +124,7 @@ if (params.ENV != "release") {
         }
 
 				// 4. 构建Image, 并push到Registry中
-/*
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
@@ -133,7 +132,7 @@ if (params.ENV != "release") {
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
         }
-*/
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
@@ -222,13 +221,13 @@ if (params.ENV == "test") {
         git branch: "dev", url: "${gitRepo}"
 
         sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
-/*
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
             sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml pull hystrix-dashboard"
             sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml stop hystrix-dashboard"
             sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml rm -f hystrix-dashboard"
         }
-*/
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
             sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull config-service"
             sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop config-service"
@@ -302,7 +301,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
-//    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/pom.xml"
@@ -315,7 +314,7 @@ def replaceVersion() {
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}Dockerfile"
-//    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/${sourcedockerfile}Dockerfile"
@@ -368,13 +367,13 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/edge-service:${VERSION}"
         }
-/*
+
         stage("Img-Hystrix") {
             sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
             sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/hystrix-dashboard:${VERSION}"
         }
-*/
+
         stage("Img-User") {
             sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
             sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"

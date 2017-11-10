@@ -14,12 +14,12 @@ export IMAGE_PREFIX_ID=192.168.31.34/skate
 export HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
-WEB_IP=$HOST_IP
+export WEB_IP=$HOST_IP
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
-DOCKER_IP=${HOST_IP:-192.168.31.46}
-PUBLIC_IP=${WEB_IP:-192.168.31.46}
-IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
+export DOCKER_IP=${HOST_IP:-192.168.31.46}
+export PUBLIC_IP=${WEB_IP:-192.168.31.46}
+export IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
 
 # Remove existing containers
 docker-compose -f docker-compose_test.yml stop
