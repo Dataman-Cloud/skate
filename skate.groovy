@@ -325,7 +325,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
 }
-：
+
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
 if (params.ENV == "release" && params.BRANCH == "origin/master") {
     node("master") {
