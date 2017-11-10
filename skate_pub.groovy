@@ -7,6 +7,37 @@ publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
+node("master") {
+    stage("Common") {
+        echo "Environment: Version: ${VERSION}"
+        //前置检查
+        //1. develop分支不需带上版本号, master分支需要带上版本号
+          if (params.VERSION != "") {
+              error("Only [master] branch can have version. Please check your input!")
+          }
+
+        //2. 环境检查
+        if (params.ENV != "test" && params.ENV != "release") {
+            error("[Environment] should be test, release")
+        }
+
+        //3. 发布master到生产之前进行二次确认
+        if (params.ENV == "release") {
+            try {
+                timeout(time: 15, unit: 'SECONDS') {
+                    input message: '将会直接直接发布Release, 确定要发布吗',
+                            parameters: [[$class      : 'BooleanParameterDefinition',
+                                          defaultValue: false,
+                                          description : '点击将会发布Release',
+                                          name        : '发布Release']]
+                }
+            } catch (err) {
+                def user = err.getCauses()[0].getUser()
+                error "Aborted by:\n ${user}"
+            }
+        }
+    }
+}
 /** 推3rd依赖包到公网的Maven仓库 **/
 def push3rdJarToPublicMaven() {
 
@@ -42,44 +73,6 @@ def push3rdJarToPublicMaven() {
         }
     }
 }
-
-/** 推images到公网的仓库**/
-def pushImageToPublicRegistry() {
-
-    if (params.IS_PUSH == "Yes") {
-
-        stage("Push-image-base") {
-            sh "docker build -t ${publicImagePrefix}/config-service:${VERSION} config-service"
-            sh "docker build -t ${publicImagePrefix}/discovery-service:${VERSION} discovery-service"
-            sh "docker build -t ${publicImagePrefix}/edge-service:${VERSION} edge-service"
-            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
-            sh "docker push ${publicImagePrefix}/config-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/discovery-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/edge-service:${VERSION}"
-        }
-
-        stage("Push-image-biz") {
-            sh "docker build -f user-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
-            sh "docker build -f account-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
-            sh "docker build -f shopping-cart-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
-            sh "docker build -f catalog-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
-            sh "docker build -f inventory-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
-            sh "docker build -f order-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
-            sh "docker build -f online-store-web/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
-
-            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
-
-            sh "docker push ${publicImagePrefix}/user-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/account-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/shopping-cart-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/catalog-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/inventory-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/order-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/online-store-web:${VERSION}"
-        }
-    }
-}
-
 
 /** 推images到公网的仓库**/
 def pushImageToPublicRegistry() {
