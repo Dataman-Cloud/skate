@@ -8,7 +8,7 @@ set -e
 SKATE_VERSION=${PUBLISH_VERSION:-latest}
 
 #填入相应的影像前缀
-IMAGE_PREFIX_ID=demoregistry.dataman-inc.com
+IMAGE_PREFIX_ID=demoregistry.dataman-inc.com/skate
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
 
