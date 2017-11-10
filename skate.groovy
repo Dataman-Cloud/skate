@@ -1,6 +1,7 @@
 // Author: linzhaoming
 // Date: 2017-01-05
 // Usage: Jenkins的自动Pipeline构建脚本
+//modify by dongxian lu 
 
 //定义常量和变量
 def projectName = "skate"
@@ -11,10 +12,8 @@ def regHarborUsername = "gzteam"
 def registryPassword = "Dataman1234"
 def recvEmail = "dxlu@dataman-inc.com"
 def publicIp="106.75.90.26"
-
-//定义绑定域变量
-targetdockerfile = "target/docker/"
-sourcedockerfile = "src/main/docker/"
+def targetdockerfile = "target/docker/"
+def sourcedockerfile = "src/main/docker/"
 
 node("master") {
     stage("Common") {
@@ -223,74 +222,74 @@ if (params.ENV == "test") {
         sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
 /*
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
-            sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
+            sh "docker-compose -f docker-compose_test.yml pull hystrix-dashboard"
+            sh "docker-compose -f docker-compose_test.yml stop hystrix-dashboard"
+            sh "docker-compose -f docker-compose_test.yml rm -f hystrix-dashboard"
         }
 */
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
-            sh "docker-compose -f docker-compose.yml pull config-service"
-            sh "docker-compose -f docker-compose.yml stop config-service"
-            sh "docker-compose -f docker-compose.yml rm -f config-service"
+            sh "docker-compose -f docker-compose_test.yml pull config-service"
+            sh "docker-compose -f docker-compose_test.yml stop config-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f config-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service") {
-            sh "docker-compose -f docker-compose.yml pull discovery-service"
-            sh "docker-compose -f docker-compose.yml stop discovery-service"
-            sh "docker-compose -f docker-compose.yml rm -f discovery-service"
+            sh "docker-compose -f docker-compose_test.yml pull discovery-service"
+            sh "docker-compose -f docker-compose_test.yml stop discovery-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f discovery-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
-            sh "docker-compose -f docker-compose.yml pull edge-service"
-            sh "docker-compose -f docker-compose.yml stop edge-service"
-            sh "docker-compose -f docker-compose.yml rm -f edge-service"
+            sh "docker-compose -f docker-compose_test.yml pull edge-service"
+            sh "docker-compose -f docker-compose_test.yml stop edge-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f edge-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
-            sh "docker-compose -f docker-compose.yml pull user-service"
-            sh "docker-compose -f docker-compose.yml stop user-service"
-            sh "docker-compose -f docker-compose.yml rm -f user-service"
+            sh "docker-compose -f docker-compose_test.yml pull user-service"
+            sh "docker-compose -f docker-compose_test.yml stop user-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f user-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
-            sh "docker-compose -f docker-compose.yml pull account-service"
-            sh "docker-compose -f docker-compose.yml stop account-service"
-            sh "docker-compose -f docker-compose.yml rm -f account-service"
+            sh "docker-compose -f docker-compose_test.yml pull account-service"
+            sh "docker-compose -f docker-compose_test.yml stop account-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f account-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
-            sh "docker-compose -f docker-compose.yml pull shopping-cart-service"
-            sh "docker-compose -f docker-compose.yml stop shopping-cart-service"
-            sh "docker-compose -f docker-compose.yml rm -f shopping-cart-service"
+            sh "docker-compose -f docker-compose_test.yml pull shopping-cart-service"
+            sh "docker-compose -f docker-compose_test.yml stop shopping-cart-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f shopping-cart-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
-            sh "docker-compose -f docker-compose.yml pull catalog-service"
-            sh "docker-compose -f docker-compose.yml stop catalog-service"
-            sh "docker-compose -f docker-compose.yml rm -f catalog-service"
+            sh "docker-compose -f docker-compose_test.yml pull catalog-service"
+            sh "docker-compose -f docker-compose_test.yml stop catalog-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f catalog-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
-            sh "docker-compose -f docker-compose.yml pull inventory-service"
-            sh "docker-compose -f docker-compose.yml stop inventory-service"
-            sh "docker-compose -f docker-compose.yml rm -f inventory-service"
+            sh "docker-compose -f docker-compose_test.yml pull inventory-service"
+            sh "docker-compose -f docker-compose_test.yml stop inventory-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f inventory-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
-            sh "docker-compose -f docker-compose.yml pull online-store-web"
-            sh "docker-compose -f docker-compose.yml stop online-store-web"
-            sh "docker-compose -f docker-compose.yml rm -f online-store-web"
+            sh "docker-compose -f docker-compose_test.yml pull online-store-web"
+            sh "docker-compose -f docker-compose_test.yml stop online-store-web"
+            sh "docker-compose -f docker-compose_test.yml rm -f online-store-web"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-            sh "docker-compose -f docker-compose.yml pull order-service"
-            sh "docker-compose -f docker-compose.yml stop order-service"
-            sh "docker-compose -f docker-compose.yml rm -f order-service"
+            sh "docker-compose -f docker-compose_test.yml pull order-service"
+            sh "docker-compose -f docker-compose_test.yml stop order-service"
+            sh "docker-compose -f docker-compose_test.yml rm -f order-service"
         }
         
         if (params.SUB_PROJECT == "all"){
 						sh "chmod +x *.sh"
-						sh "./skaterun_test.sh"
+						sh "skaterun_test.sh"
         }
     }
 }
