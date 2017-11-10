@@ -14,7 +14,7 @@ def recvEmail = "dxlu@dataman-inc.com"
 def publicIp="106.75.90.26"
 def targetdockerfile = "target/docker/"
 def sourcedockerfile = "src/main/docker/"
-def node_IP=192.168.31.46
+def node_IP="192.168.31.46"
 
 
 node("master") {
