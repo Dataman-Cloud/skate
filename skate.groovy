@@ -313,7 +313,6 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
-/*
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}/Dockerfile"
@@ -325,7 +324,6 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
-*/
 }
 ：
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
