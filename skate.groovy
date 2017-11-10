@@ -323,9 +323,6 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}Dockerfile"
-
-    sh "echo Replace latest to ${VERSION} in skaterun_pub.sh"
-    sh "sed -i 's|PUBLISH_VERSION|${VERSION}|g\' skaterun_pub.sh"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
