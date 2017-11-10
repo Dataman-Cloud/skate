@@ -291,7 +291,7 @@ if (params.ENV == "test") {
         
         if (params.SUB_PROJECT == "all"){
 						sh "chmod +x *.sh"
-						sh "skaterun_test.sh"
+						sh "./skaterun_test.sh"
         }
     }
 }
@@ -428,11 +428,5 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             sh "echo 'Reset the version to master-SNAPSHOT'"
             sh "git reset --hard"
         }
-
-        //推公网image仓库
-        //pushImageToPublicRegistry();
-
-        //推公网Maven仓库
-        //push3rdJarToPublicMaven();
     }
 }

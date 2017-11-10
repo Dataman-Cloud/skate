@@ -5,12 +5,13 @@ set -e
 # Export the active docker machine IP
 
 #请修改对应images的版本号
-SKATE_VERSION=${PUBLISH_VERSION:-latest}
+export SKATE_VERSION=latest
 
 #填入相应的映像前缀
-IMAGE_PREFIX_ID=192.168.31.34/skate
+export IMAGE_PREFIX_ID=192.168.31.34/skate
 
-HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+#HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+export HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
 WEB_IP=$HOST_IP

@@ -15,28 +15,9 @@ node("master") {
           if (params.VERSION != "") {
               error("Only [master] branch can have version. Please check your input!")
           }
-
-        //2. 环境检查
-        if (params.ENV != "test" && params.ENV != "release") {
-            error("[Environment] should be test, release")
-        }
-
-        //3. 发布master到生产之前进行二次确认
-        if (params.ENV == "release") {
-            try {
-                timeout(time: 15, unit: 'SECONDS') {
-                    input message: '将会直接直接发布Release, 确定要发布吗',
-                            parameters: [[$class      : 'BooleanParameterDefinition',
-                                          defaultValue: false,
-                                          description : '点击将会发布Release',
-                                          name        : '发布Release']]
-                }
-            } catch (err) {
-                def user = err.getCauses()[0].getUser()
-                error "Aborted by:\n ${user}"
-            }
-        }
     }
+        //推公网image仓库
+		pushImageToPublicRegistry();
 }
 /** 推3rd依赖包到公网的Maven仓库 **/
 def push3rdJarToPublicMaven() {
