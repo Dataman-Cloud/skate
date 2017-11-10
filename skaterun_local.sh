@@ -2,37 +2,32 @@
 
 set -e
 
-p1=$1
-
-if [ ! -n "$p1" ] ;then
-    echo "you have not input a parameter eg. test local or web!"
-    exit
-fi
-
-# Export the active docker machine IP
+# Build the project and docker images
+#mvn clean install
 
 #请修改对应images的版本号
-SKATE_VERSION=${PUBLISH_VERSION:-latest}
+export SKATE_VERSION=${PUBLISH_VERSION:-latest}
 
-#填入相应的映像前缀
-IMAGE_PREFIX_ID=192.168.31.34/skate
+#填入相应的影像前缀
+export IMAGE_PREFIX_ID=skate
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+export HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
-WEB_IP=$HOST_IP
+export WEB_IP=$HOST_IP
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
-DOCKER_IP=${HOST_IP:-192.168.31.46}
-PUBLIC_IP=${WEB_IP:-192.168.31.46}
-IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
+export DOCKER_IP=${HOST_IP:-192.168.31.46}
+export PUBLIC_IP=${WEB_IP:-192.168.31.46}
+export IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
 
 # Remove existing containers
-docker-compose -f docker-compose_test.yml stop
-docker-compose -f docker-compose_test.yml rm -f
+docker-compose -f docker-compose_local.yml stop
+docker-compose -f docker-compose_local.yml rm -f
 
 # Start the config service first and wait for it to become available
-docker-compose -f docker-compose_test.yml up -d config-service
+docker-compose -f docker-compose_local.yml up -d config-service
 
 while [ -z ${CONFIG_SERVICE_READY} ]; do
   echo "Waiting for config service..."
@@ -43,7 +38,7 @@ while [ -z ${CONFIG_SERVICE_READY} ]; do
 done
 
 # Start the discovery service next and wait
-docker-compose -f docker-compose_test.yml up -d discovery-service
+docker-compose -f docker-compose_local.yml up -d discovery-service
 
 while [ -z ${DISCOVERY_SERVICE_READY} ]; do
   echo "Waiting for discovery service..."
@@ -54,7 +49,7 @@ while [ -z ${DISCOVERY_SERVICE_READY} ]; do
 done
 
 # Start the other containers
-docker-compose -f docker-compose_test.yml up -d
+docker-compose -f docker-compose_local.yml up -d
 
 # Attach to the log output of the cluster
-#docker-compose -f docker-compose_test.yml logs
+#docker-compose logs

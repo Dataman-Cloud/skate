@@ -1,26 +1,22 @@
 // Author: linzhaoming
 // Date: 2017-01-05
 // Usage: Jenkins的自动Pipeline构建脚本
+//modify by dongxian lu 
 
 //定义常量和变量
 def projectName = "skate"
 def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
 def registryUrl = "192.168.31.34";
 def imagePrefix = "${registryUrl}/skate"
-def registryUsername = "gzteam"
+def regHarborUsername = "gzteam"
 def registryPassword = "Dataman1234"
 def recvEmail = "dxlu@dataman-inc.com"
+def publicIp="106.75.90.26"
+def test_Node_IP="192.168.31.46"
 
-//定义绑定域变量
-publicRegistryUrl = "demoregistry.dataman-inc.com"
-publicImagePrefix = "${publicRegistryUrl}/skate"
-publicRegistryUsername = "guangzhou"
-publicRegistryPassword = "Gz-regsistry-2017@"
-publicRepositoryId = "releases-public"
-publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
-workRootDir = "/home/apps/jenkins-home/workspace/skate"
-targetdockerfile = "/target/docker/"
-sourcedockerfile = "/src/main/docker/"
+targetdockerfile = "target/docker/"
+sourcedockerfile = "src/main/docker"
+
 
 node("master") {
     stage("Common") {
@@ -81,8 +77,8 @@ if (params.ENV != "release") {
             }
         }
 
+				// 3. sonar
         stage("Sonar") {
-            // 3. sonar
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
                 sh "mvn -f hystrix-dashboard sonar:sonar"
             }
@@ -129,10 +125,11 @@ if (params.ENV != "release") {
         }
 
 				// 4. 构建Image, 并push到Registry中
+
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/hystrix-dashboard"
             }
         }
@@ -140,7 +137,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
             stage("img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/config-service"
             }
         }
@@ -148,7 +145,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
             stage("img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/discovery-service"
             }
         }
@@ -156,7 +153,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
             stage("img-edge") {
                 sh "docker build -t ${imagePrefix}/edge-service edge-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/edge-service"
             }
         }
@@ -164,7 +161,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
             stage("img-user") {
                 sh "docker build -t ${imagePrefix}/user-service user-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/user-service"
             }
         }
@@ -172,7 +169,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
             stage("img-account") {
                 sh "docker build -t ${imagePrefix}/account-service account-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/account-service"
             }
         }
@@ -180,7 +177,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
             stage("img-shoopingcart") {
                 sh "docker build -t ${imagePrefix}/shopping-cart-service shopping-cart-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/shopping-cart-service"
             }
         }
@@ -188,7 +185,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
             stage("img-catalog") {
                 sh "docker build -t ${imagePrefix}/catalog-service catalog-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/catalog-service"
             }
         }
@@ -196,7 +193,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
             stage("img-inventory") {
                 sh "docker build -t ${imagePrefix}/inventory-service inventory-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/inventory-service"
             }
         }
@@ -204,7 +201,7 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
             stage("img-order") {
                 sh "docker build -t ${imagePrefix}/order-service order-service/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/order-service"
             }
         }
@@ -212,95 +209,89 @@ if (params.ENV != "release") {
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
             stage("img-online-store") {
                 sh "docker build -t ${imagePrefix}/online-store-web online-store-web/${targetdockerfile}"
-                sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
                 sh "docker push ${imagePrefix}/online-store-web"
             }
         }
     }
 }
 
-//3. 发布到测试(test)环境: Swarm集群
+//3. 发布到测试(test)环境:
 if (params.ENV == "test") {
     node("master") {
         git branch: "dev", url: "${gitRepo}"
 
-        sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+        sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
-            sh "docker-compose -f docker-compose.yml pull hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml stop hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml rm -f hystrix-dashboard"
-            sh "docker-compose -f docker-compose.yml up -d hystrix-dashboard"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml pull hystrix-dashboard"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml stop hystrix-dashboard"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest docker-compose -f docker-compose_test.yml rm -f hystrix-dashboard"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
-            sh "docker-compose -f docker-compose.yml pull config-service"
-            sh "docker-compose -f docker-compose.yml stop config-service"
-            sh "docker-compose -f docker-compose.yml rm -f config-service"
-            sh "docker-compose -f docker-compose.yml up -d config-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull config-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop config-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f config-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service") {
-            sh "docker-compose -f docker-compose.yml pull discovery-service"
-            sh "docker-compose -f docker-compose.yml stop discovery-service"
-            sh "docker-compose -f docker-compose.yml rm -f discovery-service"
-            sh "docker-compose -f docker-compose.yml up -d discovery-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull discovery-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop discovery-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f discovery-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
-            sh "docker-compose -f docker-compose.yml pull edge-service"
-            sh "docker-compose -f docker-compose.yml stop edge-service"
-            sh "docker-compose -f docker-compose.yml rm -f edge-service"
-            sh "docker-compose -f docker-compose.yml up -d edge-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull edge-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop edge-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f edge-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
-            sh "docker-compose -f docker-compose.yml pull user-service"
-            sh "docker-compose -f docker-compose.yml stop user-service"
-            sh "docker-compose -f docker-compose.yml rm -f user-service"
-            sh "docker-compose -f docker-compose.yml up -d user-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull user-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop user-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f user-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
-            sh "docker-compose -f docker-compose.yml pull account-service"
-            sh "docker-compose -f docker-compose.yml stop account-service"
-            sh "docker-compose -f docker-compose.yml rm -f account-service"
-            sh "docker-compose -f docker-compose.yml up -d account-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull account-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop account-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f account-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
-            sh "docker-compose -f docker-compose.yml pull shopping-cart-service"
-            sh "docker-compose -f docker-compose.yml stop shopping-cart-service"
-            sh "docker-compose -f docker-compose.yml rm -f shopping-cart-service"
-            sh "docker-compose -f docker-compose.yml up -d shopping-cart-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull shopping-cart-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop shopping-cart-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f shopping-cart-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
-            sh "docker-compose -f docker-compose.yml pull catalog-service"
-            sh "docker-compose -f docker-compose.yml stop catalog-service"
-            sh "docker-compose -f docker-compose.yml rm -f catalog-service"
-            sh "docker-compose -f docker-compose.yml up -d catalog-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull catalog-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop catalog-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f catalog-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
-            sh "docker-compose -f docker-compose.yml pull inventory-service"
-            sh "docker-compose -f docker-compose.yml stop inventory-service"
-            sh "docker-compose -f docker-compose.yml rm -f inventory-service"
-            sh "docker-compose -f docker-compose.yml up -d inventory-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull inventory-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop inventory-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f inventory-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
-            sh "docker-compose -f docker-compose.yml pull online-store-web"
-            sh "docker-compose -f docker-compose.yml stop online-store-web"
-            sh "docker-compose -f docker-compose.yml rm -f online-store-web"
-            sh "docker-compose -f docker-compose.yml up -d online-store-web"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull online-store-web"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop online-store-web"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f online-store-web"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-            sh "docker-compose -f docker-compose.yml pull order-service"
-            sh "docker-compose -f docker-compose.yml stop order-service"
-            sh "docker-compose -f docker-compose.yml rm -f order-service"
-            sh "docker-compose -f docker-compose.yml up -d order-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull order-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop order-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest PUBLIC_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f order-service"
+        }
+        
+        if (params.SUB_PROJECT == "all"){
+						sh "chmod +x *.sh"
+						sh "./skaterun_test.sh"
         }
     }
 }
@@ -322,20 +313,17 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' shopping-cart-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' catalog-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}Dockerfile"
-
-    sh "echo Replace latest to ${VERSION} in docker-compose.yml"
-    sh "sed -i 's|:latest|:${VERSION}|g\' docker-compose.yml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' shopping-cart-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' catalog-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
@@ -362,67 +350,67 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
 
         stage("Img-Conf") {
             sh "docker build -t ${imagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/config-service:${VERSION}"
         }
 
         stage("Img-Discovery") {
             sh "docker build -t ${imagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/discovery-service:${VERSION}"
         }
 
         stage("Img-Edge") {
             sh "docker build -t ${imagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/edge-service:${VERSION}"
         }
 
         stage("Img-Hystrix") {
             sh "docker build -t ${imagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/hystrix-dashboard:${VERSION}"
         }
 
         stage("Img-User") {
             sh "docker build -t ${imagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/user-service:${VERSION}"
         }
 
         stage("Img-Account") {
             sh "docker build -t ${imagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/account-service:${VERSION}"
         }
 
         stage("Img-Shopping") {
             sh "docker build -t ${imagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/shopping-cart-service:${VERSION}"
         }
 
         stage("Img-Catalog") {
             sh "docker build -t ${imagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/catalog-service:${VERSION}"
         }
 
         stage("Img-Inventory") {
             sh "docker build -t ${imagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/inventory-service:${VERSION}"
         }
 
         stage("Img-Online") {
             sh "docker build -t ${imagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/online-store-web:${VERSION}"
         }
 
         stage("Img-Order") {
             sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
-            sh "docker login -u ${registryUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/order-service:${VERSION}"
         }
 
@@ -436,85 +424,6 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             //6. 恢复重置
             sh "echo 'Reset the version to master-SNAPSHOT'"
             sh "git reset --hard"
-        }
-
-        //推公网image仓库
-        //pushImageToPublicRegistry();
-
-        //推公网Maven仓库
-        //push3rdJarToPublicMaven();
-    }
-}
-
-/** 推3rd依赖包到公网的Maven仓库 **/
-def push3rdJarToPublicMaven() {
-
-    if (params.IS_PUSH == "Yes") {
-        // 推送依赖包到公网仓库，不能包含有源码
-        stage("Push-public-parent") {
-            //推送skate-parent
-            //由于parent没有jar包，而且mvn命令一定要写-Dfile参数，所以-Dfile这里随便写一个，实际上不会推此包
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=pom.xml -Dfile=octopus-api/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "echo 'push octopus-parent pom to public maven registry finish.'"
-        }
-
-        stage("Push-public-base") {
-            //推送 基础配置，服务发现
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=config-service/pom.xml -Dfile=config-service/target/config-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=discovery-service/pom.xml -Dfile=discovery-service/target/discovery-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=edge-service/pom.xml -Dfile=edge-service/target/edge-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=hystrix-dashboard/pom.xml -Dfile=hystrix-dashboard/target/hystrix-dashboard-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "echo 'push base service jar to public maven registry finish.'"
-        }
-
-        stage("Push-public-biz") {
-            //推送 业务
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=user-service/pom.xml -Dfile=user-service/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=account-service/pom.xml -Dfile=account-service/target/account-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=shopping-cart-service/pom.xml -Dfile=shopping-cart-service/target/shopping-cart-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=catalog-service/pom.xml -Dfile=catalog-service/target/catalog-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=inventory-service/pom.xml -Dfile=inventory-service/target/inventory-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=order-service/pom.xml -Dfile=order-service/target/order-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=online-store-web/pom.xml -Dfile=online-store-web/target/online-store-web-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-
-            sh "echo 'push biz jar to public maven registry finish.'"
-        }
-    }
-}
-
-/** 推images到公网的仓库**/
-def pushImageToPublicRegistry() {
-
-    if (params.IS_PUSH == "Yes") {
-
-        stage("Push-image-base") {
-            sh "docker build -t ${publicImagePrefix}/config-service:${VERSION} config-service"
-            sh "docker build -t ${publicImagePrefix}/discovery-service:${VERSION} discovery-service"
-            sh "docker build -t ${publicImagePrefix}/edge-service:${VERSION} edge-service"
-            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
-            sh "docker push ${publicImagePrefix}/config-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/discovery-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/edge-service:${VERSION}"
-        }
-
-        stage("Push-image-biz") {
-            sh "docker build -f user-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
-            sh "docker build -f account-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
-            sh "docker build -f shopping-cart-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
-            sh "docker build -f catalog-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
-            sh "docker build -f inventory-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
-            sh "docker build -f order-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
-            sh "docker build -f online-store-web/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
-
-            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
-
-            sh "docker push ${publicImagePrefix}/user-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/account-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/shopping-cart-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/catalog-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/inventory-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/order-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/online-store-web:${VERSION}"
         }
     }
 }

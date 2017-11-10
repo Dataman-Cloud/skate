@@ -1,12 +1,12 @@
 config-service:
-  image: skate/config-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/config-service:$SKATE_VERSION
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
   ports:
    - 8888:8888
 hystrix-dashboard:
-  image: skate/hystrix-dashboard:$SKATE_VERSION
+  image: $IMAGE_PREFIX/hystrix-dashboard:$SKATE_VERSION
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -34,7 +34,7 @@ redis:
   ports:
    - 6379:6379
 user-service:
-  image: skate/user-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/user-service:$SKATE_VERSION
   ports:
    - 8181:8181
   links:
@@ -45,14 +45,14 @@ user-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 discovery-service:
-  image: skate/discovery-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/discovery-service:$SKATE_VERSION
   ports:
    - 8761:8761
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 edge-service:
-  image: skate/edge-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/edge-service:$SKATE_VERSION
   ports:
    - 9999:9999
   links:
@@ -63,7 +63,7 @@ edge-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 account-service:
-  image: skate/account-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/account-service:$SKATE_VERSION
   links:
    - user-service
    - discovery-service
@@ -73,7 +73,7 @@ account-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 inventory-service:
-  image: skate/inventory-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/inventory-service:$SKATE_VERSION
   links:
    - neo4j
    - discovery-service
@@ -82,7 +82,7 @@ inventory-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 order-service:
-  image: skate/order-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/order-service:$SKATE_VERSION
   links:
    - mongo
    - discovery-service
@@ -92,7 +92,7 @@ order-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$PUBLIC_IP
 catalog-service:
-  image: skate/catalog-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/catalog-service:$SKATE_VERSION
   links:
    - redis
    - mysql
@@ -102,7 +102,7 @@ catalog-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
 shopping-cart-service:
-  image: skate/shopping-cart-service:$SKATE_VERSION
+  image: $IMAGE_PREFIX/shopping-cart-service:$SKATE_VERSION
   links:
    - mysql
    - discovery-service
@@ -112,7 +112,7 @@ shopping-cart-service:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$PUBLIC_IP
 online-store-web:
-  image: skate/online-store-web:$SKATE_VERSION
+  image: $IMAGE_PREFIX/online-store-web:$SKATE_VERSION
   ports:
    - 8787:8787
   links:
