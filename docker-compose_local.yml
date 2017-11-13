@@ -81,16 +81,6 @@ inventory-service:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
-order-service:
-  image: $IMAGE_PREFIX/order-service:$SKATE_VERSION
-  links:
-   - mongo
-   - discovery-service
-   - config-service
-   - user-service
-  environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
 catalog-service:
   image: $IMAGE_PREFIX/catalog-service:$SKATE_VERSION
   links:
@@ -101,6 +91,16 @@ catalog-service:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
+order-service:
+  image: $IMAGE_PREFIX/order-service:$SKATE_VERSION
+  links:
+   - mongo
+   - discovery-service
+   - config-service
+   - user-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$WEB_IP
 shopping-cart-service:
   image: $IMAGE_PREFIX/shopping-cart-service:$SKATE_VERSION
   links:
@@ -110,7 +110,7 @@ shopping-cart-service:
    - user-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+   - DOCKER_IP=$WEB_IP
 online-store-web:
   image: $IMAGE_PREFIX/online-store-web:$SKATE_VERSION
   ports:
@@ -122,4 +122,4 @@ online-store-web:
    - edge-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+   - DOCKER_IP=$WEB_IP

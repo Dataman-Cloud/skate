@@ -2,25 +2,24 @@
 
 set -e
 
-# Build the project and docker images
-#mvn clean install
-
 #请修改对应images的版本号
-export SKATE_VERSION=${PUBLISH_VERSION:-latest}
+SKATE_VERSION=${PUBLISH_VERSION:-latest}
 
 #填入相应的影像前缀
-export IMAGE_PREFIX_ID=skate
+IMAGE_PREFIX_ID=skate
 
-HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
-export HOST_IP=192.168.31.46
+#HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
-export WEB_IP=$HOST_IP
+WEB_IP=$HOST_IP
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
-export DOCKER_IP=${HOST_IP:-192.168.31.46}
-export PUBLIC_IP=${WEB_IP:-192.168.31.46}
-export IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
+DOCKER_IP=${HOST_IP:-192.168.31.46}
+WEB_IP=${WEB_IP:-192.168.31.46}
+IMAGE_PREFIX=${IMAGE_PREFIX_ID:-192.168.31.34}
+
+export SKATE_VERSION DOCKER_IP WEB_IP IMAGE_PREFIX
 
 # Remove existing containers
 docker-compose -f docker-compose_local.yml stop
