@@ -92,13 +92,13 @@ def pushImageToPublicRegistry() {
         }
 
         stage("Push-image-biz") {
-            sh "docker build -f user-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f account-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f shopping-cart-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f catalog-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f inventory-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f order-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service/${sourcedockerfile}/Dockerfile"
-            sh "docker build -f online-store-web/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/user-service:${VERSION} user-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/account-service:${VERSION} account-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/order-service:${VERSION} order-service/${sourcedockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web/${sourcedockerfile}/Dockerfile"
 
             sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
 
