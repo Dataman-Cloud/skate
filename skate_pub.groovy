@@ -98,23 +98,23 @@ def pushImageToPublicRegistry() {
     if (params.IS_PUSH == "Yes") {
 
         stage("Push-image-base") {
-            sh "docker build -t ${publicImagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}/Dockerfile"
-            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}/${targetdockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/config-service:${VERSION} config-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/discovery-service:${VERSION} discovery-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/edge-service:${VERSION} edge-service/${targetdockerfile}"
+            sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}/${targetdockerfile}"
             sh "docker push ${publicImagePrefix}/config-service:${VERSION}"
             sh "docker push ${publicImagePrefix}/discovery-service:${VERSION}"
             sh "docker push ${publicImagePrefix}/edge-service:${VERSION}"
         }
 
         stage("Push-image-biz") {
-            sh "docker build -t ${publicImagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}/Dockerfile"
-            sh "docker build -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}/Dockerfile"
+            sh "docker build -t ${publicImagePrefix}/user-service:${VERSION} user-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/account-service:${VERSION} account-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
+            sh "docker build -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
 
             sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
 
