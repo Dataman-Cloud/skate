@@ -9,6 +9,7 @@ SKATE_VERSION=${PUBLISH_VERSION:-latest}
 IMAGE_PREFIX_ID=demoregistry.dataman-inc.com/skate
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+HOST_IP=10.3.8.23
 
 #缺省WEB界面的访问IP地址，有需要则修改
 WEB_IP=106.75.90.26

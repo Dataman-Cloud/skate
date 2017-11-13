@@ -8,7 +8,8 @@ SKATE_VERSION=${PUBLISH_VERSION:-latest}
 #填入相应的影像前缀
 IMAGE_PREFIX_ID=skate
 
-HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+#HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
+HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
 WEB_IP=$HOST_IP

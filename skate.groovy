@@ -291,8 +291,7 @@ if (params.ENV == "test") {
         }
         
         if (params.SUB_PROJECT == "all"){
-						sh "chmod +x *.sh"
-						sh "./skaterun_test.sh"
+						sh "sh ./skaterun_test.sh"
         }
     }
 }
