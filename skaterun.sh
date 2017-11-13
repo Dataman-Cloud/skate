@@ -29,6 +29,7 @@ fi
 # Export the active docker machine IP
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'|tr -s ["\n"]|tr -d [":"]`
+HOST_IP=192.168.31.46
 
 #缺省WEB界面的访问IP地址，有需要则修改
 WEB_IP=$HOST_IP
