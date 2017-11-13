@@ -26,10 +26,6 @@ sourcedockerfile = "src/main/docker"
             sh "mvn -DskipTests clean package"
         }
 
-				if (params.VERSION = "") {
-						error("Only master branch can have null version. Please check your input!")
-				}
-
         //调整到push tag 后，确保推内网所有操作成功
         //推公网image仓库
         pushImageToPublicRegistry()
