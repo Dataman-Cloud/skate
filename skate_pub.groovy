@@ -8,6 +8,9 @@ publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
+targetdockerfile = "target/docker/"
+sourcedockerfile = "src/main/docker"
+
     node("master") {
         stage("Prepare") {
             sh "echo version is ${VERSION}, IS_PUSH is ${IS_PUSH}"
@@ -93,13 +96,13 @@ def pushImageToPublicRegistry() {
         }
 
         stage("Push-image-biz") {
-            sh "docker build -f user-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
-            sh "docker build -f account-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
-            sh "docker build -f shopping-cart-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
-            sh "docker build -f catalog-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
-            sh "docker build -f inventory-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
-            sh "docker build -f order-service/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
-            sh "docker build -f online-store-web/${targetdockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
+            sh "docker build -f user-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/user-service:${VERSION} user-service"
+            sh "docker build -f account-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/account-service:${VERSION} account-service"
+            sh "docker build -f shopping-cart-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/shopping-cart-service:${VERSION} shopping-cart-service"
+            sh "docker build -f catalog-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/catalog-service:${VERSION} catalog-service"
+            sh "docker build -f inventory-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/inventory-service:${VERSION} inventory-service"
+            sh "docker build -f order-service/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/order-service:${VERSION} order-service"
+            sh "docker build -f online-store-web/${sourcedockerfile}/Dockerfile -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web"
 
             sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
 
