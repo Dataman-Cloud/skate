@@ -8,7 +8,7 @@ publicRepositoryId = "releases-public"
 publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
-targetdockerfile = "target/docker/"
+targetdockerfile = "target/"
 sourcedockerfile = "src/main/docker"
 
     node("master") {
@@ -24,8 +24,23 @@ sourcedockerfile = "src/main/docker"
 
         stage("Release-Build") {
             //sh "mvn -DskipTests clean package"
-            sh "mvn -DskipTests clean package deploy -Dspring.profiles.active=development"
+            sh "mvn -DskipTests clean package -Dspring.profiles.active=docker"
         }
+
+        stage("cp-dockerfile") {
+        	sh "cp config-service/${sourcedockerfile}/Dockerfile  config-service/${targetdockerfile}"
+        	sh "cp discovery-service/${sourcedockerfile}/Dockerfile  discovery-service/${targetdockerfile}"
+        	sh "cp edge-service/${sourcedockerfile}/Dockerfile  edge-service/${targetdockerfile}"
+        	sh "cp user-service/${sourcedockerfile}/Dockerfile  user-service/${targetdockerfile}"
+        	sh "cp account-service/${sourcedockerfile}/Dockerfile  account-service/${targetdockerfile}"
+        	sh "cp shopping-cart-service/${sourcedockerfile}/Dockerfile  shopping-cart-service/${targetdockerfile}"
+        	sh "cp catalog-service/${sourcedockerfile}/Dockerfile  catalog-service/${targetdockerfile}"
+        	sh "cp inventory-service/${sourcedockerfile}/Dockerfile  inventory-service/${targetdockerfile}"
+        	sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
+        	sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
+        	sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
+        }
+        
 
         //调整到push tag 后，确保推内网所有操作成功
         //推公网image仓库
