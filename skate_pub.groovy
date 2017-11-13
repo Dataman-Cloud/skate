@@ -13,7 +13,7 @@ workRootDir = "/home/apps/jenkins-home/workspace/skate"
             sh "echo version is ${VERSION}, IS_PUSH is ${IS_PUSH}"
 
             git branch: "master", url: "${gitRepo}"
-            sh "git pull origin develop"
+            sh "git pull origin dev"
 
 						sh "echo 'execute replaceVersion'"
             replaceVersion()
