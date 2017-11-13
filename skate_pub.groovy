@@ -111,3 +111,34 @@ def pushImageToPublicRegistry() {
         }
     }
 }
+
+
+/** Ìæ»»°æ±¾ºÅ*/
+def replaceVersion() {
+    sh "echo Replace master-SNAPSHOT to ${VERSION} in pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' shopping-cart-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' catalog-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
+
+    sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' discovery-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' hystrix-dashboard/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' edge-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' user-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' account-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' shopping-cart-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' catalog-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
+}

@@ -42,7 +42,7 @@ node("master") {
         if (params.ENV != "test" && params.ENV != "release") {
             error("[Environment] should be test, release")
         }
-
+/*
         //3. 发布master到生产之前进行二次确认
         if (params.ENV == "release") {
             try {
@@ -58,6 +58,7 @@ node("master") {
                 error "Aborted by:\n ${user}"
             }
         }
+*/
     }
 }
 
