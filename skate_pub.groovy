@@ -1,3 +1,4 @@
+def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
 publicRegistryUrl = "demoregistry.dataman-inc.com"
 publicImagePrefix = "${publicRegistryUrl}/skate"
 publicRegistryUsername = "guangzhou"
@@ -14,6 +15,7 @@ workRootDir = "/home/apps/jenkins-home/workspace/skate"
             git branch: "master", url: "${gitRepo}"
             sh "git pull origin develop"
 
+						sh "echo 'execute replaceVersion'"
             replaceVersion()
         }
 
@@ -111,7 +113,6 @@ def pushImageToPublicRegistry() {
         }
     }
 }
-
 
 /** Ìæ»»°æ±¾ºÅ*/
 def replaceVersion() {
