@@ -8,8 +8,8 @@ def projectName = "skate"
 def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
 def registryUrl = "192.168.31.34";
 def imagePrefix = "${registryUrl}/skate"
-def regHarborUsername = "gzteam"
-def registryPassword = "Dataman1234"
+def regHarborUsername = "admin"
+def registryPassword = "Harbor12345"
 def recvEmail = "dxlu@dataman-inc.com"
 def publicIp="106.75.90.26"
 def test_Node_IP="192.168.31.46"
@@ -225,69 +225,69 @@ if (params.ENV == "test") {
         sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull hystrix-dashboard"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml stop hystrix-dashboard"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml rm -f hystrix-dashboard"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull hystrix-dashboard"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml stop hystrix-dashboard"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml rm -f hystrix-dashboard"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull config-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop config-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f config-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP} docker-compose -f docker-compose_test.yml pull config-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop config-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f config-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull discovery-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop discovery-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f discovery-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull discovery-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop discovery-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f discovery-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "edge-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull edge-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop edge-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f edge-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull edge-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop edge-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f edge-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "user-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull user-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop user-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f user-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull user-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop user-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f user-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "account-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull account-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop account-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f account-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull account-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop account-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f account-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "shopping-cart-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull shopping-cart-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop shopping-cart-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f shopping-cart-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull shopping-cart-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop shopping-cart-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f shopping-cart-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "catalog-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull catalog-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop catalog-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f catalog-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull catalog-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop catalog-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f catalog-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "inventory-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull inventory-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop inventory-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f inventory-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull inventory-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop inventory-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f inventory-service"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "online-store-web") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull online-store-web"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop online-store-web"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f online-store-web"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull online-store-web"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop online-store-web"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f online-store-web"
         }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull order-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop order-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate SKATE_VERSION=latest WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f order-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml pull order-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml stop order-service"
+            sh "env IMAGE_PREFIX='${registryUrl}/skate' SKATE_VERSION='latest' WEB_IP=${test_Node_IP}  docker-compose -f docker-compose_test.yml rm -f order-service"
         }
         
         if (params.SUB_PROJECT == "all"){
