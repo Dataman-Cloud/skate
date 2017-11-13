@@ -40,8 +40,8 @@ WEB_IP=${WEB_IP:-192.168.31.46}
 export SKATE_VERSION DOCKER_IP WEB_IP IMAGE_PREFIX
 
 # Remove existing containers
-docker-compose -f docker-compose_test.yml stop
-docker-compose -f docker-compose_test.yml rm -f
+docker-compose -f docker-compose.yml stop
+docker-compose -f docker-compose.yml rm -f
 
 # Start the config service first and wait for it to become available
 docker-compose -f docker-compose_test.yml up -d config-service
@@ -55,7 +55,7 @@ while [ -z ${CONFIG_SERVICE_READY} ]; do
 done
 
 # Start the discovery service next and wait
-docker-compose -f docker-compose_test.yml up -d discovery-service
+docker-compose -f docker-compose.yml up -d discovery-service
 
 while [ -z ${DISCOVERY_SERVICE_READY} ]; do
   echo "Waiting for discovery service..."
@@ -66,7 +66,7 @@ while [ -z ${DISCOVERY_SERVICE_READY} ]; do
 done
 
 # Start the other containers
-docker-compose -f docker-compose_test.yml up -d
+docker-compose -f docker-compose.yml up -d
 
 # Attach to the log output of the cluster
-#docker-compose -f docker-compose_test.yml logs
+#docker-compose -f docker-compose.yml logs
