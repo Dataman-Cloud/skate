@@ -291,7 +291,7 @@ if (params.ENV == "test") {
         }
 
         if (params.SUB_PROJECT == "all"){
-						sh "sh ./skaterun_test.sh"
+						sh "sh ./skaterun.sh test"
         }
     }
 }
