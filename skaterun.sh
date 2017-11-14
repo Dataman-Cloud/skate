@@ -19,7 +19,7 @@ elif [ $p1 = "local" ] ;then
 	WEB_IP='192.168.31.46'
 elif [ $p1 = "web" ] ;then
 	IMAGE_PREFIX="demoregistry.dataman-inc.com/skate"
-	SKATE_VERSION="latest"
+	SKATE_VERSION=":latest"
 	WEB_IP='106.75.90.26'
 else
     echo "you have not input a parameter in  'test'\'local'\'web'"

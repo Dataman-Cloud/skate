@@ -34,4 +34,4 @@ fi
 export SKATE_VERSION DOCKER_IP WEB_IP IMAGE_PREFIX
 
 #env IMAGE_PREFIX='192.168.31.34/skate' SKATE_VERSION='latest' WEB_IP='192.168.31.46' docker-compose -f docker-compose_test.yml down -v
-docker-compose -f docker-compose_test.yml down -v
+docker-compose -f docker-compose.yml down -v
