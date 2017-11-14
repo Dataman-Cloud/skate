@@ -327,6 +327,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
 
     sh "echo Replace public web to ${VERSION} in skate_stop.sh"
+    sh "sed -i 's|:latest|${VERSION}|g\' skaterun.sh"
     sh "sed -i 's|:latest|${VERSION}|g\' skate_stop.sh"
 }
 
