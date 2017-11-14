@@ -8,17 +8,20 @@ if [ ! -n "$p1" ] ;then
     exit
 fi
 
-if [ p1="test" ] ;then
+if [ $p1="test" ] ;then
+	echo "stop test demo!"
 	IMAGE_PREFIX="192.168.31.34/skate"
 	SKATE_VERSION="latest"
 	WEB_IP='192.168.31.46'
-elif [ p1="local" ] ;then
+elif [ $p1="local" ] ;then
+	echo "stop local develop demo!"
 	IMAGE_PREFIX="skate"
 	SKATE_VERSION="latest"
 	WEB_IP='192.168.31.46'
-elif [ p1="web" ] ;then
+elif [ $p1="web" ] ;then
+	echo "stop public web demo!"
 	IMAGE_PREFIX="demoregistry.dataman-inc.com/skate"
-	SKATE_VERSION="latest"
+	SKATE_VERSION=":latest"
 	WEB_IP='192.168.31.46'
 else
     echo "you have not input a parameter in  'test'\'local'\'web'"
