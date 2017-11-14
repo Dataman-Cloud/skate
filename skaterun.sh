@@ -12,15 +12,15 @@ fi
 if [ $p1 = "test" ] ;then
 	IMAGE_PREFIX="192.168.31.34/skate"
 	SKATE_VERSION="latest"
-	WEB_IP='192.168.31.46'
+	WEB_IP="192.168.31.46"
 elif [ $p1 = "local" ] ;then
 	IMAGE_PREFIX="skate"
 	SKATE_VERSION="latest"
-	WEB_IP='192.168.31.46'
+	WEB_IP="192.168.31.46"
 elif [ $p1 = "web" ] ;then
 	IMAGE_PREFIX="demoregistry.dataman-inc.com/skate"
 	SKATE_VERSION=":latest"
-	WEB_IP='106.75.90.26'
+	WEB_IP="106.75.90.26"
 else
     echo "you have not input a parameter in  'test'\'local'\'web'"
     exit
@@ -29,10 +29,7 @@ fi
 # Export the active docker machine IP
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'|tr -s ["\n"]|tr -d [":"]`
-HOST_IP=192.168.31.46
-
-#缺省WEB界面的访问IP地址，有需要则修改
-WEB_IP=$HOST_IP
+HOST_IP="192.168.31.46"
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
 DOCKER_IP=${HOST_IP:-192.168.31.46}

@@ -6,7 +6,7 @@ set -e
 SKATE_VERSION=latest
 
 #填入相应的影像前缀
-IMAGE_PREFIX_ID=demoregistry.dataman-inc.com/skate
+IMAGE_PREFIX=demoregistry.dataman-inc.com/skate
 
 HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'`
 HOST_IP=10.3.8.23
@@ -16,8 +16,6 @@ WEB_IP=106.75.90.26
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
 DOCKER_IP=${HOST_IP:-10.3.8.23}
-WEB_IP=${WEB_IP:-106.75.90.26}
-IMAGE_PREFIX=${IMAGE_PREFIX_ID:-demoregistry.dataman-inc.com/skate}
 
 export SKATE_VERSION DOCKER_IP WEB_IP IMAGE_PREFIX
 
