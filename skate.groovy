@@ -291,6 +291,7 @@ if (params.ENV == "test") {
         }
 
         if (params.SUB_PROJECT == "all"){
+						sh "sh ./skate_stop.sh test"
 						sh "sh ./skaterun.sh test"
         }
     }
@@ -324,6 +325,9 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
+
+    sh "echo Replace public web to ${VERSION} in skate_stop.sh"
+    sh "sed -i 's|:latest|${VERSION}|g\' skate_stop.sh"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署

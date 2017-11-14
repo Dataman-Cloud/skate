@@ -3,7 +3,7 @@
 set -e
 
 #请修改对应images的版本号
-SKATE_VERSION=${PUBLISH_VERSION:-latest}
+SKATE_VERSION=latest
 
 #填入相应的影像前缀
 IMAGE_PREFIX_ID=demoregistry.dataman-inc.com/skate
