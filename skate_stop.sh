@@ -14,12 +14,12 @@ BASE_IMAGE_PREFIX=""
 if [ $p1 = "test" ] ;then
 	echo "stop test demo!"
 	DOCKER_IP="192.168.31.46"
-	IMAGE_PREFIX="192.168.31.34/skate"
+	IMAGE_PREFIX="192.168.31.34/skate/"
 	SKATE_VERSION="latest"
 elif [ $p1 = "local" ] ;then
 	echo "stop local develop demo!"
 	DOCKER_IP="192.168.31.46"
-	IMAGE_PREFIX="skate"
+	IMAGE_PREFIX="skate/"
 	SKATE_VERSION="latest"
 elif [ $p1 = "web" ] ;then
 	echo "stop public web demo!"

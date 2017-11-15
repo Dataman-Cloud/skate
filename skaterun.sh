@@ -13,11 +13,11 @@ BASE_IMAGE_PREFIX=""
 
 HOST_IP="192.168.31.46"
 if [ $p1 = "test" ] ;then
-	IMAGE_PREFIX="192.168.31.34/skate"
+	IMAGE_PREFIX="192.168.31.34/skate/"
 	SKATE_VERSION="latest"
 	WEB_IP="192.168.31.46"
 elif [ $p1 = "local" ] ;then
-	IMAGE_PREFIX="skate"
+	IMAGE_PREFIX="skate/"
 	SKATE_VERSION="latest"
 	WEB_IP="192.168.31.46"
 elif [ $p1 = "web" ] ;then
