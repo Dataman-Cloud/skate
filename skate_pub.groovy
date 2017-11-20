@@ -5,7 +5,6 @@ publicRegistryUsername = "guangzhou"
 publicRegistryPassword = "Gz-regsistry-2017@"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 publicRepositoryId = "releases-public"
-publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
 targetdockerfile = "target/"
