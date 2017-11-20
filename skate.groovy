@@ -17,6 +17,8 @@ def test_Node_IP="192.168.31.46"
 targetdockerfile = "target/docker/"
 sourcedockerfile = "src/main/docker"
 
+/**环境版本设置*/
+envfile="/src/main/resources/static/assets/js/env.js"
 
 node("master") {
     stage("Common") {
@@ -329,6 +331,9 @@ def replaceVersion() {
     sh "echo Replace public web to ${VERSION} in skate_stop.sh"
     sh "sed -i 's|:latest|${VERSION}|g\' skaterun.sh"
     sh "sed -i 's|:latest|${VERSION}|g\' skate_stop.sh"
+
+    /**添加版本号**/
+    sh "sed -i 's|:master-SNAPSHOT|${VERSION}|g\' online-store-web/${envfile}"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
