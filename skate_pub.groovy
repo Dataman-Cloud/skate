@@ -5,92 +5,53 @@ publicRegistryUsername = "guangzhou"
 publicRegistryPassword = "Gz-regsistry-2017@"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 publicRepositoryId = "releases-public"
-publicRepositoryUrl = "http://106.75.3.66:8081/nexus/content/repositories/releases"
 workRootDir = "/home/apps/jenkins-home/workspace/skate"
 
 targetdockerfile = "target/"
 sourcedockerfile = "src/main/docker"
 
-    node("master") {
-        stage("Prepare") {
-            sh "echo version is ${VERSION}, IS_PUSH is ${IS_PUSH}"
+node("master") {
+    stage("Prepare") {
+        sh "echo version is ${VERSION}, IS_PUSH is ${IS_PUSH}"
 
-            git branch: "master", url: "${gitRepo}"
-            sh "git pull origin dev"
+        git branch: "master", url: "${gitRepo}"
+        sh "git pull origin dev"
 
-						sh "echo 'execute replaceVersion'"
-            replaceVersion()
-        }
-
-        stage("Release-Build") {
-            //sh "mvn -DskipTests clean package"
-            sh "mvn -DskipTests clean package -Dspring.profiles.active=docker"
-        }
-
-        stage("cp-dockerfile") {
-        	sh "cp config-service/${sourcedockerfile}/Dockerfile  config-service/${targetdockerfile}"
-        	sh "cp discovery-service/${sourcedockerfile}/Dockerfile  discovery-service/${targetdockerfile}"
-        	sh "cp edge-service/${sourcedockerfile}/Dockerfile  edge-service/${targetdockerfile}"
-        	sh "cp user-service/${sourcedockerfile}/Dockerfile  user-service/${targetdockerfile}"
-        	sh "cp account-service/${sourcedockerfile}/Dockerfile  account-service/${targetdockerfile}"
-        	sh "cp shopping-cart-service/${sourcedockerfile}/Dockerfile  shopping-cart-service/${targetdockerfile}"
-        	sh "cp catalog-service/${sourcedockerfile}/Dockerfile  catalog-service/${targetdockerfile}"
-        	sh "cp inventory-service/${sourcedockerfile}/Dockerfile  inventory-service/${targetdockerfile}"
-        	sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
-        	sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
-        	sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
-        }
-
-
-        //调整到push tag 后，确保推内网所有操作成功
-        //推公网image仓库
-        pushImageToPublicRegistry()
-
-        //推公网Maven仓库
-        //push3rdJarToPublicMaven()
-
-        stage("Cleanup") {
-            //恢复重置
-            sh "echo 'Reset the version to master-SNAPSHOT'"
-            sh "git reset --hard"
-        }
+				sh "echo 'execute replaceVersion'"
+        replaceVersion()
     }
 
-/** 推3rd依赖包到公网的Maven仓库 **/
-def push3rdJarToPublicMaven() {
+    stage("Release-Build") {
+        //sh "mvn -DskipTests clean package"
+        sh "mvn -DskipTests clean package -Dspring.profiles.active=docker"
+    }
 
-    if (params.IS_PUSH == "Yes") {
-        // 推送依赖包到公网仓库，不能包含有源码
-        stage("Push-public-parent") {
-            //推送skate-parent
-            //由于parent没有jar包，而且mvn命令一定要写-Dfile参数，所以-Dfile这里随便写一个，实际上不会推此包
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=pom.xml -Dfile=octopus-api/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "echo 'push octopus-parent pom to public maven registry finish.'"
-        }
+    stage("cp-dockerfile") {
+    	sh "cp config-service/${sourcedockerfile}/Dockerfile  config-service/${targetdockerfile}"
+    	sh "cp discovery-service/${sourcedockerfile}/Dockerfile  discovery-service/${targetdockerfile}"
+    	sh "cp edge-service/${sourcedockerfile}/Dockerfile  edge-service/${targetdockerfile}"
+    	sh "cp user-service/${sourcedockerfile}/Dockerfile  user-service/${targetdockerfile}"
+    	sh "cp account-service/${sourcedockerfile}/Dockerfile  account-service/${targetdockerfile}"
+    	sh "cp shopping-cart-service/${sourcedockerfile}/Dockerfile  shopping-cart-service/${targetdockerfile}"
+    	sh "cp catalog-service/${sourcedockerfile}/Dockerfile  catalog-service/${targetdockerfile}"
+    	sh "cp inventory-service/${sourcedockerfile}/Dockerfile  inventory-service/${targetdockerfile}"
+    	sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
+    	sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
+    	sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
+    }
 
-        stage("Push-public-base") {
-            //推送 基础配置，服务发现
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=config-service/pom.xml -Dfile=config-service/target/config-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=discovery-service/pom.xml -Dfile=discovery-service/target/discovery-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=edge-service/pom.xml -Dfile=edge-service/target/edge-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-//            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=hystrix-dashboard/pom.xml -Dfile=hystrix-dashboard/target/hystrix-dashboard-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "echo 'push base service jar to public maven registry finish.'"
-        }
 
-        stage("Push-public-biz") {
-            //推送 业务
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=user-service/pom.xml -Dfile=user-service/target/octopus-api-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=account-service/pom.xml -Dfile=account-service/target/account-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=shopping-cart-service/pom.xml -Dfile=shopping-cart-service/target/shopping-cart-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=catalog-service/pom.xml -Dfile=catalog-service/target/catalog-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=inventory-service/pom.xml -Dfile=inventory-service/target/inventory-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=order-service/pom.xml -Dfile=order-service/target/order-service-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
-            sh "mvn -s ${workRootDir}/settings.xml deploy:deploy-file -DpomFile=online-store-web/pom.xml -Dfile=online-store-web/target/online-store-web-${VERSION}.jar  -DrepositoryId=${publicRepositoryId} -Durl=${publicRepositoryUrl}"
+    //调整到push tag 后，确保推内网所有操作成功
+    //推公网image仓库
+    pushImageToPublicRegistry()
 
-            sh "echo 'push biz jar to public maven registry finish.'"
-        }
+    stage("Cleanup") {
+        //恢复重置
+        sh "echo 'Reset the version to master-SNAPSHOT'"
+        sh "git reset --hard"
     }
 }
+
 
 /** 推images到公网的仓库**/
 def pushImageToPublicRegistry() {
