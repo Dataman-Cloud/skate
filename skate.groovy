@@ -18,7 +18,7 @@ targetdockerfile = "target/docker/"
 sourcedockerfile = "src/main/docker"
 
 /**环境版本设置*/
-envfile="/src/main/resources/static/assets/js/env.js"
+envfile="src/main/resources/static/assets/js/env.js"
 
 node("master") {
     stage("Common") {
@@ -333,7 +333,7 @@ def replaceVersion() {
     sh "sed -i 's|:latest|${VERSION}|g\' skate_stop.sh"
 
     /**添加版本号**/
-    sh "sed -i 's|:master-SNAPSHOT|${VERSION}|g\' online-store-web/${envfile}"
+    sh "sed -i 's|latest|${VERSION}|g\' online-store-web/${envfile}"
 }
 
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
