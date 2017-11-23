@@ -32,4 +32,24 @@ public class InventoryControllerV1 {
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @RequestMapping(path = "/modifyProductNum", method = RequestMethod.GET, name = "modifyProductNum")
+    public ResponseEntity modifyProductNum(@RequestParam("productId") String productId,@RequestParam("productNum")
+            long productNum){
+        return Optional.ofNullable(inventoryService.modifyProductNum(productId,productNum))
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * 通过产品编号获取库存量
+     * @param productId
+     * @return
+     */
+    @RequestMapping(path = "/getInventoryNumByPid", method = RequestMethod.GET, name = "getInventoryNumByPid")
+    public ResponseEntity getInventoryNumByPid(@RequestParam("productId") String productId){
+        return Optional.ofNullable(inventoryService.getInventoryNumByPid(productId))
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }

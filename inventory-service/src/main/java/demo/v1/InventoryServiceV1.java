@@ -54,4 +54,14 @@ public class InventoryServiceV1 {
         return neo4jTemplate.loadAll(inventoryList, 1)
                 .stream().collect(Collectors.toList());
     }
+
+    @HystrixCommand
+    public Inventory modifyProductNum(String productId,long productNum){
+        return inventoryRepository.modifyProductNum(productId,productNum);
+    }
+
+    @HystrixCommand
+    public Long getInventoryNumByPid(String productId){
+        return inventoryRepository.getInventoryNumByPid(productId);
+    }
 }

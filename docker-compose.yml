@@ -123,3 +123,15 @@ online-store-web:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$WEB_IP
+octopus-service:
+  image: ${IMAGE_PREFIX}octopus-service:${SKATE_VERSION}
+  ports:
+   - 8700:8700
+  links:
+   - neo4j
+   - discovery-service
+   - config-service
+   - inventory-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$WEB_IP
