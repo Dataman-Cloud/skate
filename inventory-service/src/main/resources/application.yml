@@ -1,4 +1,4 @@
-spring.profiles.active: development
+spring.profiles.active: test
 ---
 spring:
   profiles: development
@@ -31,8 +31,13 @@ eureka:
 spring:
   profiles: test
   neo4j:
-    host: ${SPRING_NEO4J_HOST:192.168.99.101}
-    port: ${SPRING_NEO4J_PORT:7474}
+    host: 192.168.31.46
+    port: 7474
 eureka:
+  instance:
+    prefer-ip-address: false
   client:
-    enabled: false
+    registerWithEureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://192.168.31.46:8761/eureka/

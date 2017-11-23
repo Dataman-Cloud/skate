@@ -1,6 +1,8 @@
 spring:
   application:
     name: online-store-web
+  profiles:
+    active: test
 server:
   port: 8787
 ---
@@ -11,14 +13,16 @@ spring:
       uri: http://config-service:8888
 ---
 spring:
-  profiles: default
-  cloud:
-    config:
-      uri: http://localhost:8888
-spring.profiles.active: development
----
-spring:
   profiles: cloud
   cloud:
     config:
       uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
+
+---
+spring:
+  profiles: test
+  cloud:
+    config:
+      uri: http://192.168.31.46:8888
+
+

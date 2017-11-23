@@ -28,7 +28,7 @@ public class Stock {
 
     private Date syncTime; //同步时间
 
-    private byte sync=0; //货品状态，是否已经同步库存表，默认是0，未同步，1已同步
+    private boolean sync=false; //false未同步，true已同步,默认是false
 
     public Long getId() {
         return id;
@@ -70,11 +70,11 @@ public class Stock {
         this.stockTime = stockTime;
     }
 
-    public byte getSync() {
+    public boolean isSync() {
         return sync;
     }
 
-    public void setSync(byte sync) {
+    public void setSync(boolean sync) {
         this.sync = sync;
     }
 
