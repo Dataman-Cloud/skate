@@ -28,10 +28,9 @@ public class StockControllerV1 {
 
     /**
      * 获取未同步的货品
-     * @return
      */
     @RequestMapping("/getStockNoSync")
-    public ResponseEntity getStockNoSync(){
+    public ResponseEntity getStockNoSync() {
         return Optional.ofNullable(stockService.getStockNoSync())
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -39,10 +38,9 @@ public class StockControllerV1 {
 
     /**
      * 同步产品状态
-     * @return
      */
-    @RequestMapping("/modifyProductState/{productId}")
-    public ResponseEntity modifyProductState(@PathVariable("productId") String productId){
+    @RequestMapping("/modifyProductState")
+    public ResponseEntity modifyProductState(@PathVariable("productId") String productId) {
         return Optional.ofNullable(stockService.modifyProductState(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

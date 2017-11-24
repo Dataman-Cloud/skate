@@ -1,14 +1,20 @@
 package demo.util;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import demo.stock.Stock;
 
@@ -16,16 +22,18 @@ public class JSONSerializer {
 
     private static final String DEFAULT_CHARSET_NAME = "UTF-8";
 
-    public static <T> String serialize(T object) {
+    @Deprecated
+    public static <T> String obj2Json(T object) {
         return JSON.toJSONString(object);
     }
 
-    public static <T> T deserialize(String string, Class<T> clz) {
+    @Deprecated
+    public static <T> T json2Obj(String string, Class<T> clz) {
         return JSON.parseObject(string, clz);
     }
 
     public static <T> T load(Path path, Class<T> clz) throws IOException {
-        return deserialize(
+        return json2Obj(
                 new String(Files.readAllBytes(path), DEFAULT_CHARSET_NAME), clz);
     }
 
@@ -34,26 +42,120 @@ public class JSONSerializer {
             Files.createDirectories(path.getParent());
         }
         Files.write(path,
-                serialize(object).getBytes(DEFAULT_CHARSET_NAME),
+                obj2Json(object).getBytes(DEFAULT_CHARSET_NAME),
                 StandardOpenOption.WRITE,
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
 
-    public static void main(String[] args) {
+    /**
+     * javabean to json
+     */
+    public static <T> String objToJson(T object) {
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        return json;
+    }
+
+    /**
+     * list to json
+     */
+    public static <T> String listToJson(List<T> list) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        return json;
+    }
+
+    /**
+     * map to json
+     */
+    public static String mapToJson(Map map) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        return json;
+    }
+
+    /**
+     * json to javabean
+     */
+    public static <T> T jsonToObj(String json, Class<T> t) {
+        Gson gson = new Gson();
+        T obj = gson.fromJson(json, t);//对于javabean直接给出class实例
+        return obj;
+    }
+
+    /**
+     * json字符串转List集合
+     */
+    public static <T> List<T> jsonToList(String json, Class<T[]> type) {
+        Gson gson = new Gson();
+        T[] list = new Gson().fromJson(json, type);
+        return Arrays.asList(list);
+    }
+
+    /**
+     * json字符串转List集合
+     */
+    public static <K, V> List<Map<K, V>> json2Map(String json, Class<Map[]> type) {
+        Gson gson = new Gson();
+        Map<K, V>[] list = new Gson().fromJson(json, type);
+        return Arrays.asList(list);
+    }
+
+    /**
+     * json字符串转Map
+     */
+    public static <K, V> Map<K, V> jsonToMap(String json) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<K, V>>() {
+        }.getType();
+        Map<K, V> maps = gson.fromJson(json, type);
+        return maps;
+    }
+
+    //springBoot 启动时只允许有一个main函数，测试完毕需要注释掉
+    /*public static void main(String[] args) {
         Stock person1 = new Stock();
-        person1.setId(001L);
+        person1.setId(1L);
         person1.setNumber(100L);
         person1.setStockTime(new Date());
 
         Stock person2 = new Stock();
-        person2.setId(002L);
+        person2.setId(2L);
         person2.setNumber(200L);
         person2.setStockTime(new Date());
 
         List<Stock> lp = new ArrayList<Stock>();
         lp.add(person1);
         lp.add(person2);
-        System.out.println(serialize(lp));
-    }
+        System.out.println("jsonObj2str:" + listToJson(lp));
+
+        String json = listToJson(lp);
+        //Map<String,Object> obj = jsonToMap(json);
+        //System.out.print(obj.getId());
+        //for(Map.Entry entry : obj.entrySet()){
+        //    System.out.print(entry.getKey() + " - " + entry.getValue());
+        // }
+        //List<Stock> list = (List<Stock>)jsonToObj(json,Stock.class);
+
+        List<Stock> jsonListObject = jsonToList(json, Stock[].class);
+        List<Map<String, Object>> maps = json2Map(json, Map[].class);
+        for (Stock stock : jsonListObject) {
+            System.out.print(stock.getId() + " - " + stock.getNumber() + " - " + stock.getStockTime() + "\n");
+        }
+
+        for (Map<String, Object> map : maps) {
+            for (Map.Entry<String, Object> m : map.entrySet()) {
+                //System.out.print("key: " + m.getKey() + " - value: " + m.getValue() + "\n");
+            }
+
+            for (String key : map.keySet()) {
+
+            }
+
+            System.out.print("productId: " + map.get("id") + " - productNumber: " + map.get("number") + "\n");
+        }
+    }*/
 }

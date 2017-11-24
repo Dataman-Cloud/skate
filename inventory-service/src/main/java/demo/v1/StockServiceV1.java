@@ -16,17 +16,17 @@ public class StockServiceV1 {
     private StockRepository stockRepository;
 
     @Autowired
-    public StockServiceV1(StockRepository stockRepository){
+    public StockServiceV1(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }
 
     @HystrixCommand
-    public List<Stock> getStockNoSync(){
+    public List<Stock> getStockNoSync() {
         return stockRepository.getStockNoSync();
     }
 
     @HystrixCommand
-    public Stock modifyProductState(String productId){
+    public Stock modifyProductState(String productId) {
         return stockRepository.modifyProductState(productId);
     }
 

@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableHystrix
-public class OtcopusApplication {
+public class OctopusApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OtcopusApplication.class, args);
+        SpringApplication.run(OctopusApplication.class, args);
     }
 
     @LoadBalanced

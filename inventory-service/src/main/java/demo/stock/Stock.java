@@ -17,7 +17,7 @@ public class Stock {
     @GraphId
     private Long id;
 
-    @Relationship(type = "PRODUCT_TYPE", direction = "OUTGOING")
+    @Relationship(type = "PRODUCT_STOCK", direction = "OUTGOING")
     private Product product;
 
     private Long number; //进货数量
@@ -28,7 +28,7 @@ public class Stock {
 
     private Date syncTime; //同步时间
 
-    private boolean sync=false; //false未同步，true已同步,默认是false
+    private Boolean sync = false; //false未同步，true已同步,默认是false
 
     public Long getId() {
         return id;
@@ -70,11 +70,11 @@ public class Stock {
         this.stockTime = stockTime;
     }
 
-    public boolean isSync() {
+    public Boolean isSync() {
         return sync;
     }
 
-    public void setSync(boolean sync) {
+    public void setSync(Boolean sync) {
         this.sync = sync;
     }
 
@@ -84,5 +84,31 @@ public class Stock {
 
     public void setSyncTime(Date syncTime) {
         this.syncTime = syncTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + id +
+                ", product=" + product +
+                ", number=" + number +
+                ", stockUser='" + stockUser + '\'' +
+                ", stockTime=" + stockTime +
+                ", syncTime=" + syncTime +
+                ", sync=" + sync +
+                '}';
+    }
+
+    public Stock() {
+    }
+
+    public Stock(Product product, Long number, String stockUser, Date stockTime, Date syncTime,
+            Boolean sync) {
+        this.product = product;
+        this.number = number;
+        this.stockUser = stockUser;
+        this.stockTime = stockTime;
+        this.syncTime = syncTime;
+        this.sync = sync;
     }
 }
