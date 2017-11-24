@@ -289,6 +289,24 @@ contentApp.controller('OrderListCtrl', ['$scope', '$http', '$location', 'orderSe
 
     }]);
 
+contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
+    function ($scope, $http, $location, orderService, $routeParams){
+        $scope.stockUrl = '/api/stock/v1/stocks';
+        var fetchOrder = function(){
+            $http({
+                method:'GET',
+                url: $scope.stockUrl
+            }).success(function(data,status,headers,config){
+                $scope.stocks = data;
+
+            }).error(function(data,status,headers,config){
+                $location.path('/');
+            });
+        }
+    }]);
+
+
+
 contentApp.controller('OrderCtrl', ['$scope', '$http', '$location', 'orderService', '$routeParams',
     function ($scope, $http, $location, orderService, $routeParams) {
         $scope.orderItemUrl = '/api/order/v1/orders/' + $routeParams.orderId;

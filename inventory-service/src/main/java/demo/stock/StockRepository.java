@@ -24,4 +24,5 @@ public interface StockRepository extends GraphRepository<Stock> {
             "\t set stock.sync={state} \n" +
             "\t RETURN stock")
     Stock modifyProductState(@Param("productId") String productId, @Param("state") Boolean state);
+
 }
