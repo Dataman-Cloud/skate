@@ -18,4 +18,9 @@ public interface StockRepository extends GraphRepository<Stock> {
             "\t set stock.sync=true \n" +
             "\t RETURN stock")
     Stock modifyProductState(@Param("productId") String productId);
+
+    @Query("MATCH (stock:Stock),(product:Product) \n"+
+            "\t WHERE product.id={productId} \n"+
+            "\t RETURN stock")
+    Stock getStockByProductId(@Param("productId") String productId);
 }

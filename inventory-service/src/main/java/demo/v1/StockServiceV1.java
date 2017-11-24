@@ -30,4 +30,24 @@ public class StockServiceV1 {
         return stockRepository.modifyProductState(productId);
     }
 
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
+    public Stock getStockByProductId(String productId){
+        Stock stock;
+        stock = stockRepository.getStockByProductId(productId);
+        return stock;
+    }
+
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
+    public Stock addStock(Stock stock,Long number){
+        stock.setNumber(stock.getNumber()+number);
+        return this.stockRepository.save(stock);
+    }
+
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
+    public Iterable<Stock> getStockALL(){
+        return this.stockRepository.findAll();
+    }
+
+    private Stock getStockFeedBack(String productId){return null;}
+
 }
