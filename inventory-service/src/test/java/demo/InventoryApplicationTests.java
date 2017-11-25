@@ -12,6 +12,7 @@ import demo.product.ProductRepository;
 import demo.shipment.Shipment;
 import demo.shipment.ShipmentRepository;
 import demo.shipment.ShipmentStatus;
+import demo.v1.ProductServiceV1;
 import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
 import org.junit.Before;
@@ -61,6 +62,9 @@ public class InventoryApplicationTests {
 
     @Autowired
     private Neo4jConfiguration neo4jConfiguration;
+
+    @Autowired
+    private ProductServiceV1 productServiceV1;
 
     @Before
     public void setup() {
@@ -179,5 +183,10 @@ public class InventoryApplicationTests {
             assertThat(shipment1, is(notNullValue()));
             assertThat(shipment1.toString(), is(shipment.toString()));
         }
+    }
+
+    @Test
+    public void productTest(){
+          productServiceV1.getProductAll();
     }
 }

@@ -291,18 +291,35 @@ contentApp.controller('OrderListCtrl', ['$scope', '$http', '$location', 'orderSe
 
 contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
     function ($scope, $http, $location, orderService, $routeParams){
-        $scope.stockUrl = '/api/stock/v1/stocks';
-        var fetchOrder = function(){
+        $scope.stockUrl = '/v1/stock/';
+        $scope.stockUpdateUrl = '/v1/stock/updateStock';
+        $scope.productUrl = 'v1/products';
+        $scope.fetchStock = function(item){
+
             $http({
                 method:'GET',
-                url: $scope.stockUrl
+                url: $scope.productUrl,
+                async:false
             }).success(function(data,status,headers,config){
-                $scope.stocks = data;
+                $scope.products = data;
+
+                for (var i = 0; i < $scope.products.length; i++){
+                    $http({
+                        method:'GET',
+                        url:$scope.stockUrl+$scope.products[i].productId,
+                        async:false
+                    }).success(function(data,status,headers,config){
+                        $scope.products[i].stock = data;
+                    }).error(function(){
+                        console.info("根据产品Id:"+$scope.products[i].productId+"获取库存信息失败")
+                    })
+                }
 
             }).error(function(data,status,headers,config){
-                $location.path('/');
+                console.info("根据产品ID获取库存信息的过程中出现错误");
             });
-        }
+        };
+        fetchStock();
     }]);
 
 

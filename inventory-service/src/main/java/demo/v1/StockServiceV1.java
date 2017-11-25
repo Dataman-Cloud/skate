@@ -50,4 +50,12 @@ public class StockServiceV1 {
 
     private Stock getStockFeedBack(String productId){return null;}
 
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
+    public Stock updateStock(Stock stock){
+        if (stockRepository.exists(stock.getId())){
+            stockRepository.save(stock);
+        }
+        return stockRepository.findOne(stock.getId());
+    }
+
 }
