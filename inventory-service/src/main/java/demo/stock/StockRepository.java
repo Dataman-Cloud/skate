@@ -26,4 +26,9 @@ public interface StockRepository extends GraphRepository<Stock> {
 
 
 
+    @Query("MATCH (stock:Stock),(product:Product) \n" +
+            "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock) WHERE product.productId = {productId} \n" +
+            "\t RETURN stock")
+    Stock getStockByProductId(@Param("productId") String productId);
+
 }
