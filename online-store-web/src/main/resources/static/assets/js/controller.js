@@ -289,41 +289,6 @@ contentApp.controller('OrderListCtrl', ['$scope', '$http', '$location', 'orderSe
 
     }]);
 
-contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
-    function ($scope, $http, $location, orderService, $routeParams){
-        $scope.stockUrl = '/v1/stock/';
-        $scope.stockUpdateUrl = '/v1/stock/updateStock';
-        $scope.productUrl = 'v1/products';
-        $scope.fetchStock = function(item){
-
-            $http({
-                method:'GET',
-                url: $scope.productUrl,
-                async:false
-            }).success(function(data,status,headers,config){
-                $scope.products = data;
-
-                for (var i = 0; i < $scope.products.length; i++){
-                    $http({
-                        method:'GET',
-                        url:$scope.stockUrl+$scope.products[i].productId,
-                        async:false
-                    }).success(function(data,status,headers,config){
-                        $scope.products[i].stock = data;
-                    }).error(function(){
-                        console.info("根据产品Id:"+$scope.products[i].productId+"获取库存信息失败")
-                    })
-                }
-
-            }).error(function(data,status,headers,config){
-                console.info("根据产品ID获取库存信息的过程中出现错误");
-            });
-        };
-        fetchStock();
-    }]);
-
-
-
 contentApp.controller('OrderCtrl', ['$scope', '$http', '$location', 'orderService', '$routeParams',
     function ($scope, $http, $location, orderService, $routeParams) {
         $scope.orderItemUrl = '/api/order/v1/orders/' + $routeParams.orderId;
@@ -490,6 +455,7 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
         $scope.productItemUrl = '/api/catalog/v1/products/' + $routeParams.productId;
         $scope.productsUrl = '/api/catalog/v1/catalog';
         $scope.products = [];
+        $scope.productStockUrl = '/api/inventory/v1/stock';
 
         $scope.$on('logout', function (event, msg) {
             fetchProduct();
@@ -514,9 +480,107 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
 
             }).error(function (data, status, headers, config) {
             });
+            //查询库存
+            $http({
+                method: 'GET',
+                url: $scope.productStockUrl
+            }).success(function (data, status, headers, config) {
+                $scope.stock = data;
+
+            }).error(function (data, status, headers, config) {
+            });
         };
 
         fetchProduct();
+    }]);
+
+
+contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
+    function ($scope, $http, $location, orderService, $routeParams){
+        $scope.stockUrl = '/v1/stock/';
+        $scope.stockUpdateUrl = '/v1/stock/updateStock';
+        $scope.productUrl = '/v1/products';
+        $scope.oriNum = '';//产品的初始库存
+        $scope.addNum = '';//产品要添加的库存
+        $scope.products = [];//查询回来的所有产品
+        $scope.item = '';//当前选中的产品
+        //获取产品和关联的库存
+        var fetchStock = function(){
+
+            $http({
+                method:'GET',
+                url: $scope.productUrl,
+                async:false
+            }).success(function(data,status,headers,config){
+                $scope.products = data.products;
+                console.info("获取所有的products:"+data.products);
+                for (var i = 0; i < $scope.products.length; i++){
+                    $http({
+                        method:'GET',
+                        url:$scope.stockUrl+$scope.products[i].productId,
+                        async:false
+                    }).success(function(data,status,headers,config){
+                        console.info("产品关联stock："+data);
+                        $scope.products[i].stock = data;
+                    }).error(function(){
+                        console.info("根据产品Id:"+$scope.products[i].productId+"获取库存信息失败")
+                    })
+                }
+
+            }).error(function(data,status,headers,config){
+                console.info("根据产品ID获取库存信息的过程中出现错误");
+            });
+        };
+
+        //设定当前选择的产品
+        $scope.setCurrentProduct = function(item) {
+            $scope.item = item;
+        }
+
+        //更新产品
+        $scope.updateProduct = function(item){
+            $http({
+                method:'POST',
+                url: $scope.stockUpdateUrl,
+                data:JSON.stringify({
+                    'id':item.id,
+                    'name':item.name,
+                    'unitPrice':item.unitPrice,
+                    'productId':item.productId,
+                    'description':item.description,
+                    'inStock':item.inStock
+                })
+            }).success(function(data,status,headers,config){
+                fetchStock();
+            }).error(function(data,status,headers,config){
+                console.info("更新产品信息的过程中出现错误");
+            });
+        };
+
+        //入库
+        $scope.addToStock = function () {
+            $scope.oriNum = $scope.item.stock.number;
+            $http({
+                method:'POST',
+                url: $scope.stockUpdateUrl,
+                data:JSON.stringify({
+                    'id':$scope.item.stock.id,
+                    'number':$scope.oriNum + $scope.addNum
+                })
+            }).success(function(data,status,headers,config){
+                var  s = data;
+                console.info("更新后返回的库存:"+data);
+                for (var i = 0; i < $scope.products.length; i++){
+                    if (products[i].stock.id == s.id){
+                        products[i].stock.number = s.number;
+                    }
+                }
+            }).error(function(data,status,headers,config){
+                console.info("添加库存信息的过程中出现错误");
+            });
+        };
+
+        fetchStock();
     }]);
 
 contentApp.filter('rawHtml', ['$sce', function ($sce) {
