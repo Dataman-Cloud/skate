@@ -1,9 +1,6 @@
 package demo;
 
-import demo.product.ProductRepository;
-import demo.v1.ProductServiceV1;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -11,24 +8,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import demo.inventory.Inventory;
 import demo.inventory.InventoryRepository;
-import demo.product.Product;
 import demo.stock.Stock;
 import demo.stock.StockRepository;
-import demo.v1.InventoryServiceV1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {InventoryApplication.class})
@@ -49,20 +40,6 @@ public class StockApplicationTest {
 
     @Autowired
     private Neo4jConfiguration neo4jConfiguration;
-
-    @Autowired
-    private ProductServiceV1 productServiceV1;
-
-    @Before
-    public void setup() {
-        try {
-            neo4jConfiguration.getSession().query(
-                    "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r;", new HashMap<>())
-                    .queryResults();
-        } catch (Exception e) {
-            neo4jConnection = false;
-        }
-    }
 
     @Test
     public void addStockTest() {
@@ -115,14 +92,14 @@ public class StockApplicationTest {
                 recode.put(s.getId(), s.getProduct().getProductId());
             }
             List<Stock> stocks = readyStockData();
-            for(Stock s : stocks){
+            for (Stock s : stocks) {
                 Stock stock = stockRepository.save(s);
             }
 
-            for(Inventory inventory : inventories){
+            for (Inventory inventory : inventories) {
                 for (Stock s : stocks) {
                     String productId = s.getProduct().getProductId();
-                    if(inventory.getProduct().getProductId().equals(productId)){
+                    if (inventory.getProduct().getProductId().equals(productId)) {
                         Long productNum = s.getNumber();
                         Long nowInventoryNum = inventoryRepository.getInventoryNumByPid(productId);
                         nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;
@@ -144,42 +121,20 @@ public class StockApplicationTest {
     }
 
     public static List<Stock> readyStockData() {
-        Product product1 = new Product("衣服-TEST-12464", "TEST-12464", "测试新增的数据", 15.55);
-        Stock stock1 = new Stock(product1, 100L, "admin", new Date(), null, false);
-
-        Product product2 = new Product("衣服-TEST-34563", "TEST-34563", "测试新增的数据", 18.99);
-        Stock stock2 = new Stock(product2, 100L, "admin", new Date(), null, false);
-
-        Product product3 = new Product("衣服-TEST-64233", "TEST-64233", "测试新增的数据", 188.99);
-        Stock stock3 = new Stock(product3, 100L, "admin", new Date(), null, false);
-
-        List<Stock> stocks = Arrays.asList(stock1, stock2, stock3).stream().collect(Collectors.toList());
-        return stocks;
+        return ReadyData.readyStockData();
     }
 
     public static List<Inventory> readyInventoryData() {
-        Product product1 = new Product("衣服-TEST-12464", "TEST-12464", "测试新增的数据", 15.55);
-        Inventory inventory1 = new Inventory("150", product1);
-
-        Product product2 = new Product("衣服-TEST-34563", "TEST-34563", "测试新增的数据", 18.99);
-        Inventory inventory2 = new Inventory("180", product2);
-
-        Product product3 = new Product("衣服-TEST-64233", "TEST-64233", "测试新增的数据", 188.99);
-        Inventory inventory3 = new Inventory("230", product3);
-
-        List<Inventory> inventory = Arrays.asList(inventory1, inventory2, inventory3).stream().collect(Collectors
-                .toList());
-        return inventory;
+        return ReadyData.readyInventoryData();
     }
 
     public void clearData(String nodeName) {
         if (recode != null && recode.size() > 0) {
-            if (nodeName.equals("stock")) {
+            if (nodeName.equals(stockNode)) {
                 for (Map.Entry<Long, Object> map : recode.entrySet()) {
                     stockRepository.delete(map.getKey());
                 }
-
-            } else if (nodeName.equals("inventory")) {
+            } else if (nodeName.equals(inventoryNode)) {
                 for (Map.Entry<Long, Object> map : recode.entrySet()) {
                     inventoryRepository.delete(map.getKey());
                 }

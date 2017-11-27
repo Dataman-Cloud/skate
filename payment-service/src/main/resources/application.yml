@@ -12,7 +12,7 @@ spring:
     database: MYSQL
     generate-ddl: true
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev?useSSL=false
+    url: jdbc:mysql://192.168.31.46:3306/dev?useSSL=false
     username: root
     password: dbpass
 ---

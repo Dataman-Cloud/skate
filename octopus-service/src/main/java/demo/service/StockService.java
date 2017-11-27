@@ -16,12 +16,12 @@ import demo.inventory.Inventory;
 import demo.stock.Stock;
 
 @Service
-public class StockServiceV1 {
+public class StockService {
 
     private RestTemplate restTemplate;
 
     @Autowired
-    public StockServiceV1(@LoadBalanced RestTemplate restTemplate) {
+    public StockService(@LoadBalanced RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

@@ -14,8 +14,6 @@ public class InventoryControllerV1 {
 
     private InventoryServiceV1 inventoryService;
 
-
-
     @Autowired
     public InventoryControllerV1(InventoryServiceV1 inventoryService) {
         this.inventoryService = inventoryService;
@@ -31,6 +29,27 @@ public class InventoryControllerV1 {
     @RequestMapping(path = "/inventory", method = RequestMethod.GET, name = "getAvailableInventoryForProductIds")
     public ResponseEntity getAvailableInventoryForProductIds(@RequestParam("productIds") String productIds) {
         return Optional.ofNullable(inventoryService.getAvailableInventoryForProductIds(productIds))
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * 通过产品编号修改库存量
+     */
+    @RequestMapping(path = "/modifyProductNum/{productId}/{productNum}", method = RequestMethod.GET, name = "modifyProductNum")
+    public ResponseEntity modifyProductNum(@RequestParam("productId") String productId, @RequestParam("productNum")
+            Long productNum) {
+        return Optional.ofNullable(inventoryService.modifyProductNum(productId, productNum))
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * 通过产品编号获取库存量
+     */
+    @RequestMapping(path = "/getInventoryNumByPid/{productId}", method = RequestMethod.GET, name = "getInventoryNumByPid")
+    public ResponseEntity getInventoryNumByPid(@RequestParam("productId") String productId) {
+        return Optional.ofNullable(inventoryService.getInventoryNumByPid(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

@@ -15,17 +15,17 @@ security:
 spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev
+    url: jdbc:mysql://192.168.31.46:3306/dev
     username: root
     password: dbpass
     platform: mysql
 security:
   oauth2:
     resource:
-      userInfoUri: http://192.168.99.100:8181/uaa/user
+      userInfoUri: http://192.168.31.46:8181/uaa/user
     client:
       client-id: acme
-      access-token-uri: http://192.168.99.100:8787
+      access-token-uri: http://192.168.31.46:8787
   enable-csrf: false
   ignored: /api/**
 eureka:
@@ -35,7 +35,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.99.100:8761/eureka/
+      defaultZone: http://192.168.31.46:8761/eureka/
 ---
 spring:
   profiles: docker
@@ -50,7 +50,7 @@ spring:
 security:
   oauth2:
     resource:
-      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+      userInfoUri: http://${DOCKER_IP:192.168.31.46}:8181/uaa/user
     client:
       client-id: acme
   enable-csrf: false

@@ -37,7 +37,7 @@ public class StockControllerV1 {
     /**
      * 同步产品状态
      */
-    @RequestMapping("/modifyProductState")
+    @RequestMapping("/modifyProductState/{productId}")
     public ResponseEntity modifyProductState(@PathVariable("productId") String productId) {
         return Optional.ofNullable(stockService.modifyProductState(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))

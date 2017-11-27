@@ -17,6 +17,7 @@ import demo.stock.StockRepository;
 import demo.v1.ProductServiceV1;
 import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +73,7 @@ public class InventoryApplicationTests {
     @Autowired
     private StockRepository stockRepository;
 
-   @Before
+    @Before
     public void setup() {
         try {
             neo4jConfiguration.getSession().query(
@@ -85,26 +86,28 @@ public class InventoryApplicationTests {
 
     @Test
     public void inventoryTest() {
-        if(neo4jConnection) {
+        if (neo4jConnection) {
             Warehouse warehouse = new Warehouse("Pivotal SF");
 
             List<Product> products = Arrays.asList(
 
-                    new Product("Best. Cloud. Ever. (T-Shirt, Men's Large)", "SKU-24642", "<p>Do you love your cloud platform? " +
-                            "Do you push code continuously into production on a daily basis? " +
-                            "Are you living the cloud native microservice dream? Then rain or shine, this T-Shirt is for you. " +
-                            "Show the world you're a stylish cloud platform architect with this cute yet casual tee. " +
-                            "<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />" +
-                            "&nbsp; 110% cloud stuff, 5% spandex<br />&nbsp; Rain wash only<br />&nbsp; " +
-                            "Four nines of <em>stylability</em></p>", 21.99),
+                    new Product("Best. Cloud. Ever. (T-Shirt, Men's Large)", "SKU-24642",
+                            "<p>Do you love your cloud platform? " +
+                                    "Do you push code continuously into production on a daily basis? " +
+                                    "Are you living the cloud native microservice dream? Then rain or shine, this T-Shirt is for you. " +
+                                    "Show the world you're a stylish cloud platform architect with this cute yet casual tee. " +
+                                    "<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />" +
+                                    "&nbsp; 110% cloud stuff, 5% spandex<br />&nbsp; Rain wash only<br />&nbsp; " +
+                                    "Four nines of <em>stylability</em></p>", 21.99),
 
-                    new Product("Like a BOSH (T-Shirt, Women's Medium)", "SKU-34563", "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
-                            "is an elegant release engineering tool for a more virtualized cloud-native age. " +
-                            "The feeling of spinning up a highly available distributed system of VMs is second only to the " +
-                            "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
-                            "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
-                            "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
-                            "4 nines of <em>re-washability</em></p>", 14.99),
+                    new Product("Like a BOSH (T-Shirt, Women's Medium)", "SKU-34563",
+                            "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
+                                    "is an elegant release engineering tool for a more virtualized cloud-native age. " +
+                                    "The feeling of spinning up a highly available distributed system of VMs is second only to the " +
+                                    "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
+                                    "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
+                                    "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
+                                    "4 nines of <em>re-washability</em></p>", 14.99),
 
                     new Product("We're gonna need a bigger VM (T-Shirt, Women's Small)", "SKU-12464", 13.99),
                     new Product("cf push awesome (Hoodie, Men's Medium)", "SKU-64233",
@@ -188,49 +191,65 @@ public class InventoryApplicationTests {
 
             assertThat(shipment1, is(notNullValue()));
             assertThat(shipment1.toString(), is(shipment.toString()));
+
+            //初始化stock数据表
+            Product product0 = new Product();
+            product0.setProductId("SKU-24642");
+            Stock stock1 = new Stock(product0, 100L, "admin", new Date(), null, true);
+
+            Product product2 = new Product();
+            product2.setProductId("SKU-34563");
+            Stock stock2 = new Stock(product2, 100L, "admin", new Date(), null, true);
+
+            Product product3 = new Product();
+            product3.setProductId("SKU-64233");
+            Stock stock3 = new Stock(product3, 100L, "admin", new Date(), null, true);
+
+            stockRepository.save(Arrays.asList(stock1, stock2, stock3).stream().collect(Collectors.toList()));
         }
     }
 
     @Test
-    public void productTest(){
+    public void productTest() {
 
-         Iterable<Product> products = productServiceV1.getProductAll();
+        Iterable<Product> products = productServiceV1.getProductAll();
 
-         products.forEach(new Consumer<Product>() {
-             @Override
-             public void accept(Product product) {
-                 assertThat(product, is(notNullValue()));
-                 assertThat(product.getName(), is(product.getName()));
-                 assertThat(product.getUnitPrice(), is(product.getUnitPrice()));
-                 System.out.println("------------");
-                 System.out.println("-----productId:"+product.getProductId());
-                 System.out.println("-----name:"+product.getName());
-                 System.out.println("-----unitPrice:"+product.getUnitPrice());
-             }
-         });
+        products.forEach(new Consumer<Product>() {
+            @Override
+            public void accept(Product product) {
+                assertThat(product, is(notNullValue()));
+                assertThat(product.getName(), is(product.getName()));
+                assertThat(product.getUnitPrice(), is(product.getUnitPrice()));
+                System.out.println("------------");
+                System.out.println("-----productId:" + product.getProductId());
+                System.out.println("-----name:" + product.getName());
+                System.out.println("-----unitPrice:" + product.getUnitPrice());
+            }
+        });
 
     }
 
     @Test
-    public void updateProductByProductId(){
+    public void updateProductByProductId() {
 
-        Product product = new Product("衣服-TEST-12464","SKU-24642","测试新增的数据",31.99);
+        Product product = new Product("衣服-TEST-12464", "SKU-24642", "测试新增的数据", 31.99);
 
-      //  Product product1 = productRepository.getProductByProductId("SKU-24642");
-     //   System.out.println("unitPrice--------------:"+product1.getUnitPrice());
+        //  Product product1 = productRepository.getProductByProductId("SKU-24642");
+        //   System.out.println("unitPrice--------------:"+product1.getUnitPrice());
 
-     //   productServiceV1.updateProductByProductId(product);
+        //   productServiceV1.updateProductByProductId(product);
 
-      //  Product product2 = productRepository.getProductByProductId(product.getProductId());
-     //   System.out.println("unitPrice----------------------"+product2.getUnitPrice());
+        //  Product product2 = productRepository.getProductByProductId(product.getProductId());
+        //   System.out.println("unitPrice----------------------"+product2.getUnitPrice());
     }
 
     @Test
-    public void getProductStock(){
-      // Stock stock = stockRepository.getStockByProductId("SKU-24642");
+    public void getProductStock() {
+        // Stock stock = stockRepository.getStockByProductId("SKU-24642");
         //System.out.println(stock.getId());
         //System.out.println(stock.getNumber());
         //System.out.println(stock.getProduct());
         //System.out.println(stock.getProduct().getName());
     }
+
 }
