@@ -51,9 +51,9 @@ public class StockApplicationTest {
     @Before
     public void setup() {
         try {
-            /*neo4jConfiguration.getSession().query(
+            neo4jConfiguration.getSession().query(
                     "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r;", new HashMap<>())
-                    .queryResults();*/
+                    .queryResults();
         } catch (Exception e) {
             neo4jConnection = false;
         }
@@ -110,14 +110,14 @@ public class StockApplicationTest {
                 recode.put(s.getId(), s.getProduct().getProductId());
             }
             List<Stock> stocks = readyStockData();
-            for(Stock s : stocks){
+            for (Stock s : stocks) {
                 Stock stock = stockRepository.save(s);
             }
 
-            for(Inventory inventory : inventories){
+            for (Inventory inventory : inventories) {
                 for (Stock s : stocks) {
                     String productId = s.getProduct().getProductId();
-                    if(inventory.getProduct().getProductId().equals(s.getProduct().getProductId())){
+                    if (inventory.getProduct().getProductId().equals(s.getProduct().getProductId())) {
                         Long productNum = s.getNumber();
                         Long nowInventoryNum = inventoryRepository.getInventoryNumByPid(productId);
                         nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;
@@ -168,7 +168,7 @@ public class StockApplicationTest {
     }
 
     public void clearData(String nodeName) {
-        if(recode!=null && recode.size()>0) {
+        if (recode != null && recode.size() > 0) {
             if (nodeName.equals("stock")) {
                 for (Map.Entry<Long, Object> map : recode.entrySet()) {
                     stockRepository.delete(map.getKey());
