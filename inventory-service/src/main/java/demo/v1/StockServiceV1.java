@@ -41,7 +41,7 @@ public class StockServiceV1 {
         return this.stockRepository.findAll();
     }
 
-    @HystrixCommand(fallbackMethod = "getStockFeedBack")
+    @HystrixCommand
     public Stock getStockByProductId(String productId){
         return this.stockRepository.getStockByProductId(productId);
     }

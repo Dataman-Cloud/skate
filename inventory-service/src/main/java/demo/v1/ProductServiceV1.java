@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import demo.inventory.Inventory;
 import demo.product.Product;
 import demo.product.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,24 +15,36 @@ import java.util.stream.Stream;
  */
 @Service
 public class ProductServiceV1 {
+
     private ProductRepository productRepository;
 
-    private ProductServiceV1(ProductRepository productRepository){
+    @Autowired
+    public ProductServiceV1(ProductRepository productRepository){
         this.productRepository = productRepository;
     }
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
+    @HystrixCommand
     public Iterable<Product> getProductAll() {
 
 
         Iterable<Product> productList = productRepository.findAll();
-/*
-        if (product != null) {
-            Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(productId).stream();
-            product.setInStock(availableInventory.findAny().isPresent());
-        }*/
+
 
         return productList;
+    }
+
+
+
+    @HystrixCommand
+    public Product updateProductByProductId(Product product){
+
+         productRepository.updateProductByProductId(product.getProductId(),product.getName(),
+                 product.getUnitPrice(),product.getDescription());
+
+        /*if (productRepository.exists(product.getId())){
+            return productRepository.save(product);
+        }*/
+        return null;
     }
 
     private Product getProductFallback(String productId) {

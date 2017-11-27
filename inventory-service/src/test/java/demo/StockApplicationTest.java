@@ -1,5 +1,7 @@
 package demo;
 
+import demo.product.ProductRepository;
+import demo.v1.ProductServiceV1;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +49,9 @@ public class StockApplicationTest {
 
     @Autowired
     private Neo4jConfiguration neo4jConfiguration;
+
+    @Autowired
+    private ProductServiceV1 productServiceV1;
 
     @Before
     public void setup() {
@@ -114,7 +119,7 @@ public class StockApplicationTest {
             for (Stock s : stocks) {
                 String productId = s.getProduct().getProductId();
                 Long productNum = s.getNumber();
-                Inventory inventory = inventoryService.modifyProductNum(productId, productNum);
+              //  Inventory inventory = inventoryService.modifyProductNum(productId, productNum);
             }
             Assert.assertTrue("修改数据成功！", true);
 
@@ -175,5 +180,9 @@ public class StockApplicationTest {
             neo4jConnection = false;
         }
     }
+
+
+
+
 
 }
