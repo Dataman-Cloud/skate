@@ -22,7 +22,7 @@ public class InventoryServiceV1 {
 
     @Autowired
     public InventoryServiceV1(InventoryRepository inventoryRepository,
-            ProductRepository productRepository, Session neo4jTemplate) {
+                              ProductRepository productRepository, Session neo4jTemplate) {
         this.inventoryRepository = inventoryRepository;
         this.productRepository = productRepository;
         this.neo4jTemplate = neo4jTemplate;
@@ -49,8 +49,7 @@ public class InventoryServiceV1 {
         product = productRepository.getProductByProductId(productId);
 
         if (product != null) {
-            Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(productId)
-                    .stream();
+            Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(productId).stream();
             product.setInStock(availableInventory.findAny().isPresent());
         }
 

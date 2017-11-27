@@ -1,5 +1,7 @@
 package demo;
 
+import demo.product.ProductRepository;
+import demo.v1.ProductServiceV1;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +49,9 @@ public class StockApplicationTest {
 
     @Autowired
     private Neo4jConfiguration neo4jConfiguration;
+
+    @Autowired
+    private ProductServiceV1 productServiceV1;
 
     @Before
     public void setup() {
@@ -110,14 +115,14 @@ public class StockApplicationTest {
                 recode.put(s.getId(), s.getProduct().getProductId());
             }
             List<Stock> stocks = readyStockData();
-            for (Stock s : stocks) {
+            for(Stock s : stocks){
                 Stock stock = stockRepository.save(s);
             }
 
-            for (Inventory inventory : inventories) {
+            for(Inventory inventory : inventories){
                 for (Stock s : stocks) {
                     String productId = s.getProduct().getProductId();
-                    if (inventory.getProduct().getProductId().equals(s.getProduct().getProductId())) {
+                    if(inventory.getProduct().getProductId().equals(productId)){
                         Long productNum = s.getNumber();
                         Long nowInventoryNum = inventoryRepository.getInventoryNumByPid(productId);
                         nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;

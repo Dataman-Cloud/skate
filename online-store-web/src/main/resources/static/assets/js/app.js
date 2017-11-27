@@ -24,12 +24,12 @@ contentApp.config(['$routeProvider',
         }).when('/orders', {
             templateUrl: 'assets/partials/orders.html',
             controller: 'OrderListCtrl'
-        }).when('/stocks',{
-            templateUrl: 'assets/partials/stock.html',
-            controller: 'StockListCtrl'
         }).when('/orders/:orderId', {
             templateUrl: 'assets/partials/order.html',
             controller: 'OrderCtrl'
+        }).when('/stock',{
+            templateUrl:'assets/partials/stock.html',
+            controller:'StockCtrl'
         }).otherwise({
             redirectTo: '/'
         });

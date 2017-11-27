@@ -13,21 +13,25 @@ public interface StockRepository extends GraphRepository<Stock> {
             "\t RETURN stock")
     List<Stock> getStockNoSync();
 
-    @Query("MATCH (product:Product), \n" +
-            "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock) WHERE stock.sync=false AND product.productId = {productId} \n" +
+    @Query("MATCH (stock:Stock),(product:Product) \n" +
+            "\t WHERE stock.sync=false AND product.id={productId} \n" +
             "\t set stock.sync=true \n" +
             "\t RETURN stock")
     Stock modifyProductState(@Param("productId") String productId);
 
-    @Query("MATCH (stock:Stock),(product:Product) \n" +
-            "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock) WHERE stock.sync=false AND product.productId = {productId} \n" +
-            "\t set stock.sync={state} \n" +
-            "\t RETURN stock")
-    Stock modifyProductState(@Param("productId") String productId, @Param("state") Boolean state);
 
+
+
+    @Query("MATCH (stock:Stock), \n" +
+            "\t (product:Product) WHERE  product.productId={productId} \n"+
+            "\t RETURN stock")
+    Stock getStockByProductId(@Param("productId") String productId);
+
+
+/*
     @Query("MATCH (stock:Stock),(product:Product) \n" +
             "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock) WHERE product.productId = {productId} \n" +
             "\t RETURN stock")
-    Stock getStockByProductId(@Param("productId") String productId);
+    Stock getStockByProductId(@Param("productId") String productId);*/
 
 }

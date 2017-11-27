@@ -12,6 +12,9 @@ import demo.product.ProductRepository;
 import demo.shipment.Shipment;
 import demo.shipment.ShipmentRepository;
 import demo.shipment.ShipmentStatus;
+import demo.stock.Stock;
+import demo.stock.StockRepository;
+import demo.v1.ProductServiceV1;
 import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
 import org.junit.Before;
@@ -26,6 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -62,7 +66,13 @@ public class InventoryApplicationTests {
     @Autowired
     private Neo4jConfiguration neo4jConfiguration;
 
-    @Before
+    @Autowired
+    private ProductServiceV1 productServiceV1;
+
+    @Autowired
+    private StockRepository stockRepository;
+
+   // @Before
     public void setup() {
         try {
             neo4jConfiguration.getSession().query(
@@ -179,5 +189,48 @@ public class InventoryApplicationTests {
             assertThat(shipment1, is(notNullValue()));
             assertThat(shipment1.toString(), is(shipment.toString()));
         }
+    }
+
+    @Test
+    public void productTest(){
+
+         Iterable<Product> products = productServiceV1.getProductAll();
+
+         products.forEach(new Consumer<Product>() {
+             @Override
+             public void accept(Product product) {
+                 assertThat(product, is(notNullValue()));
+                 assertThat(product.getName(), is(product.getName()));
+                 assertThat(product.getUnitPrice(), is(product.getUnitPrice()));
+                 System.out.println("------------");
+                 System.out.println("-----productId:"+product.getProductId());
+                 System.out.println("-----name:"+product.getName());
+                 System.out.println("-----unitPrice:"+product.getUnitPrice());
+             }
+         });
+
+    }
+
+    @Test
+    public void updateProductByProductId(){
+
+        Product product = new Product("衣服-TEST-12464","SKU-24642","测试新增的数据",31.99);
+
+        Product product1 = productRepository.getProductByProductId("SKU-24642");
+        System.out.println("unitPrice--------------:"+product1.getUnitPrice());
+
+        productServiceV1.updateProductByProductId(product);
+
+        Product product2 = productRepository.getProductByProductId(product.getProductId());
+        System.out.println("unitPrice----------------------"+product2.getUnitPrice());
+    }
+
+    @Test
+    public void getProductStock(){
+       Stock stock = stockRepository.getStockByProductId("SKU-24642");
+        System.out.println(stock.getId());
+        System.out.println(stock.getNumber());
+        System.out.println(stock.getProduct());
+        System.out.println(stock.getProduct().getName());
     }
 }

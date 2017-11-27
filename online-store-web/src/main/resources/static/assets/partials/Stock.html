@@ -1,119 +1,103 @@
-<div class="container order-view hidden-content" ng-model="stock">
+<div class="container order-view hidden-content" ng-model="stocks">
     <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">Order Details</div>
-                <ul class="list-group list-group-details accounts">
-                    <li class="list-group-item">
-                        <div class="account-username">
-                            <div class="panel-heading">product Id: <span
-                                    class="panel-heading ng-binding">{{ stock.product.id }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="account-number">
-                            <div class="panel-heading">Order Status: <span
-                                    class="panel-heading ng-binding">{{ order.orderStatus }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="default-account">
-                            <div class="panel-heading">Account Number: <span
-                                    class="panel-heading ng-binding">{{ order.accountNumber }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="default-account">
-                            <div class="panel-heading">Order Date: <span
-                                    class="panel-heading ng-binding">{{ order.createdAt | date:"MM/dd/yyyy 'at' h:mma" }}</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
         <div class="col-md-12 panel-head-list">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">Ordered Items</div>
-
-                <ul class="list-group list-group-details shopping-cart">
-                    <li class="list-group-item" ng-if="order.lineItems.length == 0">
-                        Your order is empty
-                    </li>
-                    <li ng-repeat="item in order.lineItems" class="list-group-item">
-                        <div class="row">
-                            <div class="col-md-2 col-xs-2 cart-item-image">
-                                <div class="thumbnail">
-                                    <a href="index.html#/products/{{item.productId}}">
-                                        <img alt="{{item.name}}" src="/assets/img/posters/{{item.productId}}.png"/>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-xs-4 cart-item-description">
-                                <div class="row">
-                                    <div class="col-md-12"><label>Name:</label>{{item.name}}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12"><label>Product:</label>{{item.productId}}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.price
-                                |
-                                currency}}
-                            </div>
-                            <div class="col-md-3 col-xs-3 cart-item-price"><label>Quantity:</label>{{item.quantity}}
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-12 panel-head-list">
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading"><i class="fa fa-home icon-head"></i>Shipping Address</div>
-                <ul class="list-group list-group-details accounts">
+                <div class="panel-heading"><i class="fa fa-home icon-head"></i>stock details</div>
+                <ul class="list-group list-group-details">
                     <li class="list-group-item">
-                        <div>
-                            <div class="panel-heading">Street 1: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.street1 }}</span>
-                            </div>
-                        </div>
-                        <div ng-if="order.shippingAddress.street2 != ''">
-                            <div class="panel-heading">Street 2: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.street2 }}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="panel-heading">City: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.city }}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="panel-heading">State: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.state }}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="panel-heading">Zip Code: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.zipCode }}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="panel-heading">Country: <span
-                                    class="panel-heading ng-binding">{{ order.shippingAddress.country }}</span>
-                            </div>
-                        </div>
                     </li>
                 </ul>
+                <div class="table-responsive">
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th>productId</th>
+                            <th>name</th>
+                            <th class="hidden-xs">unitPrice</th>
+                            <th>stock</th>
+                            <th>operation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in products">
+                            <td class="tdst-group-item">
+                                <a>{{product.productId}}</a>
+                            </td>
+                            <td class="tdst-group-item">
+                                {{product.name}}
+                            </td>
+                            <td class="tdst-group-item hidden-xs">
+                                {{product.unitPrice}}
+                            </td>
+                            <td class="tdst-group-item">
+                                {{product.stock.number}}
+                            </td>
+                            <td class="tdst-group-item">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="setCurrentProduct(product)">Inbound</button>
+<!--                                <button class="btn btn-primary" id="delete" type="submit" ng-click="setCurrentProduct(product)">Outbound</button>-->
+                                <button class="btn btn-primary" id="updateProduct" ng-click="setCurrentProduct(product)" type="submit">edit</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content"  style="background:#3C3C3C; color:#3C3C3C">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel" style="color: floralwhite">入库</h4>
+                                </div>
+                                <div class="modal-body" style="color: floralwhite">
+                                    <label class="control-label">库存数：</label>
+                                    <input type="text" ng-model="addNum"  placeholder="请输入要入库的数量">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addToStock()">提交</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="productModal"  tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content"  style="background:#3C3C3C; color:#3C3C3C">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="productModalLabel" style="color: floralwhite">入库</h4>
+                                </div>
+                                <div class="modal-body" style="color: floralwhite">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>productId</th>
+                                            <th>name</th>
+                                            <th class="hidden-xs">unitPrice</th>
+                                        </tr>
+                                        <tr >
+                                            <td class="tdst-group-item">
+                                                <input type="text" ng-model="item.id">
+                                            </td>
+                                            <td class="tdst-group-item">
+                                                <input type="text" ng-model="item.name">
+                                            </td>
+                                            <td class="tdst-group-item hidden-xs">
+                                                <input type="text" ng-model="item.unitPrice">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="updateProduct(item)">更新</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
