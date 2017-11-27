@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
+import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -34,7 +35,9 @@ public class StockApplicationTest {
 
     private Logger log = LoggerFactory.getLogger(InventoryApplicationTests.class);
     private Boolean neo4jConnection = true;
-    Map<Long, Object> recode = new ConcurrentHashMap<>();
+    private Map<Long, Object> recode = new ConcurrentHashMap<>();
+    private static final String stockNode = "stock";
+    private static final String inventoryNode = "inventory";
 
     @Autowired
     private StockRepository stockRepository;
@@ -43,17 +46,14 @@ public class StockApplicationTest {
     private InventoryRepository inventoryRepository;
 
     @Autowired
-    private InventoryServiceV1 inventoryService;
-
-    @Autowired
     private Neo4jConfiguration neo4jConfiguration;
 
     @Before
     public void setup() {
         try {
-            neo4jConfiguration.getSession().query(
+            /*neo4jConfiguration.getSession().query(
                     "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r;", new HashMap<>())
-                    .queryResults();
+                    .queryResults();*/
         } catch (Exception e) {
             neo4jConnection = false;
         }
@@ -67,7 +67,7 @@ public class StockApplicationTest {
             try {
                 for (Stock stock : stocks) {
                     Stock s = stockRepository.save(stock);
-                    recode.put(s.getId(), s.getProduct().getName());
+                    recode.put(s.getId(), s.getProduct().getProductId());
                 }
 
                 Assert.assertTrue("新增数据成功！", true);
@@ -75,7 +75,7 @@ public class StockApplicationTest {
                 e.printStackTrace();
             } finally {
                 //删除测试数据
-                clearData();
+                clearData(stockNode);
             }
         }
     }
@@ -97,7 +97,7 @@ public class StockApplicationTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            clearData();
+            clearData(stockNode);
         }
     }
 
@@ -110,21 +110,31 @@ public class StockApplicationTest {
                 recode.put(s.getId(), s.getProduct().getProductId());
             }
             List<Stock> stocks = readyStockData();
-
-            for (Stock s : stocks) {
-                String productId = s.getProduct().getProductId();
-                Long productNum = s.getNumber();
-                Inventory inventory = inventoryService.modifyProductNum(productId, productNum);
+            for(Stock s : stocks){
+                Stock stock = stockRepository.save(s);
             }
+
+            for(Inventory inventory : inventories){
+                for (Stock s : stocks) {
+                    String productId = s.getProduct().getProductId();
+                    if(inventory.getProduct().getProductId().equals(s.getProduct().getProductId())){
+                        Long productNum = s.getNumber();
+                        Long nowInventoryNum = inventoryRepository.getInventoryNumByPid(productId);
+                        nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;
+                        String modifyInventoryNum = String.valueOf(productNum + nowInventoryNum); //当前库存量加上原有库存量
+                        Inventory i = inventoryRepository.modifyProductNum(productId, modifyInventoryNum);
+                        System.out.print("商品编号：" + i.getProduct().getProductId() + "修改成功\n");
+                    }
+                }
+            }
+
             Assert.assertTrue("修改数据成功！", true);
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            for (Map.Entry<Long, Object> map : recode.entrySet()) {
-                stockRepository.delete(map.getKey());
-            }
-            recode.clear();
+            clearData(inventoryNode);
+            //clearData(stockNode);
         }
     }
 
@@ -157,11 +167,20 @@ public class StockApplicationTest {
         return inventory;
     }
 
-    public void clearData() {
-        for (Map.Entry<Long, Object> map : recode.entrySet()) {
-            stockRepository.delete(map.getKey());
+    public void clearData(String nodeName) {
+        if(recode!=null && recode.size()>0) {
+            if (nodeName.equals("stock")) {
+                for (Map.Entry<Long, Object> map : recode.entrySet()) {
+                    stockRepository.delete(map.getKey());
+                }
+
+            } else if (nodeName.equals("inventory")) {
+                for (Map.Entry<Long, Object> map : recode.entrySet()) {
+                    inventoryRepository.delete(map.getKey());
+                }
+            }
+            recode.clear();
         }
-        recode.clear();
     }
 
     @Test
@@ -175,5 +194,4 @@ public class StockApplicationTest {
             neo4jConnection = false;
         }
     }
-
 }

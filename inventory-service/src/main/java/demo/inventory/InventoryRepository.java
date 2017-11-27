@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface InventoryRepository extends GraphRepository<Inventory> {
+
     @Query("MATCH (product:Product),\n" +
             "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory)\n" +
             "WHERE product.productId = {productId} AND NOT (inventory)<-[:CONTAINS_PRODUCT]-()\n" +
@@ -27,15 +28,16 @@ public interface InventoryRepository extends GraphRepository<Inventory> {
             "RETURN inventory")
     List<Inventory> getAvailableInventoryForProductList(@Param("productIds") String[] productIds);
 
-    @Query("MATCH (product:Product), \n" +
-            "\t (product)<-[:PRODUCT_STOCK]-(inventory:Inventory) WHERE product.id={productId} \n" +
-            "\t set inventory.inventoryNumber={productNum} \n" +
-            "\t RETURN inventory")
-    Inventory modifyProductNum(@Param("productId") String productId,@Param("productNum") Long productNum);
+    @Query("MATCH (product:Product),\n" +
+            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory) WHERE product.productId = {productId}\n" +
+            "set inventory.inventoryNumber = {modifyInventoryNum}\n" +
+            "RETURN inventory")
+    Inventory modifyProductNum(@Param("productId") String productId,@Param("modifyInventoryNum") String
+            modifyInventoryNum);
 
-    @Query("MATCH (inventory:Inventory),(product:Product) \n" +
-            "\t (product)<-[:PRODUCT_STOCK]-(inventory:Inventory) WHERE product.productId={productId} \n" +
-            "\t RETURN COUNT(inventory)")
+    @Query("MATCH (inventory:Inventory),(product:Product),\n" +
+            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory) WHERE product.productId = {productId}\n" +
+            "RETURN COUNT(inventory)")
     Long getInventoryNumByPid(@Param("productId") String productId);
 
 }

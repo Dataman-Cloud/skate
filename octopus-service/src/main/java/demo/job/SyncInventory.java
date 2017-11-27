@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import demo.service.StockServiceV1;
 import demo.stock.Stock;
 import demo.util.JSONSerializer;
@@ -52,10 +54,10 @@ public class SyncInventory extends OctopusJavaMsgJob {
 
         try {
             //获取商品id,并修改进货表中数据状态
-            List<Stock> stocks = JSONSerializer.jsonToList(value, Stock[].class);
-            for (Stock stock : stocks) {
-                productId = stock.getProduct().getProductId();
-                productNum = stock.getNumber();
+            List<Map<String,Object>> stocks = JSONSerializer.json2Map(value,Map[].class);
+            for (Map<String,Object> stock : stocks) {
+                productId = stock.get("productId").toString();
+                productNum = (Long)stock.get("productNum");
 
                 //在商品数量信息同步修改到库存表中
                 stockServiceV1.modifyStockState(productId);

@@ -13,6 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -130,7 +131,7 @@ public class JSONSerializer {
         List<Stock> lp = new ArrayList<Stock>();
         lp.add(person1);
         lp.add(person2);
-        System.out.println("jsonObj2str:" + listToJson(lp));
+        //System.out.println("jsonObj2str:" + listToJson(lp));
 
         String json = listToJson(lp);
         //Map<String,Object> obj = jsonToMap(json);
@@ -142,7 +143,7 @@ public class JSONSerializer {
 
         List<Stock> jsonListObject = jsonToList(json, Stock[].class);
         List<Map<String, Object>> maps = json2Map(json, Map[].class);
-        for (Stock stock : jsonListObject) {
+        *//*for (Stock stock : jsonListObject) {
             System.out.print(stock.getId() + " - " + stock.getNumber() + " - " + stock.getStockTime() + "\n");
         }
 
@@ -156,6 +157,28 @@ public class JSONSerializer {
             }
 
             System.out.print("productId: " + map.get("id") + " - productNumber: " + map.get("number") + "\n");
+        }*//*
+
+        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
+        Map<String,Object> map2 = null;
+
+        for(int i=0;i<10;i++){
+            map2 = new HashMap<String,Object>();
+            map2.put("productId","TEST-00" + i);
+            map2.put("productNum",100L);
+            mapList.add(map2);
+        }
+
+        String json2 = mapList.toString();
+        System.out.print("jsonStr: " + json2 + "\n");
+        //System.out.print("mapObj: " + json2Map(json2,Map[].class));
+
+        List<Map<String,Object>> objMap = json2Map(json2,Map[].class);
+        for(Map<String,Object> obj : objMap){
+            //for(Map.Entry entry : obj.entrySet()){
+             //   System.out.print("key: " + entry.getKey() + " -- value : " + entry.getValue() + "\n");
+            //}
+            System.out.print("productId: " + obj.get("productId") +  " -- productNum: " + obj.get("productNum") + "\n");
         }
     }*/
 }

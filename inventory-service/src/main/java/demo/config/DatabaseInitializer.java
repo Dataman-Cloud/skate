@@ -12,6 +12,8 @@ import demo.product.ProductRepository;
 import demo.shipment.Shipment;
 import demo.shipment.ShipmentRepository;
 import demo.shipment.ShipmentStatus;
+import demo.stock.Stock;
+import demo.stock.StockRepository;
 import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,13 @@ public class DatabaseInitializer {
     private CatalogRepository catalogRepository;
     private InventoryRepository inventoryRepository;
     private Neo4jConfiguration neo4jConfiguration;
+    private StockRepository stockRepository;
 
     @Autowired
     public DatabaseInitializer(ProductRepository productRepository, ShipmentRepository shipmentRepository,
                                WarehouseRepository warehouseRepository, AddressRepository addressRepository,
                                CatalogRepository catalogRepository, InventoryRepository inventoryRepository,
-                               Neo4jConfiguration neo4jConfiguration) {
+                               Neo4jConfiguration neo4jConfiguration,StockRepository stockRepository) {
         this.productRepository = productRepository;
         this.shipmentRepository = shipmentRepository;
         this.warehouseRepository = warehouseRepository;
@@ -47,6 +50,7 @@ public class DatabaseInitializer {
         this.catalogRepository = catalogRepository;
         this.inventoryRepository = inventoryRepository;
         this.neo4jConfiguration = neo4jConfiguration;
+        this.stockRepository = stockRepository;
     }
 
     public void populate() throws Exception {
@@ -128,5 +132,20 @@ public class DatabaseInitializer {
                 warehouse, ShipmentStatus.SHIPPED);
 
         shipmentRepository.save(shipment);
+
+        //初始化stock数据表
+        Product product1 = new Product();
+        product1.setProductId("SKU-24642");
+        Stock stock1 = new Stock(product1,100L,"admin",new Date(),null,true);
+
+        Product product2 = new Product();
+        product2.setProductId("SKU-34563");
+        Stock stock2 = new Stock(product2,100L,"admin",new Date(),null,true);
+
+        Product product3 = new Product();
+        product3.setProductId("SKU-64233");
+        Stock stock3 = new Stock(product3,100L,"admin",new Date(),null,true);
+
+        stockRepository.save(Arrays.asList(stock1,stock2,stock3).stream().collect(Collectors.toList()));
     }
 }
