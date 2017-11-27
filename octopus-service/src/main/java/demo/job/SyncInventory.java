@@ -12,8 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import demo.service.StockServiceV1;
-import demo.stock.Stock;
+import demo.service.StockService;
 import demo.util.JSONSerializer;
 
 /**
@@ -24,7 +23,7 @@ public class SyncInventory extends OctopusJavaMsgJob {
     private Logger log = LoggerFactory.getLogger(ScanInventory.class);
 
     @Autowired
-    private StockServiceV1 stockServiceV1;
+    private StockService stockService;
 
     /**
      * Java消息作业的具体执行任务内容
@@ -60,9 +59,9 @@ public class SyncInventory extends OctopusJavaMsgJob {
                 productNum = (Long)stock.get("productNum");
 
                 //在商品数量信息同步修改到库存表中
-                stockServiceV1.modifyStockState(productId);
+                stockService.modifyStockState(productId);
                 //修改商品库存数量
-                stockServiceV1.modifyProductNum(productId, productNum);
+                stockService.modifyProductNum(productId, productNum);
 
                 result = String.format("同步商品编号为：" + productId + "数量为：" + productNum + "成功！" + DateFormatUtils.format(new
                                 Date(),
