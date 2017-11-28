@@ -190,7 +190,7 @@ contentApp.controller('HeaderCtrl', ['$scope', '$http',
                 });
                 $scope.user = data;
             }).error(function (data, status, headers, config) {
-                scope.user = {};
+                $scope.user = {};
             });
         };
 
@@ -497,12 +497,13 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
 
 contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
     function ($scope, $http, $location, orderService, $routeParams){
-        $scope.stockUrl = '/v1/stock/';
-        $scope.stockUpdateUrl = '/v1/stock/updateStock';
-        $scope.productUrl = '/v1/products';
+        $scope.stockUrl = '/api/inventory/v1/stock/';
+        $scope.stockUpdateUrl = '/api/v1/stock/updateStock';
+        $scope.productUrl = '/api/inventory/v1/products';
         $scope.oriNum = '';//产品的初始库存
         $scope.addNum = '';//产品要添加的库存
         $scope.products = [];//查询回来的所有产品
+        var arr = $scope.products;
         $scope.item = '';//当前选中的产品
         //获取产品和关联的库存
         var fetchStock = function(){
@@ -510,21 +511,26 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
             $http({
                 method:'GET',
                 url: $scope.productUrl,
-                async:false
+                async: false
             }).success(function(data,status,headers,config){
-                $scope.products = data.products;
-                console.info("获取所有的products:"+data.products);
-                for (var i = 0; i < $scope.products.length; i++){
+                //$scope.products = data;
+                arr = data;
+                console.info("count:"+$scope.products.length) ;
+                for (var i = 0; i < arr.length; i++){
                     $http({
                         method:'GET',
-                        url:$scope.stockUrl+$scope.products[i].productId,
-                        async:false
+                        url:$scope.stockUrl+arr[i].productId,
+                        async: false
                     }).success(function(data,status,headers,config){
-                        console.info("产品关联stock："+data);
-                        $scope.products[i].stock = data;
+                       // $scope.products.push({stock:data})
+
                     }).error(function(){
-                        console.info("根据产品Id:"+$scope.products[i].productId+"获取库存信息失败")
+                        console.info("根据产品Id获取库存信息失败")
                     })
+                }
+
+                for (var j = 0;j<$scope.products.length;j++){
+                    console.info("----"+$scope.products[j].stock);
                 }
 
             }).error(function(data,status,headers,config){
