@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: development
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+logging:
+  level:
+    demo: info
 ---
 server:
   port: 8181

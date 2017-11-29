@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: discovery-service
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+logging:
+  level:
+    demo: info
 
 ---
 spring:

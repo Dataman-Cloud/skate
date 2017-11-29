@@ -65,7 +65,7 @@ public class InventoryControllerV1Test {
                     String modifyInventoryNum = String.valueOf(productNum + nowInventoryNum); //当前库存量加上原有库存量
                     Inventory in = restTemplate
                             .getForObject(String.format
-                                            ("http://inventory-service/v1/stock/modifyProductNum/%s/%s", productId, productNum),
+                                            ("http://inventory-service/api/inventory/v1/stock/modifyProductNum/%s/%s", productId, productNum),
                                     Inventory.class);
                     System.out.print("修改数据编号：" + in.getId() + "成功！");
                 }

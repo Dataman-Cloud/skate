@@ -18,8 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import demo.InventoryApplication;
 import demo.ReadyData;
 import demo.StockApplicationTest;
+import demo.catalog.Catalog;
 import demo.inventory.Inventory;
 import demo.inventory.InventoryRepository;
+import demo.product.Product;
 import demo.stock.Stock;
 import demo.stock.StockRepository;
 
@@ -29,6 +31,7 @@ import demo.stock.StockRepository;
 public class StockControllerV1Test {
 
     @Autowired
+    @LoadBalanced
     private RestTemplate restTemplate;
 
     @Autowired
@@ -48,7 +51,7 @@ public class StockControllerV1Test {
     @Test
     public void getStockNoSyncTest() {
         List<Stock> stocks = (List<Stock>) restTemplate
-                .getForObject(String.format("http://inventory-service/v1/stock/getStockNoSync"), Stock
+                .getForObject(String.format("http://inventory-service/api/inventory/v1/stock/getStockNoSync"), Stock
                         .class);
         Assert.assertEquals("测试数据Stock不能为空！", stocks);
         List<Map<String, Long>> productIds = new ArrayList<>(stocks.size() + 1);
@@ -75,7 +78,7 @@ public class StockControllerV1Test {
                 try {
                     Stock stock = restTemplate
                             .getForObject(
-                                    String.format("http://inventory-service/v1/stock/modifyProductState?productId=%s",
+                                    String.format("http://inventory-service/api/inventory/v1/stock/modifyProductState/%s",
                                             entry.getKey()), Stock.class);
                     Assert.assertTrue("同步数据：" + stock.getId() + "成功！", true);
                     System.out.print("同步数据：" + stock.getId() + "成功！\n");

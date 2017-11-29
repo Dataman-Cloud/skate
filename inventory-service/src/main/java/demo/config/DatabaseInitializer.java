@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-@Profile({"docker", "cloud", "development"})
+@Profile({"docker", "cloud", "development","test"})
 public class DatabaseInitializer {
 
     private ProductRepository productRepository;
