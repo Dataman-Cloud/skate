@@ -154,4 +154,11 @@ public class StockApplicationTest {
             neo4jConnection = false;
         }
     }
+
+
+    @Test
+    public void updateStockByStockId(){
+       Stock stock=  stockRepository.updateStockByProductId("SKU-64233",95);
+      //  System.out.println(stock.getNumber());
+    }
 }

@@ -50,7 +50,6 @@ public class StockControllerV1 {
      */
     @RequestMapping(path = "/{productId}", method = RequestMethod.GET, name = "getStockByProductId")
     public ResponseEntity<Stock> getStockByProductId(@PathVariable("productId") String productId) {
-        System.out.println("inside------------------");
         return Optional.ofNullable(stockService.getStockByProductId(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -71,9 +70,9 @@ public class StockControllerV1 {
      * 添加到库存
      * @return
      */
-    @RequestMapping(path = "/updateStock", method = RequestMethod.GET, name = "updateStock")
-    public ResponseEntity updateStock(@RequestBody Stock stock){
-        return Optional.ofNullable(stockService.updateStock(stock))
+    @RequestMapping(path = "/updateStockByProductId/{productId}/{number}", method = RequestMethod.GET, name = "updateStockByProductId")
+    public ResponseEntity updateStockByProductId(@PathVariable("productId")String productId,@PathVariable("number") Integer number){
+        return Optional.ofNullable(stockService.updateStockByProductId(productId,number))
                 .map(result -> new ResponseEntity<>(result,HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -84,7 +83,6 @@ public class StockControllerV1 {
      */
     @RequestMapping(path = "/getProductRelateStock", method = RequestMethod.GET, name = "getProductRelateStock")
     public ResponseEntity getProductRelateStock() {
-        System.out.println("stock inside------------------");
         return Optional.ofNullable(stockService.getProductRelateStock())
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

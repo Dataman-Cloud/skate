@@ -20,15 +20,6 @@ public interface StockRepository extends GraphRepository<Stock> {
     Stock modifyProductState(@Param("productId") String productId);
 
 
-
-
-    /*@Query("MATCH (stock:Stock), \n" +
-            "\t (product:Product) WHERE  product.productId={productId} \n"+
-            "\t RETURN stock")
-    Stock getStockByProductId(@Param("productId") String productId);
-*/
-
-
     @Query("MATCH (stock:Stock),(product:Product), \n" +
             "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock) WHERE product.productId = {productId} \n" +
             "\t RETURN stock")
@@ -39,5 +30,11 @@ public interface StockRepository extends GraphRepository<Stock> {
             "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock)\n" +
             "\t RETURN stock")
     Iterable<Stock> getProductRelateStock();
+
+    @Query("MATCH (stock:Stock),(product:Product), \n" +
+            "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock)\n" +
+            "\t where product.productId = {productId} set stock.number = {number} RETURN stock")
+    Stock updateStockByProductId(@Param("productId")String productId,
+                              @Param("number")Integer number);
 
 }

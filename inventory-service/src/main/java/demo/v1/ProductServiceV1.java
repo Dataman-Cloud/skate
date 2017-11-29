@@ -41,9 +41,6 @@ public class ProductServiceV1 {
          productRepository.updateProductByProductId(product.getProductId(),product.getName(),
                  product.getUnitPrice(),product.getDescription());
 
-        /*if (productRepository.exists(product.getId())){
-            return productRepository.save(product);
-        }*/
         return null;
     }
 
