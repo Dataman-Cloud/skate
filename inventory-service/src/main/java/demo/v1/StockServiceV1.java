@@ -58,4 +58,11 @@ public class StockServiceV1 {
         return stockRepository.findOne(stock.getId());
     }
 
+    @HystrixCommand
+    public Iterable<Stock> getProductRelateStock() {
+        return this.stockRepository.getProductRelateStock();
+    }
+
+
+
 }

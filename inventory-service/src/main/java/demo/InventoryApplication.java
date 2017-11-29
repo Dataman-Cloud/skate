@@ -17,10 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import demo.catalog.Catalog;
-import demo.config.DatabaseInitializer;
-import demo.product.Product;
-
 @SpringBootApplication
 @EnableNeo4jRepositories
 @EnableConfigurationProperties
@@ -41,7 +37,7 @@ public class InventoryApplication {
     }
 
     @Bean
-    @Profile({"docker", "cloud", "development", "test"})
+    @Profile({"docker", "cloud", "development","test"})
     CommandLineRunner commandLineRunner(DatabaseInitializer databaseInitializer) {
         return args -> {
             // Initialize the database for end to end integration testing
@@ -58,8 +54,8 @@ public class InventoryApplication {
         }
     }
 
-    @Bean
     @LoadBalanced
+    @Bean
     public RestTemplate loadRestTemplate() {
         return new RestTemplate();
     }

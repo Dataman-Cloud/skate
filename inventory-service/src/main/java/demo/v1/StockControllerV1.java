@@ -50,6 +50,7 @@ public class StockControllerV1 {
      */
     @RequestMapping(path = "/{productId}", method = RequestMethod.GET, name = "getStockByProductId")
     public ResponseEntity<Stock> getStockByProductId(@PathVariable("productId") String productId) {
+        System.out.println("inside------------------");
         return Optional.ofNullable(stockService.getStockByProductId(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -76,5 +77,19 @@ public class StockControllerV1 {
                 .map(result -> new ResponseEntity<>(result,HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    /**
+     * 获取全部产品库存信息
+     * @return
+     */
+    @RequestMapping(path = "/getProductRelateStock", method = RequestMethod.GET, name = "getProductRelateStock")
+    public ResponseEntity getProductRelateStock() {
+        System.out.println("stock inside------------------");
+        return Optional.ofNullable(stockService.getProductRelateStock())
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
 
 }
