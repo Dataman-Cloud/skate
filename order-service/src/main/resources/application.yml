@@ -12,7 +12,7 @@ logging:
 spring:
   profiles: development
   data:
-    mongodb:s
+    mongodb:
       host: 192.168.31.46
       port: 27017
   jackson:
