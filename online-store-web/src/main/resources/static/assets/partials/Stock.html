@@ -20,23 +20,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="product in products">
+                        <tr ng-repeat="stock in stocks">
                             <td class="tdst-group-item">
-                                <a>{{product.productId}}</a>
+                                <a>{{stock.product.productId}}</a>
                             </td>
                             <td class="tdst-group-item">
-                                {{product.name}}
+                                {{stock.product.name}}
                             </td>
                             <td class="tdst-group-item hidden-xs">
-                                {{product.unitPrice}}
+                                {{stock.product.unitPrice}}
                             </td>
                             <td class="tdst-group-item">
-                                {{product.stock.number}}
+                                {{stock.number}}
                             </td>
                             <td class="tdst-group-item">
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="setCurrentProduct(product)">Inbound</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="setCurrentStock(stock)">Inbound</button>
 <!--                                <button class="btn btn-primary" id="delete" type="submit" ng-click="setCurrentProduct(product)">Outbound</button>-->
-                                <button class="btn btn-primary" id="updateProduct" ng-click="setCurrentProduct(product)" type="submit">edit</button>
+                                <button class="btn btn-primary" id="updateProduct" ng-click="setCurrentStock(stock)" type="submit">edit</button>
                             </td>
                         </tr>
                         </tbody>
@@ -77,13 +77,13 @@
                                         </tr>
                                         <tr >
                                             <td class="tdst-group-item">
-                                                <input type="text" ng-model="item.id">
+                                                <input type="text" ng-model="item.product.productId">
                                             </td>
                                             <td class="tdst-group-item">
-                                                <input type="text" ng-model="item.name">
+                                                <input type="text" ng-model="item.product.name">
                                             </td>
                                             <td class="tdst-group-item hidden-xs">
-                                                <input type="text" ng-model="item.unitPrice">
+                                                <input type="text" ng-model="item.product.unitPrice">
                                             </td>
                                         </tr>
                                     </table>

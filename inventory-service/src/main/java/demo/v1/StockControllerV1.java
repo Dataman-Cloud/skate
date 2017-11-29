@@ -78,4 +78,18 @@ public class StockControllerV1 {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * 获取全部产品库存信息
+     * @return
+     */
+    @RequestMapping(path = "/getProductRelateStock", method = RequestMethod.GET, name = "getProductRelateStock")
+    public ResponseEntity getProductRelateStock() {
+        System.out.println("stock inside------------------");
+        return Optional.ofNullable(stockService.getProductRelateStock())
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
+
 }

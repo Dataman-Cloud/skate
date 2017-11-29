@@ -497,13 +497,15 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
 
 contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
     function ($scope, $http, $location, orderService, $routeParams){
-        $scope.stockUrl = '/api/inventory/v1/stock/';
+        $scope.stockUrl = '/api/inventory/v1/stock/getProductRelateStock';
         $scope.stockUpdateUrl = '/api/v1/stock/updateStock';
         $scope.productUrl = '/api/inventory/v1/products';
         $scope.oriNum = '';//产品的初始库存
         $scope.addNum = '';//产品要添加的库存
         $scope.products = [];//查询回来的所有产品
-        var arr = $scope.products;
+
+        $scope.stocks = [];//查询回来的产品库存
+
         $scope.item = '';//当前选中的产品
         //获取产品和关联的库存
         var fetchStock = function(){
@@ -513,25 +515,44 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
                 url: $scope.productUrl,
                 async: false
             }).success(function(data,status,headers,config){
-                //$scope.products = data;
-                arr = data;
-                console.info("count:"+$scope.products.length) ;
-                for (var i = 0; i < arr.length; i++){
+                $scope.products = data;
+                for (var i = 0; i < $scope.products.length-1; i++){
                     $http({
                         method:'GET',
-                        url:$scope.stockUrl+arr[i].productId,
+                        url:$scope.stockUrl+$scope.products[i].productId,
                         async: false
                     }).success(function(data,status,headers,config){
-                       // $scope.products.push({stock:data})
+
+                        //console.info("---"+data);
+
+                      //  $scope.products[i].number = data.number;
+                        for (var j=0;j<$scope.products.length;j++){
+                            if ($scope.products[j].id==data.product.id){
+                                $scope.products[j].number = data.number;
+                                break;
+                            }
+                        }
 
                     }).error(function(){
                         console.info("根据产品Id获取库存信息失败")
                     })
                 }
 
-                for (var j = 0;j<$scope.products.length;j++){
-                    console.info("----"+$scope.products[j].stock);
-                }
+            }).error(function(data,status,headers,config){
+                console.info("根据产品ID获取库存信息的过程中出现错误");
+            });
+
+        };
+
+        var fetch = function(){
+            $http({
+                method:'GET',
+                url: $scope.stockUrl,
+                async: false
+            }).success(function(data,status,headers,config){
+                $scope.stocks = data;
+                console.info("stocks------:"+data);
+
 
             }).error(function(data,status,headers,config){
                 console.info("根据产品ID获取库存信息的过程中出现错误");
@@ -539,7 +560,7 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
         };
 
         //设定当前选择的产品
-        $scope.setCurrentProduct = function(item) {
+        $scope.setCurrentStock = function(item) {
             $scope.item = item;
         }
 
@@ -586,7 +607,10 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
             });
         };
 
-        fetchStock();
+
+
+        fetch();
+        //fetchStock();
     }]);
 
 contentApp.filter('rawHtml', ['$sce', function ($sce) {
