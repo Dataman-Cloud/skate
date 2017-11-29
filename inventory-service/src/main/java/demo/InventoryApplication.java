@@ -17,6 +17,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
+import demo.catalog.Catalog;
+import demo.config.DatabaseInitializer;
+import demo.product.Product;
+
 @SpringBootApplication
 @EnableNeo4jRepositories
 @EnableConfigurationProperties
