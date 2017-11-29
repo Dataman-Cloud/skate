@@ -135,3 +135,8 @@ octopus-service:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$WEB_IP
+common-service:
+  image: ${IMAGE_PREFIX}common-service:${SKATE_VERSION}
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$WEB_IP

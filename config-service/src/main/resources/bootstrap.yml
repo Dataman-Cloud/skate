@@ -8,3 +8,10 @@ spring:
       server:
         git:
           uri: https://github.com/Dataman-Cloud/skate.git
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+logging:
+  level:
+    demo: info

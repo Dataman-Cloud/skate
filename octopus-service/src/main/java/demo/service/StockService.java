@@ -32,7 +32,7 @@ public class StockService {
     public List<Map<String, Long>> getStockNoSync() {
 
         List<Stock> stocks = (List<Stock>) restTemplate
-                .getForObject(String.format("http://inventory-service/v1/stock/getStockNoSync"), Stock
+                .getForObject(String.format("http://inventory-service/api/inventory/v1/stock/getStockNoSync"), Stock
                         .class);
         List<Map<String, Long>> productIds = new ArrayList<>(stocks.size() + 1);
         Map<String, Long> stockMap = null;
@@ -50,7 +50,7 @@ public class StockService {
     @HystrixCommand
     public Stock modifyStockState(String productId) {
         Stock stock = restTemplate
-                .getForObject(String.format("http://inventory-service/v1/stock/modifyProductState?productId=%s",
+                .getForObject(String.format("http://inventory-service/api/inventory/v1/stock/modifyProductState/%s",
                         productId), Stock
                         .class);
         return stock;
@@ -62,8 +62,8 @@ public class StockService {
     @HystrixCommand
     public Inventory modifyProductNum(String productId, Long productNum) {
         Inventory inventory = restTemplate
-                .getForObject(String.format("http://inventory-service/v1/stock/modifyProductNum?productId=%s" +
-                        "&productNum=%s", productId, productNum), Inventory.class);
+                .getForObject(String.format("http://inventory-service/api/inventory/v1/stock/modifyProductNum/%s/%s",
+                        productId, productNum), Inventory.class);
         return inventory;
     }
 }

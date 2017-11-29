@@ -30,6 +30,8 @@ This reference application is based on common design patterns for building an ec
 * Inventory Service
 * Online Store Web
 * Shopping Cart Service
+* Octopus Service
+* Common Service
 
 ## Usage
 

@@ -125,9 +125,24 @@ if (params.ENV != "release") {
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "order-service") {
                 sh "mvn -f order-service sonar:sonar"
             }
+
+            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
+                sh "mvn -f octopus-service sonar:sonar"
+            }
+
+            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
+                sh "mvn -f common-service sonar:sonar"
+            }
         }
 
 				// 4. 构建Image, 并push到Registry中
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
+            stage("img-common") {
+                sh "docker build -t ${imagePrefix}/common-service common-service/${targetdockerfile}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker push ${imagePrefix}/common-service"
+            }
+        }
 
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("img-hystrix") {
@@ -216,6 +231,14 @@ if (params.ENV != "release") {
                 sh "docker push ${imagePrefix}/online-store-web"
             }
         }
+
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
+            stage("img-octopus") {
+                sh "docker build -t ${imagePrefix}/octopus-service octopus-service/${targetdockerfile}"
+                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
+                sh "docker push ${imagePrefix}/octopus-service"
+            }
+        }
     }
 }
 
@@ -292,6 +315,18 @@ if (params.ENV == "test") {
             sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f order-service"
         }
 
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml pull octopus-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml stop octopus-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f octopus-service"
+        }
+
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml pull common-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml stop common-service"
+            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f common-service"
+        }
+
         if (params.SUB_PROJECT == "all"){
 						sh "sh ./skate_stop.sh test"
 						sh "sh ./skaterun.sh test"
@@ -314,6 +349,8 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/pom.xml"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/pom.xml"
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
@@ -327,6 +364,8 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/${sourcedockerfile}/Dockerfile"
+    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/${sourcedockerfile}/Dockerfile"
 
     sh "echo Replace public web to ${VERSION} in skate_stop.sh"
     sh "sed -i 's|:latest|${VERSION}|g\' skaterun.sh"
@@ -419,6 +458,18 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             sh "docker build -t ${imagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
             sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
             sh "docker push ${imagePrefix}/order-service:${VERSION}"
+        }
+
+        stage("Img-Octopus") {
+            sh "docker build -t ${imagePrefix}/octopus-service:${VERSION} octopus-service/${targetdockerfile}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker push ${imagePrefix}/octopus-service:${VERSION}"
+        }
+
+        stage("Img-Common") {
+            sh "docker build -t ${imagePrefix}/common-service:${VERSION} common-service/${targetdockerfile}"
+            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
+            sh "docker push ${imagePrefix}/common-service:${VERSION}"
         }
 
         stage("Cleanup") {
