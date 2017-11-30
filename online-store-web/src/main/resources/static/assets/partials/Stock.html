@@ -36,7 +36,7 @@
                             <td class="tdst-group-item">
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#myModal"  ng-click="setCurrentStock(stock)">Inbound</button>
 <!--                                <button class="btn btn-primary" id="delete" type="submit" ng-click="setCurrentProduct(product)">Outbound</button>-->
-                                <button class="btn btn-primary" data-toggle="modal" data-target="productModal" ng-click="setCurrentStock(stock)" type="submit">edit</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" ng-click="setCurrentStock(stock)" type="submit">edit</button>
                             </td>
                         </tr>
                         </tbody>
@@ -61,12 +61,12 @@
                         </div><!-- /.modal -->
                     </div>
                     <!-- 模态框（Modal） -->
-                    <div class="modal fade" id="productModal"  tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal" id="productModal"  tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content"  style="background:#3C3C3C; color:#3C3C3C">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="productModalLabel" style="color: floralwhite">入库</h4>
+                                    <h4 class="modal-title" id="productModalLabel" style="color: floralwhite">产品信息</h4>
                                 </div>
                                 <div class="modal-body" style="color: floralwhite">
                                     <table class="table table-striped">

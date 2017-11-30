@@ -98,7 +98,7 @@ public class InventoryApplicationTests {
                                     "Show the world you're a stylish cloud platform architect with this cute yet casual tee. " +
                                     "<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />" +
                                     "&nbsp; 110% cloud stuff, 5% spandex<br />&nbsp; Rain wash only<br />&nbsp; " +
-                                    "Four nines of <em>stylability</em></p>", 21.99),
+                                    "Four nines of <em>stylability</em></p>", 21.99,true),
 
                     new Product("Like a BOSH (T-Shirt, Women's Medium)", "SKU-34563",
                             "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
@@ -107,16 +107,23 @@ public class InventoryApplicationTests {
                                     "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
                                     "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
                                     "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
-                                    "4 nines of <em>re-washability</em></p>", 14.99),
+                                    "4 nines of <em>re-washability</em></p>", 14.99,true),
 
-                    new Product("We're gonna need a bigger VM (T-Shirt, Women's Small)", "SKU-12464", 13.99),
+                    new Product("We're gonna need a bigger VM (T-Shirt, Women's Small)", "SKU-12464",
+                            "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
+                                    "is an elegant release engineering tool for a more virtualized cloud-native age. " +
+                                    "The feeling of spinning up a highly available distributed system of VMs is second only to the " +
+                                    "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
+                                    "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
+                                    "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
+                                    "4 nines of <em>re-washability</em></p>", 13.99,true),
                     new Product("cf push awesome (Hoodie, Men's Medium)", "SKU-64233",
                             "<p>One of the great natives of the cloud once said \"<em>" +
                                     "Production is the happiest place on earth for us - it's better than Disneyland</em>\". " +
                                     "With this stylish Cloud Foundry hoodie you can push code to the cloud all day while staying " +
                                     "comfortable and casual. <br /><br />&nbsp; <strong>Cloud Native PaaS Collection</strong><br />" +
                                     "&nbsp; 10% cloud stuff, 90% platform nylon<br />&nbsp; Cloud wash safe<br />" +
-                                    "&nbsp; Five nines of <em>comfortability</em></p>", 21.99))
+                                    "&nbsp; Five nines of <em>comfortability</em></p>", 21.99,true))
                     .stream()
                     .collect(Collectors.toList());
 
@@ -193,17 +200,17 @@ public class InventoryApplicationTests {
             assertThat(shipment1.toString(), is(shipment.toString()));
 
             //初始化stock数据表
-            Product product0 = new Product();
-            product0.setProductId("SKU-24642");
-            Stock stock1 = new Stock(product0, 100L, "admin", new Date(), null, true);
+           // Product product0 = new Product();
+           // product0.setProductId("SKU-24642");
+            Stock stock1 = new Stock(products.get(0), 100L, "admin", new Date(), null, false);
 
-            Product product2 = new Product();
-            product2.setProductId("SKU-34563");
-            Stock stock2 = new Stock(product2, 100L, "admin", new Date(), null, true);
+           // Product product2 = new Product();
+          //  product2.setProductId("SKU-34563");
+            Stock stock2 = new Stock(products.get(1), 100L, "admin", new Date(), null, false);
 
-            Product product3 = new Product();
-            product3.setProductId("SKU-64233");
-            Stock stock3 = new Stock(product3, 100L, "admin", new Date(), null, true);
+         //   Product product3 = new Product();
+        //    product3.setProductId("SKU-64233");
+            Stock stock3 = new Stock(products.get(2), 100L, "admin", new Date(), null, false);
 
             stockRepository.save(Arrays.asList(stock1, stock2, stock3).stream().collect(Collectors.toList()));
         }
@@ -232,15 +239,15 @@ public class InventoryApplicationTests {
     @Test
     public void updateProductByProductId() {
 
-        Product product = new Product("衣服-TEST-12464", "SKU-24642", "测试新增的数据", 31.99);
+        Product product = new Product("衣服-TEST-12464", "SKU-24642", "测试新增的数据", 33.99);
 
         //  Product product1 = productRepository.getProductByProductId("SKU-24642");
-        //   System.out.println("unitPrice--------------:"+product1.getUnitPrice());
+          // System.out.println("unitPrice--------------:"+product1.getUnitPrice());
 
-        //   productServiceV1.updateProductByProductId(product);
+          productServiceV1.updateProductByProductId(product);
 
-        //  Product product2 = productRepository.getProductByProductId(product.getProductId());
-        //   System.out.println("unitPrice----------------------"+product2.getUnitPrice());
+     //     Product product2 = productRepository.getProductByProductId(product.getProductId());
+       //    System.out.println("unitPrice----------------------"+product2.getUnitPrice());
     }
 
     @Test

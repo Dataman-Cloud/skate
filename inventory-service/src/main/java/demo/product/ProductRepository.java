@@ -12,7 +12,7 @@ public interface ProductRepository extends GraphRepository<Product> {
 
     @Query("MATCH (product:Product)\n"+
             "\t WHERE product.productId = {productId}\n"+
-             "\t set product.name = {name} ,product.description = {description},product.unitPrice = {unitPrice}")
-    Product updateProductByProductId(@Param("productId") String productId,@Param("name")String name,
+             "\t set product.name = {name} ,product.description = {description},product.unitPrice = {unitPrice} return product")
+    Iterable<Product> updateProductByProductId(@Param("productId") String productId,@Param("name")String name,
                                      @Param("unitPrice") Double unitPrice,@Param("description")String description);
 }

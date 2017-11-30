@@ -455,7 +455,7 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
         $scope.productItemUrl = '/api/catalog/v1/products/' + $routeParams.productId;
         $scope.productsUrl = '/api/catalog/v1/catalog';
         $scope.products = [];
-        $scope.productStockUrl = '/api/inventory/v1/stock';
+        $scope.productStockUrl = '/api/inventory/v1/stock/' +$routeParams.productId;
 
         $scope.$on('logout', function (event, msg) {
             fetchProduct();
@@ -499,6 +499,7 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
     function ($scope, $http, $location, orderService, $routeParams){
         $scope.stockUrl = '/api/inventory/v1/stock/getProductRelateStock';
         $scope.stockUpdateUrl = '/api/inventory/v1/stock/updateStockByProductId/';
+        $scope.productUpdateUrl = '/api/inventory/v1/updateProductByProductId'
         $scope.productUrl = '/api/inventory/v1/products';
         $scope.oriNum = '';//产品的初始库存
         $scope.addNum = '';//产品要添加的库存
@@ -529,17 +530,20 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
         $scope.updateProduct = function(item){
             $http({
                 method:'POST',
-                url: $scope.stockUpdateUrl,
-                data:JSON.stringify({
-                    'id':item.id,
-                    'name':item.name,
-                    'unitPrice':item.unitPrice,
-                    'productId':item.productId,
-                    'description':item.description,
-                    'inStock':item.inStock
-                })
+                url: $scope.productUpdateUrl,
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                data:{
+                    "id":$scope.item.product.id,
+                    "name":$scope.item.product.name,
+                    "unitPrice":$scope.item.product.unitPrice,
+                    "productId":$scope.item.product.productId,
+                    "description":$scope.item.product.description,
+                    "inStock":$scope.item.product.inStock
+                }
             }).success(function(data,status,headers,config){
-                fetchStock();
+                fetch();
             }).error(function(data,status,headers,config){
                 console.info("更新产品信息的过程中出现错误");
             });
@@ -555,11 +559,6 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
             }).success(function(data,status,headers,config){
                 var  s = data;
                 console.info("更新后返回的库存:"+data);
-                /*for (var i = 0; i < $scope.products.length; i++){
-                    if (products[i].stock.id == s.id){
-                        products[i].stock.number = s.number;
-                    }
-                }*/
                 fetch();
             }).error(function(data,status,headers,config){
                 console.info("添加库存信息的过程中出现错误");

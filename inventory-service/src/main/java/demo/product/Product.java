@@ -37,6 +37,14 @@ public class Product {
         this.unitPrice = unitPrice;
     }
 
+    public Product(String name, String productId, String description, Double unitPrice,Boolean inStock){
+        this.name = name;
+        this.productId = productId;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.inStock = inStock;
+    }
+
     public Long getId() {
         return id;
     }

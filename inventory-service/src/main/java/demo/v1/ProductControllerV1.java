@@ -29,10 +29,10 @@ public class ProductControllerV1 {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @RequestMapping(path = "/product")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product){
+    @RequestMapping(path = "/updateProductByProductId")
+    public ResponseEntity updateProductByProductId(@RequestBody Product product){
         return Optional.ofNullable(productServiceV1.updateProductByProductId(product))
-                .map(result ->new ResponseEntity<>(result,HttpStatus.OK)).orElse(new ResponseEntity<Product>(HttpStatus.OK));
+                .map(result ->new ResponseEntity<>(result,HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.OK));
 
     }
 }

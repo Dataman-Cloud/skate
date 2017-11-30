@@ -36,12 +36,15 @@ public class ProductServiceV1 {
 
 
     @HystrixCommand
-    public Product updateProductByProductId(Product product){
+    public Iterable<Product> updateProductByProductId(Product product){
+        product.setName(product.getName()==null?"":product.getName());
+        product.setDescription(product.getDescription()==null?"":product.getDescription());
+        product.setUnitPrice(product.getUnitPrice()==null?0:product.getUnitPrice());
 
-         productRepository.updateProductByProductId(product.getProductId(),product.getName(),
+      return   productRepository.updateProductByProductId(product.getProductId(),product.getName(),
                  product.getUnitPrice(),product.getDescription());
 
-        return null;
+
     }
 
     private Product getProductFallback(String productId) {
