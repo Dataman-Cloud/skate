@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import demo.stock.Stock;
 
@@ -50,6 +51,10 @@ public class StockControllerV1 {
      */
     @RequestMapping(path = "/{productId}", method = RequestMethod.GET, name = "getStockByProductId")
     public ResponseEntity<Stock> getStockByProductId(@PathVariable("productId") String productId) {
+        Stock stockIterable = stockService.getStockByProductId(productId);
+        System.out.println("productId--------:"+productId);
+        System.out.println("stockResult-------:"+stockIterable.getProduct());
+
         return Optional.ofNullable(stockService.getStockByProductId(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -83,6 +88,16 @@ public class StockControllerV1 {
      */
     @RequestMapping(path = "/getProductRelateStock", method = RequestMethod.GET, name = "getProductRelateStock")
     public ResponseEntity getProductRelateStock() {
+
+        Iterable<Stock> stockIterable = stockService.getProductRelateStock();
+        stockIterable.forEach(new Consumer<Stock>() {
+            @Override
+            public void accept(Stock stock) {
+            }
+        });
+
+
+        System.out.println("stockServiceRelateStock:"+stockService.getProductRelateStock());
         return Optional.ofNullable(stockService.getProductRelateStock())
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

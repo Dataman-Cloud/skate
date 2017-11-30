@@ -2,10 +2,14 @@ package demo.v1;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import demo.inventory.Inventory;
+import demo.inventory.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import demo.stock.Stock;
 import demo.stock.StockRepository;
@@ -14,10 +18,12 @@ import demo.stock.StockRepository;
 public class StockServiceV1 {
 
     private StockRepository stockRepository;
+    private InventoryRepository inventoryRepository;
 
     @Autowired
-    public StockServiceV1(StockRepository stockRepository) {
+    public StockServiceV1(StockRepository stockRepository,InventoryRepository inventoryRepository) {
         this.stockRepository = stockRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @HystrixCommand
@@ -58,7 +64,18 @@ public class StockServiceV1 {
 
     @HystrixCommand
     public Iterable<Stock> getProductRelateStock() {
-        return this.stockRepository.getProductRelateStock();
+        Iterable<Stock> stockIterable = stockRepository.getProductRelateStock();
+        stockIterable.forEach(new Consumer<Stock>() {
+            @Override
+            public void accept(Stock stock) {
+                if (stock.getProduct() != null) {
+                    Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(stock.getProduct().getProductId()).stream();
+                    stock.getProduct().setInStock(availableInventory.findAny().isPresent());
+                }
+            }
+        });
+
+        return stockIterable;
     }
 
 

@@ -28,7 +28,7 @@ public class InventoryServiceV1 {
         this.neo4jTemplate = neo4jTemplate;
     }
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
+    @HystrixCommand
     public Product getProductByProductId(String productId) {
         Product product;
 
@@ -42,7 +42,7 @@ public class InventoryServiceV1 {
         return product;
     }
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
+    @HystrixCommand
     public Product getProduct(String productId) {
         Product product;
 
