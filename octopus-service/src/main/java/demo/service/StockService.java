@@ -56,10 +56,10 @@ public class StockService {
     private String productNumKey;
 
     @Value("${spring.application.oauthClientId}")
-    private static String oauthClientId;
+    private String oauthClientId;
 
     @Value("${spring.application.oauthSecret}")
-    private static String oauthSecret;
+    private String oauthSecret;
 
     @Value("${spring.application.passwordGrantStr}")
     private String passwordGrantStr;
