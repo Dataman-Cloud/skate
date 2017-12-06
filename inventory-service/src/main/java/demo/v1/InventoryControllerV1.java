@@ -36,8 +36,8 @@ public class InventoryControllerV1 {
     /**
      * 通过产品编号修改库存量
      */
-    @RequestMapping(path = "/modifyProductNum/{productId}/{productNum}", method = RequestMethod.GET, name = "modifyProductNum")
-    public ResponseEntity modifyProductNum(@RequestParam("productId") String productId, @RequestParam("productNum")
+    @RequestMapping(path = "/modifyInventoryNum/{productId}/{productNum}", method = RequestMethod.GET, name = "modifyInventoryNum")
+    public ResponseEntity modifyInventoryNum(@RequestParam("productId") String productId, @RequestParam("productNum")
             Long productNum) {
         return Optional.ofNullable(inventoryService.modifyProductNum(productId, productNum))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))

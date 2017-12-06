@@ -200,19 +200,14 @@ public class InventoryApplicationTests {
             assertThat(shipment1.toString(), is(shipment.toString()));
 
             //初始化stock数据表
-           // Product product0 = new Product();
-           // product0.setProductId("SKU-24642");
-            Stock stock1 = new Stock(products.get(0), 100L, "admin", new Date(), null, false);
+            Stock stock = null;
+            List<Stock> stocks = new ArrayList<>();
+            for(Product p : products){
+                stock = new Stock(p,100L,"admin",new Date(),null,false);
+                stocks.add(stock);
+            }
 
-           // Product product2 = new Product();
-          //  product2.setProductId("SKU-34563");
-            Stock stock2 = new Stock(products.get(1), 100L, "admin", new Date(), null, false);
-
-         //   Product product3 = new Product();
-        //    product3.setProductId("SKU-64233");
-            Stock stock3 = new Stock(products.get(2), 100L, "admin", new Date(), null, false);
-
-            stockRepository.save(Arrays.asList(stock1, stock2, stock3).stream().collect(Collectors.toList()));
+            stockRepository.save(stocks.stream().collect(Collectors.toList()));
         }
     }
 

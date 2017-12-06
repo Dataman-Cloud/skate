@@ -67,14 +67,14 @@ public class InventoryServiceV1 {
 
     @HystrixCommand(fallbackMethod = "getProductFallback")
     public Inventory modifyProductNum(String productId, Long productNum) {
-        Long nowInventoryNum = getInventoryNumByPid(productId);
+        Long nowInventoryNum = Long.valueOf(getInventoryNumByPid(productId));
         nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;
         String modifyInventoryNum = String.valueOf(productNum + nowInventoryNum); //当前库存量加上原有库存量
         return inventoryRepository.modifyProductNum(productId, modifyInventoryNum);
     }
 
     @HystrixCommand(fallbackMethod = "getProductFallback")
-    public Long getInventoryNumByPid(String productId) {
+    public String getInventoryNumByPid(String productId) {
         return inventoryRepository.getInventoryNumByPid(productId);
     }
 

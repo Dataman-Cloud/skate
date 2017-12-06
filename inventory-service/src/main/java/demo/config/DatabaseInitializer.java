@@ -134,18 +134,13 @@ public class DatabaseInitializer {
         shipmentRepository.save(shipment);
 
         //初始化stock数据表
-        Product product1 = new Product();
-        product1.setProductId("SKU-24642");
-        Stock stock1 = new Stock(product1,100L,"admin",new Date(),null,true);
+        Stock stock = null;
+        List<Stock> stocks = new ArrayList<>();
+        for(Product p : products){
+            stock = new Stock(p,100L,"admin",new Date(),null,false);
+            stocks.add(stock);
+        }
 
-        Product product2 = new Product();
-        product2.setProductId("SKU-34563");
-        Stock stock2 = new Stock(product2,100L,"admin",new Date(),null,true);
-
-        Product product3 = new Product();
-        product3.setProductId("SKU-64233");
-        Stock stock3 = new Stock(product3,100L,"admin",new Date(),null,true);
-
-        stockRepository.save(Arrays.asList(stock1,stock2,stock3).stream().collect(Collectors.toList()));
+        stockRepository.save(stocks.stream().collect(Collectors.toList()));
     }
 }

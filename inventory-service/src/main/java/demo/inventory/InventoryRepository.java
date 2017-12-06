@@ -35,9 +35,14 @@ public interface InventoryRepository extends GraphRepository<Inventory> {
     Inventory modifyProductNum(@Param("productId") String productId,@Param("modifyInventoryNum") String
             modifyInventoryNum);
 
-    @Query("MATCH (inventory:Inventory),(product:Product),\n" +
+    @Query("MATCH (product:Product),\n" +
             "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory) WHERE product.productId = {productId}\n" +
-            "RETURN COUNT(inventory)")
-    Long getInventoryNumByPid(@Param("productId") String productId);
+            "RETURN inventory.inventoryNumber")
+    String getInventoryNumByPid(@Param("productId") String productId);
+
+    @Query("MATCH (product:Product), \n" +
+            "\t (product)<-[r:PRODUCT_TYPE]-(inventory:Inventory)\n" +
+            "\t where ID(inventory) = {inventoryId} delete product,r,inventory")
+    void deleteIRelationP(@Param("inventoryId")String inventoryId);
 
 }

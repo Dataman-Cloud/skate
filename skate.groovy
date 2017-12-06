@@ -126,11 +126,11 @@ if (params.ENV != "release") {
                 sh "mvn -f order-service sonar:sonar"
             }
 
-            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
+			if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
                 sh "mvn -f octopus-service sonar:sonar"
-            }
+            }           
 
-            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
+ 			if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
                 sh "mvn -f common-service sonar:sonar"
             }
         }
@@ -231,14 +231,6 @@ if (params.ENV != "release") {
                 sh "docker push ${imagePrefix}/online-store-web"
             }
         }
-
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
-            stage("img-octopus") {
-                sh "docker build -t ${imagePrefix}/octopus-service octopus-service/${targetdockerfile}"
-                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
-                sh "docker push ${imagePrefix}/octopus-service"
-            }
-        }
     }
 }
 
@@ -315,17 +307,7 @@ if (params.ENV == "test") {
             sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f order-service"
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml pull octopus-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml stop octopus-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f octopus-service"
-        }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml pull common-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml stop common-service"
-            sh "env IMAGE_PREFIX=${registryUrl}/skate/ SKATE_VERSION=latest docker-compose -f docker-compose.yml rm -f common-service"
-        }
 
         if (params.SUB_PROJECT == "all"){
 						sh "sh ./skate_stop.sh test"
@@ -349,8 +331,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/pom.xml"
+
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
@@ -364,8 +345,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/${sourcedockerfile}/Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/${sourcedockerfile}/Dockerfile"
+
 
     sh "echo Replace public web to ${VERSION} in skate_stop.sh"
     sh "sed -i 's|:latest|${VERSION}|g\' skaterun.sh"
@@ -460,17 +440,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
             sh "docker push ${imagePrefix}/order-service:${VERSION}"
         }
 
-        stage("Img-Octopus") {
-            sh "docker build -t ${imagePrefix}/octopus-service:${VERSION} octopus-service/${targetdockerfile}"
-            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/octopus-service:${VERSION}"
-        }
 
-        stage("Img-Common") {
-            sh "docker build -t ${imagePrefix}/common-service:${VERSION} common-service/${targetdockerfile}"
-            sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
-            sh "docker push ${imagePrefix}/common-service:${VERSION}"
-        }
 
         stage("Cleanup") {
 						sh "echo Cleanup"

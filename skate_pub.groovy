@@ -38,8 +38,7 @@ node("master") {
     	sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
     	sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
     	sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
-        sh "cp octopus-service/${sourcedockerfile}/Dockerfile octopus-service/${targetdockerfile}"
-        sh "cp common-service/${sourcedockerfile}/Dockerfile common-service/${targetdockerfile}"
+
     }
 
 
@@ -87,8 +86,7 @@ def pushImageToPublicRegistry() {
             sh "docker build -t ${publicImagePrefix}/order-service:${VERSION} order-service/${targetdockerfile}"
             sh "docker build -t ${publicImagePrefix}/online-store-web:${VERSION} online-store-web/${targetdockerfile}"
             sh "docker build -t ${publicImagePrefix}/hystrix-dashboard:${VERSION} hystrix-dashboard/${targetdockerfile}"
-            sh "docker build -t ${publicImagePrefix}/octopus-service:${VERSION} octopus-service/${targetdockerfile}"
-            sh "docker build -t ${publicImagePrefix}/common-service:${VERSION} common-service/${targetdockerfile}"
+
 
             sh "docker login -u ${publicRegistryUsername} -p ${publicRegistryPassword} ${publicRegistryUrl}"
 
@@ -100,8 +98,7 @@ def pushImageToPublicRegistry() {
             sh "docker push ${publicImagePrefix}/order-service:${VERSION}"
             sh "docker push ${publicImagePrefix}/online-store-web:${VERSION}"
             sh "docker push ${publicImagePrefix}/hystrix-dashboard:${VERSION}"
-            sh "docker push ${publicImagePrefix}/octopus-service:${VERSION}"
-            sh "docker push ${publicImagePrefix}/common-service:${VERSION}"
+
         }
     }
 }
@@ -121,8 +118,7 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/pom.xml"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/pom.xml"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/pom.xml"
+
 
     sh "echo Replace master-SNAPSHOT to ${VERSION} in Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' config-service/${sourcedockerfile}/Dockerfile"
@@ -136,6 +132,5 @@ def replaceVersion() {
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' inventory-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' order-service/${sourcedockerfile}/Dockerfile"
     sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' online-store-web/${sourcedockerfile}/Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' octopus-service/${sourcedockerfile}/Dockerfile"
-    sh "sed -i 's|master-SNAPSHOT|${VERSION}|g\' common-service/${sourcedockerfile}/Dockerfile"
+
 }

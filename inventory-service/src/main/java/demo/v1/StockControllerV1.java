@@ -18,6 +18,7 @@ import demo.stock.Stock;
  */
 @RestController
 @RequestMapping("/v1/stock")
+@ResponseBody
 public class StockControllerV1 {
 
     private Logger log = LoggerFactory.getLogger(StockControllerV1.class);
@@ -29,10 +30,8 @@ public class StockControllerV1 {
      * 获取未同步的货品
      */
     @RequestMapping("/getStockNoSync")
-    public ResponseEntity getStockNoSync() {
-        return Optional.ofNullable(stockService.getStockNoSync())
-                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public List<Stock> getStockNoSync() {
+        return stockService.getStockNoSync();
     }
 
     /**

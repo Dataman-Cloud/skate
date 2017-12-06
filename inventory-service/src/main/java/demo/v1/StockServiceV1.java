@@ -26,12 +26,12 @@ public class StockServiceV1 {
         this.inventoryRepository = inventoryRepository;
     }
 
-    @HystrixCommand
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
     public List<Stock> getStockNoSync() {
         return stockRepository.getStockNoSync();
     }
 
-    @HystrixCommand
+    @HystrixCommand(fallbackMethod = "getStockFeedBack")
     public Stock modifyProductState(String productId) {
         return stockRepository.modifyProductState(productId);
     }
@@ -59,7 +59,6 @@ public class StockServiceV1 {
     @HystrixCommand
     public Stock updateStockByProductId(String productId,Integer number) {
          return    stockRepository.updateStockByProductId(productId,number);
-
     }
 
     @HystrixCommand
