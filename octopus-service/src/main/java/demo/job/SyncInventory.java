@@ -5,23 +5,14 @@ import com.vip.saturn.job.SaturnJobExecutionContext;
 import com.vip.saturn.job.SaturnJobReturn;
 import com.vip.saturn.job.msg.MsgHolder;
 
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import demo.OctopusApplication;
 import demo.service.StockService;
-import demo.util.JSONSerializer;
 import demo.util.TimeUtil;
-import demo.v1.InventoryServiceV1;
-import demo.v1.StockServiceV1;
 
 /**
  * 同步仓库数据 java msg job

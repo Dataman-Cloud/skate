@@ -59,7 +59,7 @@ public class StockService {
     private String oauthClientId;
 
     @Value("${spring.application.oauthSecret}")
-    private String oauthSecret;
+    private static String oauthSecret;
 
     @Value("${spring.application.passwordGrantStr}")
     private String passwordGrantStr;
