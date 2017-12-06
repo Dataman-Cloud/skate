@@ -28,7 +28,7 @@ contentApp.config(['$routeProvider',
             templateUrl: 'assets/partials/order.html',
             controller: 'OrderCtrl'
         }).when('/stock',{
-            templateUrl:'assets/partials/stock.html',
+            templateUrl:'assets/partials/Stock.html',
             controller:'StockListCtrl'
         }).otherwise({
             redirectTo: '/'
