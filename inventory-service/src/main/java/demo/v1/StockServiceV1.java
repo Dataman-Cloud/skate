@@ -68,9 +68,10 @@ public class StockServiceV1 {
         stockIterable.forEach(new Consumer<Stock>() {
             @Override
             public void accept(Stock stock) {
+
                 if (stock.getProduct() != null) {
-                    Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(stock.getProduct().getProductId()).stream();
-                    stock.getProduct().setInStock(availableInventory.findAny().isPresent());
+                   // Stream<Inventory> availableInventory = inventoryRepository.getAvailableInventoryForProduct(stock.getProduct().getProductId()).stream();
+                  //  stock.getProduct().setInStock(availableInventory.findAny().isPresent());
                 }
             }
         });
