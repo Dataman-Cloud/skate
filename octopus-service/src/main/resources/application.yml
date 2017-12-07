@@ -1,6 +1,6 @@
 spring:
   application:
-    remoteHost: 192.168.31.46
+    remoteHost: 192.168.31.72
     remotePort: 8787
     remoteAuthPort: 8181
     remoteGetStockNoSyncUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/api/inventory/v1/stock/getStockNoSync
@@ -18,7 +18,7 @@ spring:
     productIdKey: productId
     productNumKey: productNum
   profiles:
-    active: development
+    active: defult
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
@@ -26,21 +26,3 @@ spring:
 logging:
   level:
     demo : info
----
-spring:
-  profiles: development
-  neo4j:
-    host: 192.168.31.46
-    port: 7474
----
-spring:
-  profiles: docker
-  neo4j:
-    host: ${SPRING_NEO4J_HOST:neo4j}
-    port: ${SPRING_NEO4J_PORT:7474}
----
-spring:
-  profiles: test
-  neo4j:
-    host: 192.168.31.46
-    port: 8700

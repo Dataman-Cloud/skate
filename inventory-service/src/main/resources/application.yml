@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: test
+  application:
+      productIdKey: productId
+      productNumKey: productNum
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
@@ -25,6 +28,9 @@ eureka:
 ---
 spring:
   profiles: docker
+  application:
+    productIdKey: productId
+    productNumKey: productNum
   neo4j:
     host: ${SPRING_NEO4J_HOST:neo4j}
     port: ${SPRING_NEO4J_PORT:7474}
@@ -39,6 +45,9 @@ eureka:
 ---
 spring:
   profiles: test
+  application:
+      productIdKey: productId
+      productNumKey: productNum
   neo4j:
     host: 192.168.31.46
     port: 7474

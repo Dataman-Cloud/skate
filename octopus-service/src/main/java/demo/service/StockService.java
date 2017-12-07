@@ -12,13 +12,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import demo.inventory.Inventory;
-import demo.stock.Stock;
 import demo.util.HttpUtil;
 import demo.util.JSONSerializer;
 import demo.util.TimeUtil;
@@ -70,32 +67,24 @@ public class StockService {
     /**
      * 获取未同步的商品
      */
-    public List<Map<String, Object>> getStockNoSync() {
+    public String getStockNoSync() {
 
         List<Map<String, Object>> stockList = new ArrayList<>();
+        String stockStr = null;
         try {
             //1:获取token
             String token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
             log.info("token : " + token);
             HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
             //2:调用接口获取数据
-            String stockStr = restTemplate.postForObject(remoteGetStockNoSync + accessTokenStr + token, request, String
+            stockStr = restTemplate.postForObject(remoteGetStockNoSync + accessTokenStr + token, request, String
                     .class);
             log.info("stockStr: " + stockStr);
-            List<Stock> stocks = JSONSerializer.jsonToList(stockStr, Stock[].class);
 
-            Map<String, Object> stockMap = null;
-
-            for (Stock stock : stocks) {
-                stockMap = new HashMap<>();
-                stockMap.put(productIdKey, stock.getProduct().getProductId());
-                stockMap.put(productNumKey, stock.getNumber());
-                stockList.add(stockMap);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return stockList;
+        return stockStr;
     }
 
     /**
@@ -141,25 +130,25 @@ public class StockService {
     /**
      * 修改进货商品状态
      */
-    public Stock modifyStockState(String productId) {
+    public void modifyStockState(String productId) {
         //1:获取token
         String token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
         log.info("token : " + token);
         HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
         //2:调用接口获取数据
-        Stock stock = restTemplate
-                .postForObject(remoteModifyProductStateUrl + productId + accessTokenStr + token, request, Stock
+        String stock = restTemplate
+                .postForObject(remoteModifyProductStateUrl + productId + accessTokenStr + token, request, String
                         .class);
         if (StringUtils.isNotBlank(token)) {
             tokenCache.put("token", token);
         }
-        return stock;
+        log.info(stock);
     }
 
     /**
      * 修改商品库存数量
      */
-    public Inventory modifyProductNum(String productId, Long productNum) {
+    public void modifyProductNum(String productId, Long productNum) {
 
         String token = null;
         if (tokenCache != null && tokenCache.size() > 0) {
@@ -174,10 +163,10 @@ public class StockService {
         }
 
         HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
-        Inventory inventory = restTemplate
+        String inventory = restTemplate
                 .postForObject(remoteModifyInventoryNumUrl + productId + "/" + productNum + accessTokenStr + token,
                         request,
-                        Inventory.class);
-        return inventory;
+                        String.class);
+        log.info(inventory);
     }
 }

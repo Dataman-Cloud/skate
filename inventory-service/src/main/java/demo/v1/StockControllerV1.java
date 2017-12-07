@@ -30,7 +30,7 @@ public class StockControllerV1 {
      * 获取未同步的货品
      */
     @RequestMapping("/getStockNoSync")
-    public List<Stock> getStockNoSync() {
+    public String getStockNoSync() {
         return stockService.getStockNoSync();
     }
 

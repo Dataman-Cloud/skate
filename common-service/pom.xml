@@ -11,6 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.dataman</groupId>
     <artifactId>common-service</artifactId>
     <version>master-SNAPSHOT</version>
     <packaging>jar</packaging>

@@ -11,12 +11,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import demo.OctopusApplication;
 import demo.service.StockService;
-import demo.util.JSONSerializer;
 
 /**
  * 定时扫描仓库 java job
@@ -26,10 +23,10 @@ public class ScanInventory extends AbstractSaturnJavaJob {
     private Logger log = LoggerFactory.getLogger(ScanInventory.class);
 
     //测试时开启，打包时注释掉，springBoot只支持一个启动main实例
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         ScanInventory scanInventory = new ScanInventory();
         scanInventory.handleJavaJob("aa", 1, "a", new SaturnJobExecutionContext());
-    }*/
+    }
 
     /**
      * Java定时作业的具体执行任务内容
@@ -52,9 +49,8 @@ public class ScanInventory extends AbstractSaturnJavaJob {
 
         //这里直接访问数据,由于原项目没有进行接口认证处理，暂时这样，以后修改
         //查询未同步数据
-        List<Map<String, Object>> stocks = stockService.getStockNoSync();
+        String stocksStr = stockService.getStockNoSync();
 
-        String stocksStr = JSONSerializer.objToJson(stocks);
         log.info(String.format("扫描到进货商品：[%s] 时间：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),
                 stocksStr));
         log.info("4:已经执行完成，开始返回执行结果 " + stocksStr + " ，并放入topic中...");

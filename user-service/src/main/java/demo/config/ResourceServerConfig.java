@@ -15,16 +15,16 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        /*http
+        http
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/login").permitAll()
                 .anyRequest()
                 .authenticated()
-                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());*/
-        http.authorizeRequests()
+                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+        /*http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('read')")
                 .antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('write')")
-                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());*/
     }
 
     @Override
