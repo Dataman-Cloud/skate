@@ -65,7 +65,6 @@ public class InventoryServiceV1 {
                 .stream().collect(Collectors.toList());
     }
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
     public Inventory modifyProductNum(String productId, Long productNum) {
         Long nowInventoryNum = Long.valueOf(getInventoryNumByPid(productId));
         nowInventoryNum = nowInventoryNum > 0 ? nowInventoryNum : 0;

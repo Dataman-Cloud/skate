@@ -27,16 +27,16 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class AuthorizationServerConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.application.oauthUserName}")
-    private String oauthUserName;
+    private String oauthUserName="user";
 
     @Value("${spring.application.oauthPassword}")
-    private String oauthPassword;
+    private String oauthPassword="password";
 
     @Value("${spring.application.oauthClientId}")
-    private static String oauthClientId;
+    private static String oauthClientId="acme";
 
     @Value("${spring.application.oauthSecret}")
-    private static String oauthSecret;
+    private static String oauthSecret="acmesecret";
 
 
     @Autowired

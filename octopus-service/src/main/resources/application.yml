@@ -1,11 +1,11 @@
 spring:
   application:
     remoteHost: 192.168.31.72
-    remotePort: 8787
+    remotePort: 8282
     remoteAuthPort: 8181
-    remoteGetStockNoSyncUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/api/inventory/v1/stock/getStockNoSync
-    remoteModifyProductStateUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/api/inventory/v1/stock/modifyProductState/
-    remoteModifyInventoryNumUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/api/inventory/v1/modifyInventoryNum/
+    remoteGetStockNoSyncUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/v1/stock/getStockNoSync
+    remoteModifyProductStateUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/v1/stock/modifyProductState/
+    remoteModifyInventoryNumUrl: http://${spring.application.remoteHost}:${spring.application.remotePort}/v1/modifyInventoryNum/
 
     oauthUserName: user
     oauthPassword: password

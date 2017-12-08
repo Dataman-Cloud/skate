@@ -4,16 +4,14 @@ import com.vip.saturn.job.AbstractSaturnJavaJob;
 import com.vip.saturn.job.SaturnJobExecutionContext;
 import com.vip.saturn.job.SaturnJobReturn;
 
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Date;
-
 import demo.OctopusApplication;
 import demo.service.StockService;
+import demo.util.TimeUtil;
 
 /**
  * 定时扫描仓库 java job
@@ -51,7 +49,7 @@ public class ScanInventory extends AbstractSaturnJavaJob {
         //查询未同步数据
         String stocksStr = stockService.getStockNoSync();
 
-        log.info(String.format("扫描到进货商品：[%s] 时间：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+        log.info(String.format("扫描到进货商品：[%s] 时间：" + TimeUtil.ymdHms2str(),
                 stocksStr));
         log.info("4:已经执行完成，开始返回执行结果 " + stocksStr + " ，并放入topic中...");
         return new SaturnJobReturn(stocksStr);

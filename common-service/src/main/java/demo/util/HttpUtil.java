@@ -1,11 +1,13 @@
 package demo.util;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,7 +21,7 @@ public class HttpUtil {
     private static HttpHeaders getHeadersWithClientCredentials(String clientId, String secret) {
         String plainClientCredentials = clientId + ":" + secret;
         String base64ClientCredentials = new String(
-                org.apache.commons.codec.binary.Base64.encodeBase64(plainClientCredentials.getBytes()));
+                Base64.encodeBase64(plainClientCredentials.getBytes()));
 
         HttpHeaders headers = getHeaders();
         headers.add("Authorization", "Basic " + base64ClientCredentials);

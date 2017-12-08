@@ -1,7 +1,6 @@
 package demo.service;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +54,7 @@ public class StockService {
     private String oauthClientId;
 
     @Value("${spring.application.oauthSecret}")
-    private static String oauthSecret;
+    private  String oauthSecret;
 
     @Value("${spring.application.passwordGrantStr}")
     private String passwordGrantStr;
@@ -112,10 +110,7 @@ public class StockService {
                 //2：修改库存数量
                 this.modifyProductNum(productId, productNum);
 
-                log.info("同步商品编号为：" + productId + "数量为：" + productNum + "入库成功！" + DateFormatUtils.format(new
-                                Date(),
-                        "yyyy-MM-dd " +
-                                "HH:mm:ss \n"), kafkaMsg);
+                log.info("同步商品编号为：" + productId + "数量为：" + productNum + "入库成功！" + TimeUtil.ymdHms2str(), kafkaMsg);
                 record.append("(编号为：" + productId + " 数量为：" + productNum + " )");
             }
             result = "同步商品：[" + record.toString() + "] 成功！" + TimeUtil.ymdHms2str();

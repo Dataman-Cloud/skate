@@ -1,14 +1,12 @@
 package demo.v1;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import demo.inventory.Inventory;
-import demo.product.Product;
-import demo.product.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Stream;
+import demo.product.Product;
+import demo.product.ProductRepository;
 
 /**
  * Created by Thinkpad on 2017/11/24 0024.
