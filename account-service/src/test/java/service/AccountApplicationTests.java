@@ -2,6 +2,7 @@ package service;
 
 import demo.AccountApplication;
 import demo.account.Account;
+import demo.account.AccountRepository;
 import demo.address.Address;
 import demo.address.AddressType;
 import demo.creditcard.CreditCard;
@@ -19,9 +20,11 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = AccountApplication.class)
-@ActiveProfiles(profiles = "test")
+@ActiveProfiles(profiles = "development")
 @WebIntegrationTest
 public class AccountApplicationTests extends TestCase {
 
@@ -29,6 +32,9 @@ public class AccountApplicationTests extends TestCase {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @Test
     public void customerTest() {
@@ -58,9 +64,11 @@ public class AccountApplicationTests extends TestCase {
                 .add(address);
 
         // Apply the cascading update by persisting the customer object
-        customer = customerRepository.save(customer);
+     //   customer = customerRepository.save(customer);
 
         // Query for the customer object to ensure cascading persistence of the object graph
-        log.info(customerRepository.findOne(customer.getId()).toString());
+      //  log.info(customerRepository.findOne(customer.getId()).toString());
     }
+
+
 }

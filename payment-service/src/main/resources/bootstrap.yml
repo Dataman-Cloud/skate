@@ -1,15 +1,14 @@
-spring:
-  application:
-    name: account-service
 server:
   port: 0
+spring:
+  application:
+    name: payment-service
 ---
 spring:
   profiles: docker
   cloud:
     config:
-      uri: http://config-service:8888
-spring.profiles.active: development
+      uri: http://payment-service:8888
 ---
 spring:
   profiles: default

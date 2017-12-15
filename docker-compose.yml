@@ -125,3 +125,13 @@ online-store-web:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$WEB_IP
+payment-service:
+  image: ${IMAGE_PREFIX}payment-service:${SKATE_VERSION}
+  links:
+   - mysql
+   - discovery-service
+   - config-service
+   - account-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$WEB_IP

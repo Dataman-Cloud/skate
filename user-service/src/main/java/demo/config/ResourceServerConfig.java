@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("my_resource_id").stateless(false);;
+        resources.resourceId("my_resource_id").stateless(false);
     }
 
     @Bean

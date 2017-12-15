@@ -12,7 +12,7 @@ logging:
 spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://192.168.31.46:3306/dev
+    url: jdbc:mysql://192.168.31.46:3306/dev?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: dbpass
     initialize: false

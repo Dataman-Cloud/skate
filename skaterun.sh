@@ -11,19 +11,19 @@ fi
 
 BASE_IMAGE_PREFIX=""
 
-HOST_IP="192.168.31.46"
+HOST_IP="192.168.31.72"
 if [ $p1 = "test" ] ;then
 	IMAGE_PREFIX="192.168.31.34/skate/"
 	SKATE_VERSION="latest"
-	WEB_IP="192.168.31.46"
+	WEB_IP="192.168.31.72"
 elif [ $p1 = "local" ] ;then
 	IMAGE_PREFIX="skate/"
 	SKATE_VERSION="latest"
-	WEB_IP="192.168.31.46"
+	WEB_IP="192.168.31.72"
 elif [ $p1 = "web" ] ;then
 	IMAGE_PREFIX="demoregistry.dataman-inc.com/skate/"
 	BASE_IMAGE_PREFIX="demoregistry.dataman-inc.com/skate/"
-	#下一行处需要手动修改版本号
+	#锟斤拷一锟叫达拷锟斤拷要锟街讹拷锟睫改版本锟斤拷
 	SKATE_VERSION=":latest"
 	HOST_IP="10.3.8.23"
 	WEB_IP="106.75.90.26"
