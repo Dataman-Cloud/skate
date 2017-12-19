@@ -3,39 +3,39 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">Order Details</div>
+                <div class="panel-heading">订单详情</div>
                 <ul class="list-group list-group-details accounts">
                     <li class="list-group-item">
                         <div class="account-username">
-                            <div class="panel-heading">Order Id: <span
+                            <div class="panel-heading">订单编号: <span
                                     class="panel-heading ng-binding">{{ order.orderId }}</span>
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="account-number">
-                            <div class="panel-heading">Order Status: <span
+                            <div class="panel-heading">订单状态: <span
                                     class="panel-heading ng-binding">{{ order.orderStatus }}</span>
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="default-account">
-                            <div class="panel-heading">Account Number: <span
+                            <div class="panel-heading">账户编号: <span
                                     class="panel-heading ng-binding">{{ order.accountNumber }}</span>
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="default-account">
-                            <div class="panel-heading">Order Date: <span
+                            <div class="panel-heading">订单日期: <span
                                     class="panel-heading ng-binding">{{ order.createdAt | date:"MM/dd/yyyy 'at' h:mma" }}</span>
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="default-account">
-                            <div class="panel-heading">Order Total: <span
+                            <div class="panel-heading">订单总价: <span
                                     class="panel-heading ng-binding">{{ order.total | currency }}</span>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
         <div class="col-md-12 panel-head-list">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">Ordered Items</div>
+                <div class="panel-heading">订单产品</div>
 
                 <ul class="list-group list-group-details shopping-cart">
                     <li class="list-group-item" ng-if="order.lineItems.length == 0">
@@ -64,17 +64,17 @@
                             </div>
                             <div class="col-md-4 col-xs-4 cart-item-description">
                                 <div class="row">
-                                    <div class="col-md-12"><label>Name:</label>{{item.name}}</div>
+                                    <div class="col-md-12"><label>产品名称:</label>{{item.name}}</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12"><label>Product:</label>{{item.productId}}</div>
+                                    <div class="col-md-12"><label>产品编号:</label>{{item.productId}}</div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.price
+                            <div class="col-md-3 col-xs-3 cart-item-price"><label>产品价格:</label>{{item.price
                                 |
                                 currency}}
                             </div>
-                            <div class="col-md-3 col-xs-3 cart-item-price"><label>Quantity:</label>{{item.quantity}}
+                            <div class="col-md-3 col-xs-3 cart-item-price"><label>产品数量:</label>{{item.quantity}}
                             </div>
                         </div>
                     </li>
@@ -85,36 +85,36 @@
         <div class="col-md-12 panel-head-list">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading"><i class="fa fa-home icon-head"></i>Shipping Address</div>
+                <div class="panel-heading"><i class="fa fa-home icon-head"></i>快递地址</div>
                 <ul class="list-group list-group-details accounts">
                     <li class="list-group-item">
                         <div>
-                            <div class="panel-heading">Street 1: <span
+                            <div class="panel-heading">街区 1: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.street1 }}</span>
                             </div>
                         </div>
                         <div ng-if="order.shippingAddress.street2 != ''">
-                            <div class="panel-heading">Street 2: <span
+                            <div class="panel-heading">街区 2: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.street2 }}</span>
                             </div>
                         </div>
                         <div>
-                            <div class="panel-heading">City: <span
+                            <div class="panel-heading">城市: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.city }}</span>
                             </div>
                         </div>
                         <div>
-                            <div class="panel-heading">State: <span
+                            <div class="panel-heading">快递状态: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.state }}</span>
                             </div>
                         </div>
                         <div>
-                            <div class="panel-heading">Zip Code: <span
+                            <div class="panel-heading">地区编号: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.zipCode }}</span>
                             </div>
                         </div>
                         <div>
-                            <div class="panel-heading">Country: <span
+                            <div class="panel-heading">国家: <span
                                     class="panel-heading ng-binding">{{ order.shippingAddress.country }}</span>
                             </div>
                         </div>

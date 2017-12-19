@@ -71,7 +71,7 @@ spring:
 security:
   oauth2:
     resource:
-      userInfoUri: http://192.168.31.46:8181/uaa/user
+      userInfoUri: http://192.168.31.72:8181/uaa/user
     client:
       client-id: acme
   ignored: /api/**
@@ -91,6 +91,9 @@ spring:
     mongodb:
       host: mongo
       port: 27017
+  redis:
+      host: localhost
+      port: 6379
   mvc:
     date-format: "YYYY-MM-dd"
   jpa:

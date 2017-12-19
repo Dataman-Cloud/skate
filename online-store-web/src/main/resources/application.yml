@@ -84,27 +84,27 @@ zuul:
   routes:
     edge-service:
       path: /api/**
-      url: http://192.168.31.46:9999
+      url: http://192.168.31.72:9999
     auth-service:
       path: /user/**
-      url: http://192.168.31.46:8181/uaa/user
+      url: http://192.168.31.72:8181/uaa/user
 security:
   enable-csrf: false
   oauth2:
     resource:
-      userInfoUri: http://192.168.31.46:8181/uaa/user
+      userInfoUri: http://192.168.31.72:8181/uaa/user
     client:
-      accessTokenUri: http://192.168.31.46:8181/uaa/oauth/token
-      userAuthorizationUri: http://192.168.31.46:8181/uaa/oauth/authorize
+      accessTokenUri: http://192.168.31.72:8181/uaa/oauth/token
+      userAuthorizationUri: http://192.168.31.72:8181/uaa/oauth/authorize
       clientId: acme
       clientSecret: acmesecret
   ignored: /assets/**
 eureka:
   instance:
     non-secure-port: 8787
-    prefer-ip-address: false
+    prefer-ip-address: true
   client:
-    registerWithEureka: false
+    registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.31.46:8761/eureka/
+      defaultZone: http://192.168.31.72:8761/eureka/

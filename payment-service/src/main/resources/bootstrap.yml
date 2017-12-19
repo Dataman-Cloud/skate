@@ -8,7 +8,8 @@ spring:
   profiles: docker
   cloud:
     config:
-      uri: http://payment-service:8888
+      uri: http://config-service:8888
+spring.profiles.active: development
 ---
 spring:
   profiles: default

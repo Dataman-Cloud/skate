@@ -2,8 +2,8 @@
     <div class="row">
         <div>
             <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Products</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">产品</a></li>
                 <li class="active">{{product.name}}</li>
             </ol>
         </div>
@@ -14,7 +14,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
-                        <div class="panel-heading">Product Details</div>
+                        <div class="panel-heading">产品详情</div>
                         <div class="panel-body">
                             <p ng-bind-html="product.description | rawHtml"></p>
                         </div>
@@ -22,15 +22,15 @@
                         <!-- List group -->
                         <ul class="list-group list-group-details">
                             <li class="list-group-item">
-                                <div class="panel-heading">Price: <span
+                                <div class="panel-heading">产品价格: <span
                                         class="panel-heading">{{product.unitPrice | currency}}</span></div>
                             </li>
                             <li class="list-group-item">
-                                <div class="panel-heading">stock: <span
+                                <div class="panel-heading">库存: <span
                                         class="panel-heading">{{stock.number}}</span></div>
                             </li>
                             <li class="list-group-item">
-                                <div class="panel-heading">Product number: <span class="panel-heading">{{product.productId}}</span>
+                                <div class="panel-heading">产品编号: <span class="panel-heading">{{product.productId}}</span>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -39,11 +39,11 @@
                                         <div class="form-group"><input type="text" ng-model="qty" placeholder="QTY"
                                                                        class="form-control qty-text"></div>
                                         <input type="hidden" ng-model="productId" value="{{product.productId}}"/>
-                                        <button class="btn btn-primary" id="addToCart" type="submit">Add to Cart
+                                        <button class="btn btn-primary" id="addToCart" type="submit">加入购物车
                                         </button>
                                         <div class="form-group">
                                             <div id="addProductAlert" class="alert alert-success fade" role="alert">
-                                                <p>Product added to cart!</p>
+                                                <p>产品已加入购物车</p>
                                             </div>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
-                        <div class="panel-heading">Related</div>
+                        <div class="panel-heading">关联产品</div>
                         <div class="panel-body">
                             <div id="owl-demo-cast" carousel="products"
                                  class="owl-carousel owl-theme products">
@@ -83,16 +83,16 @@
 
                     <div class="panel panel-default item-left-panel">
                         <!-- Default panel contents -->
-                        <div class="panel-heading">Summary</div>
+                        <div class="panel-heading">产品描述</div>
                         <!-- List group -->
                         <div class="row">
-                            <div class="item-label col-md-12">Product name:</div>
+                            <div class="item-label col-md-12">产品名称:</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">{{product.name}}</div>
                         </div>
                         <div class="row">
-                            <div class="item-label col-md-12">Price:</div>
+                            <div class="item-label col-md-12">产品价格:</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">{{product.unitPrice}}</div>

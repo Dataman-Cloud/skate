@@ -35,7 +35,7 @@ public class PaymentServiceV1 {
     private Set<String> iniSet ;
 
 
-
+    //SquidBlockingClient
     SquidCallbackClient<PayRequest, PayResponse> callbackClientInstances;
 
 

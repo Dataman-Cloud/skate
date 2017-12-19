@@ -1,11 +1,11 @@
 <div class="container hidden-content" ng-model="cart">
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">Shopping Cart</div>
+        <div class="panel-heading">购物车</div>
 
         <ul class="list-group list-group-details shopping-cart">
             <li class="list-group-item" ng-if="cart.lineItems.length == 0">
-                Your shopping cart is empty
+                您的购物车还没有东西
             </li>
             <li ng-repeat="item in cart.lineItems" class="list-group-item">
                 <div class="row">
@@ -18,13 +18,13 @@
                     </div>
                     <div class="col-md-4 col-xs-4 cart-item-description">
                         <div class="row">
-                            <div class="col-md-12"><label>Name:</label>{{item.product.name}}</div>
+                            <div class="col-md-12"><label>产品名称:</label>{{item.product.name}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12"><label>Product:</label>{{item.product.productId}}</div>
+                            <div class="col-md-12"><label>产品编号:</label>{{item.product.productId}}</div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.product.unitPrice |
+                    <div class="col-md-3 col-xs-3 cart-item-price"><label>产品价格:</label>{{item.product.unitPrice |
                         currency}}
                     </div>
                     <div class="col-md-3 col-xs-3 cart-item-qty">
@@ -35,12 +35,12 @@
                                 <input type="hidden" ng-model="item.productId" value="{{item.productId}}"/>
                                 <input type="hidden" ng-model="originalQuantity" value="{{item.quantity}}"/>
                                 <button class="btn btn-primary" id="updateCart-{{item.productId}}" type="submit">
-                                    Update
+                                    更新
                                 </button>
                                 <div>
                                     <div id="updateProductAlert" class="{{item.productId}} alert alert-success fade"
                                          role="alert">
-                                        <p>Cart updated!</p>
+                                        <p>购物车已更新!</p>
                                     </div>
                                 </div>
                             </div>
@@ -52,16 +52,16 @@
         <ul class="list-group list-group-details shopping-cart" ng-if="cart.lineItems.length > 0">
             <li class="list-group-item checkout-summary">
                 <div class="row">
-                    <div class="col-md-12"><label>Items: </label>{{cart.totalItems}}</div>
+                    <div class="col-md-12"><label>购物车物品: </label>{{cart.totalItems}}</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12"><label>Sub-total: </label>{{cart.total | currency}}</div>
+                    <div class="col-md-12"><label>购物车总额: </label>{{cart.total | currency}}</div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <form ng-submit="checkout()" ng-controller="CheckoutCtrl">
                             <button class="btn btn-primary" id="" type="submit">
-                                Checkout
+                                去结账
                             </button>
                         </form>
                     </div>
