@@ -456,6 +456,7 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
         $scope.productsUrl = '/api/catalog/v1/catalog';
         $scope.products = [];
         $scope.productStockUrl = '/api/inventory/v1/stock/' +$routeParams.productId;
+        $scope.productInventoryNumUrl = '/api/inventory/v1/getInventoryNumByPid/' + $routeParams.productId;
 
         $scope.$on('logout', function (event, msg) {
             fetchProduct();
@@ -489,10 +490,45 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
 
             }).error(function (data, status, headers, config) {
             });
+            //查询inventory数量
+            $http({
+                method: 'GET',
+                url:$scope.productInventoryNumUrl
+            }).success(function(data, status, headers, config){
+                $scope.inventoryNum = data;
+                console.info("inventoryNum:"+$scope.inventoryNum);
+            }).error(function(data, status, headers, config){
+
+            });
         };
 
         fetchProduct();
     }]);
+
+
+contentApp.controller('ChargeCtrl', ['$scope', '$http', '$location', 'orderService',
+    function ($scope, $http, $location, orderService,$routeParams) {
+
+    $scope.chargeUrl = '/api/payment/v1/charge/';
+    $scope.money = 0;
+    $scope.count = 0;
+
+        $scope.chargeMoney = function(){
+            $http({
+                method:'GET',
+                url: $scope.chargeUrl+$scope.money+"/"+$scope.count+"/user"
+            }).success(function(data,status,headers,config){
+                console.info(data.resultMsg);
+                if (data.resultCode==200){
+                    alert("充值成功");
+                }else{
+                    alert(data.resultMsg);
+                }
+            }).error(function(data,status,headers,config){
+                alert("充值失败");
+            });
+        }
+}]);
 
 
 contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderService', '$routeParams',
@@ -507,7 +543,7 @@ contentApp.controller('StockListCtrl',['$scope', '$http', '$location', 'orderSer
 
         $scope.Stocks = [];//查询回来的产品库存
 
-        $scope.item = '';//当前选中的产品
+        $scope.item = '';//当前选中的产品8
 
 
         var fetch = function(){

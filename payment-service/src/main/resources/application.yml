@@ -12,7 +12,7 @@ squid:
   demo:
     client:
       serviceName: payment-service
-      dependencyServiceName: account-service
+      dependencyServiceName: accountService
       dependencyServiceNamespace: squid.dataman.com
       sleepTime: 100
       serverSleepTime: 1

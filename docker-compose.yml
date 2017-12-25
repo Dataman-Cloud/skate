@@ -62,7 +62,7 @@ edge-service:
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
-account-service:
+accountService:
   image: ${IMAGE_PREFIX}account-service:${SKATE_VERSION}
   links:
    - user-service
@@ -131,7 +131,7 @@ payment-service:
    - mysql
    - discovery-service
    - config-service
-   - account-service
+   - accountService
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$WEB_IP

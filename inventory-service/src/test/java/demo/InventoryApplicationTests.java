@@ -104,7 +104,7 @@ public class InventoryApplicationTests {
                                     "Show the world you're a stylish cloud platform architect with this cute yet casual tee. " +
                                     "<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />" +
                                     "&nbsp; 110% cloud stuff, 5% spandex<br />&nbsp; Rain wash only<br />&nbsp; " +
-                                    "Four nines of <em>stylability</em></p>", 21.99,true),
+                                    "Four nines of <em>stylability</em></p>", 21.99, true),
 
                     new Product("Like a BOSH (T-Shirt, Women's Medium)", "SKU-34563",
                             "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
@@ -113,7 +113,7 @@ public class InventoryApplicationTests {
                                     "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
                                     "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
                                     "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
-                                    "4 nines of <em>re-washability</em></p>", 14.99,true),
+                                    "4 nines of <em>re-washability</em></p>", 14.99, true),
 
                     new Product("We're gonna need a bigger VM (T-Shirt, Women's Small)", "SKU-12464",
                             "<p>The BOSH Outer Shell (<strong>BOSH</strong>) " +
@@ -122,14 +122,14 @@ public class InventoryApplicationTests {
                                     "feeling of frequently pushing code to production. Show the cloud <em>who's BOSH</em> with " +
                                     "this stylish cloud native ops tee.<br /><br />&nbsp; <strong>Cloud Native Tee Collection</strong><br />&nbsp; " +
                                     "99% YAML, 11% CLI<br />&nbsp; BOSH CCK <span style='text-decoration: underline;'><em>recommended</em></span><br />&nbsp; " +
-                                    "4 nines of <em>re-washability</em></p>", 13.99,true),
+                                    "4 nines of <em>re-washability</em></p>", 13.99, true),
                     new Product("cf push awesome (Hoodie, Men's Medium)", "SKU-64233",
                             "<p>One of the great natives of the cloud once said \"<em>" +
                                     "Production is the happiest place on earth for us - it's better than Disneyland</em>\". " +
                                     "With this stylish Cloud Foundry hoodie you can push code to the cloud all day while staying " +
                                     "comfortable and casual. <br /><br />&nbsp; <strong>Cloud Native PaaS Collection</strong><br />" +
                                     "&nbsp; 10% cloud stuff, 90% platform nylon<br />&nbsp; Cloud wash safe<br />" +
-                                    "&nbsp; Five nines of <em>comfortability</em></p>", 21.99,true))
+                                    "&nbsp; Five nines of <em>comfortability</em></p>", 21.99, true))
                     .stream()
                     .collect(Collectors.toList());
 
@@ -193,7 +193,7 @@ public class InventoryApplicationTests {
                             .collect(Collectors.joining("")), a, finalWarehouse, InventoryStatus.IN_STOCK))
                     .collect(Collectors.toSet());*/
             Set<Inventory> inventories = products.stream()
-                    .map(a -> new Inventory("50", a, finalWarehouse, InventoryStatus.IN_STOCK))
+                    .map(a -> new Inventory(initInventoryNum, a, finalWarehouse, InventoryStatus.IN_STOCK))
                     .collect(Collectors.toSet());
 
             inventoryRepository.save(inventories);
@@ -211,8 +211,8 @@ public class InventoryApplicationTests {
             //初始化stock数据表
             Stock stock = null;
             List<Stock> stocks = new ArrayList<>();
-            for(Product p : products){
-                stock = new Stock(p,100L,"admin",new Date(),null,false);
+            for (Product p : products) {
+                stock = new Stock(p, 100L, "admin", new Date(), null, false);
                 stocks.add(stock);
             }
 
@@ -246,19 +246,19 @@ public class InventoryApplicationTests {
         Product product = new Product("衣服-TEST-12464", "SKU-24642", "测试新增的数据", 33.99);
 
         //  Product product1 = productRepository.getProductByProductId("SKU-24642");
-          // System.out.println("unitPrice--------------:"+product1.getUnitPrice());
+        // System.out.println("unitPrice--------------:"+product1.getUnitPrice());
 
-          productServiceV1.updateProductByProductId(product);
+        productServiceV1.updateProductByProductId(product);
 
-     //     Product product2 = productRepository.getProductByProductId(product.getProductId());
-       //    System.out.println("unitPrice----------------------"+product2.getUnitPrice());
+        //     Product product2 = productRepository.getProductByProductId(product.getProductId());
+        //    System.out.println("unitPrice----------------------"+product2.getUnitPrice());
     }
 
     @Test
     public void getProductStock() {
 
-       String dd =  inventoryRepository.getInventoryNumByPid("SKU-24642");
-        System.out.println("dd:"+dd);
+        String dd = inventoryRepository.getInventoryNumByPid("SKU-24642");
+        System.out.println("dd:" + dd);
     }
 
 }

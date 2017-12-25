@@ -1,0 +1,30 @@
+<div class="container order-view hidden-content" ng-model="charge">
+    <div class="row">
+        <div class="col-md-12 panel-head-list">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><i class="fa fa-home icon-head"></i>充值页面</div>
+                <ul class="list-group list-group-details">
+                    <li class="list-group-item">
+                    </li>
+                </ul>
+                <div class="table-responsive">
+                    <table class="table table-striped" >
+                        <tbody>
+                            <tr>
+                                充值金额：<input type="text" ng-model="money"/>
+                            </tr>
+                            <tr>
+                               &nbsp; 充值笔数：<input type="text" ng-model="count"/>
+                            </tr>
+                            <tr>
+                               &nbsp; <button class="btn btn-primary" type="button" ng-click="chargeMoney()">提交</button>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -72,7 +72,7 @@ eureka:
 ---
 spring:
   application:
-    name: account-service
+    name: shopping-cart-service
   profiles: test
   jpa:
     show_sql: false
