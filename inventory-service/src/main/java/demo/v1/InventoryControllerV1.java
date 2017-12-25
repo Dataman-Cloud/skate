@@ -48,7 +48,7 @@ public class InventoryControllerV1 {
      * 通过产品编号获取库存量
      */
     @RequestMapping(path = "/getInventoryNumByPid/{productId}", method = RequestMethod.GET, name = "getInventoryNumByPid")
-    public ResponseEntity getInventoryNumByPid(@RequestParam("productId") String productId) {
+    public ResponseEntity getInventoryNumByPid(@PathVariable("productId") String productId) {
         return Optional.ofNullable(inventoryService.getInventoryNumByPid(productId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

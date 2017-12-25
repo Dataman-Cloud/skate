@@ -17,7 +17,7 @@ zuul:
   ignored-services: '*'
   ignoredPatterns: /**/api/**
   routes:
-    account-service: /account/**
+    accountService: /account/**
     payment-service: /payment/**
     inventory-service: /inventory/**
     order-service: /order/**
@@ -46,7 +46,7 @@ zuul:
   ignored-services: '*'
   ignoredPatterns: /**/api/**
   routes:
-    account-service: /account/**
+    accountService: /account/**
     payment-service: /payment/**
     inventory-service: /inventory/**
     order-service: /order/**

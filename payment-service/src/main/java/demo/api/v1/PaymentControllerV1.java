@@ -22,8 +22,9 @@ public class PaymentControllerV1 {
         this.paymentServiceV1 = paymentServiceV1;
     }
 
-    @RequestMapping(path = "/charge", method = RequestMethod.GET, name = "charge")
-    public ResponseEntity charge(@PathVariable Integer chargeCount,@PathVariable Integer chargeMoney,@PathVariable String userId) {
+    @RequestMapping(path = "/charge/{chargeMoney}/{chargeCount}/{userId}", method = RequestMethod.GET, name = "charge")
+    public ResponseEntity charge(@PathVariable("chargeCount") Integer chargeCount,@PathVariable("chargeMoney") Integer chargeMoney,@PathVariable("userId") String userId) {
+        System.out.println("-----------");
         return Optional.ofNullable(paymentServiceV1.charge(chargeCount,chargeMoney,userId))
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

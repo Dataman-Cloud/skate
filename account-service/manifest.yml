@@ -1,6 +1,6 @@
 ---
 applications:
-- name: account-service
+- name: accountService
   memory: 1024MB
   instances: 1
   host: account-service-${random-word}

@@ -73,7 +73,7 @@ public class InventoryApplicationTests {
     @Autowired
     private StockRepository stockRepository;
 
-    @Before
+   // @Before
     public void setup() {
         try {
             neo4jConfiguration.getSession().query(
@@ -247,11 +247,9 @@ public class InventoryApplicationTests {
 
     @Test
     public void getProductStock() {
-        // Stock stock = stockRepository.getStockByProductId("SKU-24642");
-        //System.out.println(stock.getId());
-        //System.out.println(stock.getNumber());
-        //System.out.println(stock.getProduct());
-        //System.out.println(stock.getProduct().getName());
+
+       String dd =  inventoryRepository.getInventoryNumByPid("SKU-24642");
+        System.out.println("dd:"+dd);
     }
 
 }
