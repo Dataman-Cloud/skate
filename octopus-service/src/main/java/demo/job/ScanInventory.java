@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import demo.OctopusApplication;
 import demo.service.StockService;
+import demo.util.LocalCache;
 import demo.util.TimeUtil;
 
 /**
@@ -21,10 +22,10 @@ public class ScanInventory extends AbstractSaturnJavaJob {
     private Logger log = LoggerFactory.getLogger(ScanInventory.class);
 
     //测试时开启，打包时注释掉，springBoot只支持一个启动main实例
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         ScanInventory scanInventory = new ScanInventory();
         scanInventory.handleJavaJob("aa", 1, "a", new SaturnJobExecutionContext());
-    }
+    }*/
 
     /**
      * Java定时作业的具体执行任务内容
@@ -39,14 +40,20 @@ public class ScanInventory extends AbstractSaturnJavaJob {
     public SaturnJobReturn handleJavaJob(final String jobName, final Integer shardItem, final String shardParam,
             final SaturnJobExecutionContext context) {
         log.info("java job 定时扫描进货表开始！");
+
         log.info("1:准备初始化环境...");
-        ConfigurableApplicationContext evn = initEnv(new String[0]);
-        log.info("2:获取相关类bean对象...");
-        StockService stockService = evn.getBean(StockService.class);
+        //通过判断缓存中是否存在bean对象来选择是否重启应用
+        StockService stockService = LocalCache.getStockServiceBean();
+
+        if (stockService == null) {
+            ConfigurableApplicationContext evn = initEnv(new String[0]);
+            log.info("2:获取相关类bean对象...");
+            stockService = evn.getBean(StockService.class);
+            LocalCache.setStockServiceBean(stockService);
+        }
+
         log.info("3:开始执行具体任务...");
 
-        //这里直接访问数据,由于原项目没有进行接口认证处理，暂时这样，以后修改
-        //查询未同步数据
         String stocksStr = stockService.getStockNoSync();
 
         log.info(String.format("扫描到进货商品：[%s] 时间：" + TimeUtil.ymdHms2str(),

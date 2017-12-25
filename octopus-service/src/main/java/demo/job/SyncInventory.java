@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import demo.OctopusApplication;
 import demo.service.StockService;
+import demo.util.LocalCache;
 import demo.util.TimeUtil;
 
 /**
@@ -25,7 +26,7 @@ public class SyncInventory extends OctopusJavaMsgJob {
     /*public static void main(String[] args) {
         SyncInventory syncInventory = new SyncInventory();
 
-        String value = "[{\"productId\":\"SKU-24642\",\"productNum\":100},{\"productId\":\"SKU-34563\",\"productNum\":100},{\"productId\":\"SKU-12464\",\"productNum\":100},{\"productId\":\"SKU-64233\",\"productNum\":100}]";
+        String value = "{\"result\":\"OK\",\"returnMsg\":\"[{\"productId\":\"SKU-24642\",\"productNum\":100},{\"productId\":\"SKU-34563\",\"productNum\":100},{\"productId\":\"SKU-12464\",\"productNum\":100},{\"productId\":\"SKU-64233\",\"productNum\":100}]\"}";
         syncInventory.handleMsgJob("aa", 1, value, new MsgHolder(new byte[1024], null, "test"), new
                 SaturnJobExecutionContext());
     }*/
@@ -44,19 +45,27 @@ public class SyncInventory extends OctopusJavaMsgJob {
             SaturnJobExecutionContext context) {
         log.info("msg job 同步库存信息开始！");
         log.info("1:准备初始化环境...");
-        ConfigurableApplicationContext evn = initEnv(new String[0]);
-        log.info("2:获取相关类bean对象...");
-        StockService stockService = evn.getBean(StockService.class);
+        //通过判断缓存中是否存在bean对象来选择是否重启应用
+        StockService stockService = LocalCache.getStockServiceBean();
+
+        if (stockService == null) {
+            ConfigurableApplicationContext evn = initEnv(new String[0]);
+            log.info("2:获取相关类bean对象...");
+            stockService = evn.getBean(StockService.class);
+            LocalCache.setStockServiceBean(stockService);
+        }
 
         String body = String.format("[Octopus]: Job %s-%s-%s payload=%s, headers=%s ",
                 jobName, key, value, new String(msgHolder.getPayloadBytes()), msgHolder.getProp());
         log.info(body);
 
+        String resValue = new String(msgHolder.getPayloadBytes());
+
         log.info(String.format("kafka接受到进货商品信息：[%s] 时间：" + TimeUtil.ymdHms2str(),
-                value));
+                resValue));
 
         log.info("3:开始执行具体任务...");
-        String result = stockService.syncInventory(value);
+        String result = stockService.syncInventory(resValue);
         log.info("4:已经执行完成，开始返回执行结果...");
         return new SaturnJobReturn("demo1: " + "headers=" + msgHolder.getProp()
                 + ", payload=" + new String(msgHolder.getPayloadBytes())

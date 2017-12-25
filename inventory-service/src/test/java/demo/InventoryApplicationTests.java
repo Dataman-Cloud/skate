@@ -1,5 +1,25 @@
 package demo;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.neo4j.config.Neo4jConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import demo.address.Address;
 import demo.address.AddressRepository;
 import demo.catalog.Catalog;
@@ -17,22 +37,6 @@ import demo.stock.StockRepository;
 import demo.v1.ProductServiceV1;
 import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.neo4j.config.Neo4jConfiguration;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -72,6 +76,8 @@ public class InventoryApplicationTests {
 
     @Autowired
     private StockRepository stockRepository;
+
+    private static final String initInventoryNum = "50";
 
     @Before
     public void setup() {
@@ -181,10 +187,13 @@ public class InventoryApplicationTests {
             Warehouse finalWarehouse = warehouse;
 
             // Create a new set of inventories with a randomized inventory number
-            Set<Inventory> inventories = products.stream()
+            /*Set<Inventory> inventories = products.stream()
                     .map(a -> new Inventory(IntStream.range(0, 9)
                             .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
                             .collect(Collectors.joining("")), a, finalWarehouse, InventoryStatus.IN_STOCK))
+                    .collect(Collectors.toSet());*/
+            Set<Inventory> inventories = products.stream()
+                    .map(a -> new Inventory("50", a, finalWarehouse, InventoryStatus.IN_STOCK))
                     .collect(Collectors.toSet());
 
             inventoryRepository.save(inventories);
@@ -247,11 +256,9 @@ public class InventoryApplicationTests {
 
     @Test
     public void getProductStock() {
-        // Stock stock = stockRepository.getStockByProductId("SKU-24642");
-        //System.out.println(stock.getId());
-        //System.out.println(stock.getNumber());
-        //System.out.println(stock.getProduct());
-        //System.out.println(stock.getProduct().getName());
+
+       String dd =  inventoryRepository.getInventoryNumByPid("SKU-24642");
+        System.out.println("dd:"+dd);
     }
 
 }

@@ -135,15 +135,6 @@ if (params.ENV != "release") {
             }
         }
 
-				// 4. 构建Image, 并push到Registry中
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
-            stage("img-common") {
-                sh "docker build -t ${imagePrefix}/common-service common-service/${targetdockerfile}"
-                sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
-                sh "docker push ${imagePrefix}/common-service"
-            }
-        }
-
         if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
             stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"

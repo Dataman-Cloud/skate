@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import demo.util.HttpUtil;
 import demo.util.JSONSerializer;
+import demo.util.LocalCache;
 import demo.util.TimeUtil;
 
 @Service
@@ -24,8 +25,6 @@ public class StockService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private RestTemplate restTemplate;
-
-    private Map<String, Object> tokenCache = new ConcurrentHashMap<>();
 
     @Autowired
     public StockService(RestTemplate restTemplate) {
@@ -54,7 +53,7 @@ public class StockService {
     private String oauthClientId;
 
     @Value("${spring.application.oauthSecret}")
-    private  String oauthSecret;
+    private String oauthSecret;
 
     @Value("${spring.application.passwordGrantStr}")
     private String passwordGrantStr;
@@ -62,16 +61,26 @@ public class StockService {
     @Value("${spring.application.accessTokenStr}")
     private String accessTokenStr;
 
+    @Value("${spring.application.returnMsgKey}")
+    private String returnMsgKey;
+
+    @Value("${spring.application.resultKey}")
+    private String resultKey;
+
     /**
      * 获取未同步的商品
      */
     public String getStockNoSync() {
 
-        List<Map<String, Object>> stockList = new ArrayList<>();
+        List<Map<String, Object>> stockList = new ArrayList<Map<String, Object>>();
         String stockStr = null;
         try {
             //1:获取token
-            String token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
+            String token = LocalCache.getToken();
+            if (StringUtils.isBlank(token)) {
+                token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
+                LocalCache.setToken(token);
+            }
             log.info("token : " + token);
             HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
             //2:调用接口获取数据
@@ -93,29 +102,46 @@ public class StockService {
         String result = null;
         String productId = null;
         StringBuilder record = new StringBuilder();
-        Long productNum = 0L;
+        String productNum = null;
         try {
             //获取商品id,并修改进货表中数据状态
-            List<Map<String, Object>> stocks = JSONSerializer.json2Map(kafkaMsg, Map[].class);
-            for (Map<String, Object> stock : stocks) {
-                productId = stock.get(productIdKey).toString();
-                Double DProductNum = (Double) stock.get(productNumKey);
-                double dProductNum = DProductNum.doubleValue();
-                long lProductNum = (long) dProductNum;
-                productNum = (Long) lProductNum;
+            if (kafkaMsg.endsWith("}]\"}")) {
+                kafkaMsg = kafkaMsg.replaceAll("\\\\","");
+                kafkaMsg = "[" + kafkaMsg + "]";
+                kafkaMsg = kafkaMsg.replace("\"returnMsg\":\"", "\"returnMsg\":");
+                kafkaMsg = kafkaMsg.replace("}]\"}]", "}]}]");
+                kafkaMsg = kafkaMsg.replaceAll(" ", "");
 
-                //1：修改进货状态
-                this.modifyStockState(productId);
+                List<Map<String, Object>> stockMaps = JSONSerializer.json2ListMap(kafkaMsg, Map[].class);
+                Map<String, Object> stockMap = stockMaps.get(0);
+                if (stockMap != null) {
+                    if (stockMap.get(resultKey).equals(HttpUtil.OK)) {
+                        List<Map<String, Object>> stocks = (List<Map<String, Object>>) stockMap.get(returnMsgKey);
 
-                //2：修改库存数量
-                this.modifyProductNum(productId, productNum);
+                        for (Map<String, Object> stock : stocks) {
+                            productId = stock.get(productIdKey).toString();
+                            productNum = stock.get(productNumKey).toString();
 
-                log.info("同步商品编号为：" + productId + "数量为：" + productNum + "入库成功！" + TimeUtil.ymdHms2str(), kafkaMsg);
-                record.append("(编号为：" + productId + " 数量为：" + productNum + " )");
+                            //1：修改进货状态
+                            this.modifyStockState(productId);
+
+                            //2：修改库存数量
+                            this.modifyProductNum(productId, productNum);
+
+                            log.info("同步商品编号为：" + productId + "数量为：" + productNum + "入库成功！" + TimeUtil.ymdHms2str(),
+                                    kafkaMsg);
+                            record.append("(编号为：" + productId + " 数量为：" + productNum + " )");
+                        }
+                        result = "同步商品：[" + record.toString() + "] 成功！" + TimeUtil.ymdHms2str();
+                    } else {
+                        result = "Kafka msg states is: " + stockMap.get(resultKey);
+                    }
+                }
+            } else {
+                result = "暂时没有未同步的商品！";
             }
-            result = "同步商品：[" + record.toString() + "] 成功！" + TimeUtil.ymdHms2str();
         } catch (Exception e) {
-            result = "同步商品编号为：" + productId + "数量为：" + productNum + "失败！" + TimeUtil.ymdHms2str();
+            result = "同步商品编号为：" + productId + "数量为：" + productNum + "失败！" + e.getMessage();
         } finally {
             log.info(result);
         }
@@ -127,35 +153,31 @@ public class StockService {
      */
     public void modifyStockState(String productId) {
         //1:获取token
-        String token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
+        String token = LocalCache.getToken();
+        if (StringUtils.isBlank(token)) {
+            token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
+            LocalCache.setToken(token);
+        }
         log.info("token : " + token);
         HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
         //2:调用接口获取数据
         String stock = restTemplate
                 .postForObject(remoteModifyProductStateUrl + productId + accessTokenStr + token, request, String
                         .class);
-        if (StringUtils.isNotBlank(token)) {
-            tokenCache.put("token", token);
-        }
         log.info(stock);
     }
 
     /**
      * 修改商品库存数量
      */
-    public void modifyProductNum(String productId, Long productNum) {
+    public void modifyProductNum(String productId, String productNum) {
 
-        String token = null;
-        if (tokenCache != null && tokenCache.size() > 0) {
-            token = tokenCache.get("token").toString();
-            if (StringUtils.isBlank(token)) {
-                token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
-                tokenCache.put("token", token);
-            }
-        } else {
+        String token = LocalCache.getToken();
+        if (StringUtils.isBlank(token)) {
             token = HttpUtil.getToken(restTemplate, getTokenUrl + passwordGrantStr, oauthClientId, oauthSecret);
-            tokenCache.put("token", token);
+            LocalCache.setToken(token);
         }
+        log.info("token : " + token);
 
         HttpEntity<String> request = new HttpEntity<String>(HttpUtil.getHeaders());
         String inventory = restTemplate

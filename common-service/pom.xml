@@ -20,8 +20,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <spring-data-neo4j.version>4.0.0.RELEASE</spring-data-neo4j.version>
     </properties>
 
     <dependencies>
@@ -46,7 +44,7 @@
             <artifactId>gson</artifactId>
         </dependency>
 
-        <!--使用这个包，尽量不要使用tomcat中自带的包，因为有些service会移除tomcat-->
+        <!--base64引用使用这个包，尽量不要使用tomcat中自带的包，因为有些service会移除tomcat-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

@@ -72,7 +72,6 @@ public class InventoryServiceV1 {
         return inventoryRepository.modifyProductNum(productId, modifyInventoryNum);
     }
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
     public String getInventoryNumByPid(String productId) {
         return inventoryRepository.getInventoryNumByPid(productId);
     }

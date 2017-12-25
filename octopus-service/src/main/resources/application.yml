@@ -17,6 +17,8 @@ spring:
 
     productIdKey: productId
     productNumKey: productNum
+    returnMsgKey: returnMsg
+    resultKey: result
   profiles:
     active: defult
   mvc:

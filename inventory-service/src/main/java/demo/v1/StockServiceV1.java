@@ -30,7 +30,7 @@ public class StockServiceV1 {
     private String productNumKey;
 
     @Autowired
-    public StockServiceV1(StockRepository stockRepository,InventoryRepository inventoryRepository) {
+    public StockServiceV1(StockRepository stockRepository, InventoryRepository inventoryRepository) {
         this.stockRepository = stockRepository;
         this.inventoryRepository = inventoryRepository;
     }
@@ -38,7 +38,7 @@ public class StockServiceV1 {
     public String getStockNoSync() {
         List<Stock> stocks = stockRepository.getStockNoSync();
         List<Map<String, Object>> stockList = new ArrayList<>();
-        if(stocks != null && stocks.size()>0){
+        if (stocks != null && stocks.size() > 0) {
             Map<String, Object> stockMap = null;
 
             for (Stock stock : stocks) {
@@ -48,7 +48,7 @@ public class StockServiceV1 {
                 stockList.add(stockMap);
             }
         }
-        String stockListstr =JSONSerializer.listToJson(stockList);
+        String stockListstr = JSONSerializer.listToJson(stockList);
         return stockListstr;
     }
 
@@ -77,8 +77,8 @@ public class StockServiceV1 {
     }
 
     @HystrixCommand
-    public Stock updateStockByProductId(String productId,Integer number) {
-        return    stockRepository.updateStockByProductId(productId,number);
+    public Stock updateStockByProductId(String productId, Integer number) {
+        return stockRepository.updateStockByProductId(productId, number);
     }
 
     @HystrixCommand
@@ -97,7 +97,6 @@ public class StockServiceV1 {
 
         return stockIterable;
     }
-
 
 
 }

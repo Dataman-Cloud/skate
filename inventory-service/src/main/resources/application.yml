@@ -17,7 +17,7 @@ logging:
 spring:
   profiles: development
   neo4j:
-    host: ${SPRING_NEO4J_HOST:192.168.31.46}
+    host: ${SPRING_NEO4J_HOST:192.168.31.72}
     port: ${SPRING_NEO4J_PORT:7474}
 eureka:
   instance:
@@ -26,7 +26,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.31.46:8761/eureka/
+      defaultZone: http://192.168.31.72:8761/eureka/
 ---
 spring:
   profiles: docker
@@ -51,7 +51,7 @@ spring:
       productIdKey: productId
       productNumKey: productNum
   neo4j:
-    host: 192.168.31.46
+    host: 192.168.31.72
     port: 7474
 eureka:
   instance:
@@ -60,4 +60,4 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.31.46:8761/eureka/
+      defaultZone: http://192.168.31.72:8761/eureka/
