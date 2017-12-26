@@ -97,6 +97,4 @@ public class StockServiceV1 {
 
         return stockIterable;
     }
-
-
 }

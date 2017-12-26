@@ -5,15 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 
-import com.alibaba.fastjson.JSON;
-
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,22 +25,6 @@ public class JSONSerializer {
     @Deprecated
     public static <T> T json2Obj(String string, Class<T> clz) {
         return JSON.parseObject(string, clz);
-    }
-
-    public static <T> T load(Path path, Class<T> clz) throws IOException {
-        return json2Obj(
-                new String(Files.readAllBytes(path), DEFAULT_CHARSET_NAME), clz);
-    }
-
-    public static <T> void save(Path path, T object) throws IOException {
-        if (Files.notExists(path.getParent())) {
-            Files.createDirectories(path.getParent());
-        }
-        Files.write(path,
-                obj2Json(object).getBytes(DEFAULT_CHARSET_NAME),
-                StandardOpenOption.WRITE,
-                StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     /**

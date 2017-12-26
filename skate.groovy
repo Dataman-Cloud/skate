@@ -6,13 +6,13 @@
 //定义常量和变量
 def projectName = "skate"
 def gitRepo = "git@github.com:Dataman-Cloud/skate.git"
-def registryUrl = "192.168.31.34";
+def registryUrl = "192.168.31.72";
 def imagePrefix = "${registryUrl}/skate"
 def regHarborUsername = "admin"
 def registryPassword = "Harbor12345"
 def recvEmail = "dxlu@dataman-inc.com"
 def publicIp="106.75.90.26"
-def test_Node_IP="192.168.31.46"
+def test_Node_IP="192.168.31.72"
 
 targetdockerfile = "target/docker/"
 sourcedockerfile = "src/main/docker"

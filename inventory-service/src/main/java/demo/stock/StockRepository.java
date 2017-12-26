@@ -38,8 +38,13 @@ public interface StockRepository extends GraphRepository<Stock> {
                               @Param("number")Integer number);
 
     @Query("MATCH (product:Product), \n" +
+            "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock)\n" +
+            "\t where product.productId = {productId} set stock.number = {number} RETURN stock")
+    Stock syncStockNumByProductId(@Param("productId")String productId,
+            @Param("number")Integer number);
+
+    @Query("MATCH (product:Product), \n" +
             "\t (product)<-[r:PRODUCT_STOCK]-(stock:Stock)\n" +
             "\t where ID(stock) = {stockId} delete product,r,stock")
     void deleteSRelationP(@Param("stockId")String stockId);
-
 }
