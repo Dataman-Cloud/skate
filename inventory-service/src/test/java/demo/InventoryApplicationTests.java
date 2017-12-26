@@ -79,7 +79,7 @@ public class InventoryApplicationTests {
 
     private static final String initInventoryNum = "50";
 
-    @Before
+   // @Before
     public void setup() {
         try {
             neo4jConfiguration.getSession().query(
@@ -259,6 +259,12 @@ public class InventoryApplicationTests {
 
         String dd = inventoryRepository.getInventoryNumByPid("SKU-24642");
         System.out.println("dd:" + dd);
+    }
+
+    @Test
+    public void getAvailableInventoryForProduct(){
+        System.out.println("----------");
+        System.out.println(inventoryRepository.getAvailableInventoryForProduct("SKU-24642"));
     }
 
 }

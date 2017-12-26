@@ -8,9 +8,15 @@ import java.util.List;
 
 public interface InventoryRepository extends GraphRepository<Inventory> {
 
-    @Query("MATCH (product:Product),\n" +
+    /*@Query("MATCH (product:Product),\n" +
             "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory)\n" +
             "WHERE product.productId = {productId} AND NOT (inventory)<-[:CONTAINS_PRODUCT]-()\n" +
+            "RETURN inventory")
+    List<Inventory> getAvailableInventoryForProduct(@Param("productId") String productId);*/
+
+    @Query("MATCH (product:Product),\n" +
+            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory)\n" +
+            "WHERE product.productId = {productId} \n" +
             "RETURN inventory")
     List<Inventory> getAvailableInventoryForProduct(@Param("productId") String productId);
 
