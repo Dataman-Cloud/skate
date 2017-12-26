@@ -107,6 +107,14 @@ public class StockApplicationTest {
                         String modifyInventoryNum = String.valueOf(productNum + nowInventoryNum); //当前库存量加上原有库存量
                         Inventory i = inventoryRepository.modifyProductNum(productId, modifyInventoryNum);
                         System.out.print("商品编号：" + i.getProduct().getProductId() + "修改成功\n");
+                        log.info("修改库存数量成功，商品编号为：" + productId + " 数量修改为：" + modifyInventoryNum);
+                        //修改库存数量
+                        Long nowStockNum = stockRepository.getStockByProductId(productId).getNumber();
+                        if (nowStockNum > 0) {
+                            Stock stock = stockRepository.syncStockNumByProductId(productId, (int) (nowStockNum - productNum));
+                            log.info("修改后当前未同步数量为：" + stock
+                                    .getNumber());
+                        }
                     }
                 }
             }
