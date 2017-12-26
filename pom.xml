@@ -29,7 +29,6 @@
         <module>edge-service</module>
         <module>shopping-cart-service</module>
         <module>hystrix-dashboard</module>
-        <!--<module>octopus-service</module>-->
         <module>common-service</module>
     </modules>
 
