@@ -33,7 +33,7 @@ public interface StockRepository extends GraphRepository<Stock> {
 
     @Query("MATCH (stock:Stock),(product:Product), \n" +
             "\t (product)<-[:PRODUCT_STOCK]-(stock:Stock)\n" +
-            "\t where product.productId = {productId} set stock.number = {number} RETURN stock")
+            "\t where product.productId = {productId} set stock.number = {number} ,stock.sync= false  RETURN stock")
     Stock updateStockByProductId(@Param("productId")String productId,
                               @Param("number")Integer number);
 
