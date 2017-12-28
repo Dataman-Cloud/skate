@@ -17,7 +17,7 @@ node("master") {
         git branch: "master", url: "${gitRepo}"
         sh "git pull origin dev"
 
-				sh "echo 'execute replaceVersion'"
+        sh "echo 'execute replaceVersion'"
         replaceVersion()
     }
 
@@ -27,20 +27,19 @@ node("master") {
     }
 
     stage("cp-dockerfile") {
-    	sh "cp config-service/${sourcedockerfile}/Dockerfile  config-service/${targetdockerfile}"
-    	sh "cp discovery-service/${sourcedockerfile}/Dockerfile  discovery-service/${targetdockerfile}"
-    	sh "cp edge-service/${sourcedockerfile}/Dockerfile  edge-service/${targetdockerfile}"
-    	sh "cp user-service/${sourcedockerfile}/Dockerfile  user-service/${targetdockerfile}"
-    	sh "cp account-service/${sourcedockerfile}/Dockerfile  account-service/${targetdockerfile}"
-    	sh "cp shopping-cart-service/${sourcedockerfile}/Dockerfile  shopping-cart-service/${targetdockerfile}"
-    	sh "cp catalog-service/${sourcedockerfile}/Dockerfile  catalog-service/${targetdockerfile}"
-    	sh "cp inventory-service/${sourcedockerfile}/Dockerfile  inventory-service/${targetdockerfile}"
-    	sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
-    	sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
-    	sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
+        sh "cp config-service/${sourcedockerfile}/Dockerfile  config-service/${targetdockerfile}"
+        sh "cp discovery-service/${sourcedockerfile}/Dockerfile  discovery-service/${targetdockerfile}"
+        sh "cp edge-service/${sourcedockerfile}/Dockerfile  edge-service/${targetdockerfile}"
+        sh "cp user-service/${sourcedockerfile}/Dockerfile  user-service/${targetdockerfile}"
+        sh "cp account-service/${sourcedockerfile}/Dockerfile  account-service/${targetdockerfile}"
+        sh "cp shopping-cart-service/${sourcedockerfile}/Dockerfile  shopping-cart-service/${targetdockerfile}"
+        sh "cp catalog-service/${sourcedockerfile}/Dockerfile  catalog-service/${targetdockerfile}"
+        sh "cp inventory-service/${sourcedockerfile}/Dockerfile  inventory-service/${targetdockerfile}"
+        sh "cp order-service/${sourcedockerfile}/Dockerfile  order-service/${targetdockerfile}"
+        sh "cp online-store-web/${sourcedockerfile}/Dockerfile  online-store-web/${targetdockerfile}"
+        sh "cp hystrix-dashboard/${sourcedockerfile}/Dockerfile hystrix-dashboard/${targetdockerfile}"
 
     }
-
 
     //������push tag ��ȷ�����������в����ɹ�
     //�ƹ���image�ֿ�
@@ -52,7 +51,6 @@ node("master") {
         sh "git reset --hard"
     }
 }
-
 
 /** ��images�������Ĳֿ�**/
 def pushImageToPublicRegistry() {

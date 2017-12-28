@@ -32,25 +32,24 @@
 </head>
 <body>
 <div class="container">
-    <h2>Please Confirm</h2>
+    <h2>授权</h2>
 
     <p>
-        Do you authorize "${authorizationRequest.clientId}" at "${authorizationRequest.redirectUri}" to access your
-        protected resources
-        with scope ${authorizationRequest.scope?join(", ")}.
+        你同意 "${authorizationRequest.clientId}" 使用连接 "${authorizationRequest.redirectUri}" 去访问你受保护的资源
+        有权限 ${authorizationRequest.scope?join(", ")}？
     </p>
     <form id="confirmationForm" name="confirmationForm"
           action="oauth/authorize" method="post">
         <input name="user_oauth_approval" value="true" type="hidden"/>
         <input name="scope.openid" value="true" type="hidden"/>
         <#--<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-        <button class="btn btn-primary" type="submit">Approve</button>
+        <button class="btn btn-primary" type="submit">同意</button>
     </form>
     <form id="denyForm" name="confirmationForm"
           action="oauth/authorize" method="post">
         <input name="user_oauth_approval" value="false" type="hidden"/>
         <#--<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-        <button class="btn btn-primary" type="submit">Deny</button>
+        <button class="btn btn-primary" type="submit">拒绝</button>
     </form>
 </div>
 

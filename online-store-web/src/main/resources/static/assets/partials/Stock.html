@@ -12,11 +12,11 @@
                     <table class="table table-striped" >
                         <thead>
                         <tr>
-                            <th>productId</th>
-                            <th>name</th>
-                            <th class="hidden-xs">unitPrice</th>
-                            <th>stock</th>
-                            <th>operation</th>
+                            <th>产品编号</th>
+                            <th>名称</th>
+                            <th class="hidden-xs">单价(元)</th>
+                            <th>未同步库存数</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,9 +34,9 @@
                                 {{stock.number}}
                             </td>
                             <td class="tdst-group-item">
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal"  ng-click="setCurrentStock(stock)">Inbound</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal"  ng-click="setCurrentStock(stock)">增量</button>
 <!--                                <button class="btn btn-primary" id="delete" type="submit" ng-click="setCurrentProduct(product)">Outbound</button>-->
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" ng-click="setCurrentStock(stock)" type="submit">edit</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" ng-click="setCurrentStock(stock)">修改</button>
                             </td>
                         </tr>
                         </tbody>
@@ -50,8 +50,9 @@
                                     <h4 class="modal-title" id="myModalLabel" style="color: floralwhite">入库</h4>
                                 </div>
                                 <div class="modal-body" style="color: floralwhite">
-                                    <label class="control-label">库存数：</label>
-                                    <input type="text" ng-model="addNum"  placeholder="请输入要入库的数量">
+                                    <label class="control-label" style="padding-right:25px;">产品编号：<span style="color:red">{{item.product.productId}}</span></label>
+                                    <label class="control-label">新增产品数：</label>
+                                    <input type="text" ng-model="addNum" id="addNum" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="请输入要入库的数量">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -71,26 +72,27 @@
                                 <div class="modal-body" style="color: floralwhite">
                                     <table class="table table-striped">
                                         <tr>
-                                            <th>productId</th>
-                                            <th>name</th>
-                                            <th class="hidden-xs">unitPrice</th>
+                                            <th>产品编号</th>
+                                            <th>名称</th>
+                                            <th class="hidden-xs">单价(元)</th>
                                         </tr>
                                         <tr >
                                             <td class="tdst-group-item">
-                                                <input type="text" ng-model="item.product.productId">
+                                                <input type="text" disabled="disabled" ng-model="item.product.productId">
                                             </td>
                                             <td class="tdst-group-item">
-                                                <input type="text" ng-model="item.product.name">
+                                                <input type="text" ng-model="item.product.name" onmouseout="checkProductName(this.value)">
                                             </td>
                                             <td class="tdst-group-item hidden-xs">
-                                                <input type="text" ng-model="item.product.unitPrice">
+                                                <input type="text" ng-model="item.product.unitPrice" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" onmouseout="checkRadixPoint(this.value)">
                                             </td>
                                         </tr>
                                     </table>
+                                        <div id="checkRadixPointAlert" class="alert alert-success fade" style="text-align:center" role="alert"></div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="updateProduct(item)">更新</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="updateProductButton" ng-click="updateProduct(item)">更新</button>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal -->

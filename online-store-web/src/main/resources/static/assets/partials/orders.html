@@ -6,7 +6,7 @@
                 <div class="panel-heading"><i class="fa fa-home icon-head"></i>历史订单</div>
                 <ul class="list-group list-group-details shopping-cart" ng-if="orders.length == 0">
                     <li class="list-group-item">
-                        Your order history will display here after your first checkout
+                        订单历史为空！
                     </li>
                 </ul>
                 <div class="table-responsive">
@@ -28,7 +28,7 @@
                                 {{ order.orderStatus }}
                             </td>
                             <td class="tdst-group-item hidden-xs">
-                                {{ order.createdAt | date:"MM/dd/yyyy" }}
+                                {{ order.createdAt | date:"yyyy-MM-dd HH:mm:ss" }}
                             </td>
                             <td class="tdst-group-item">
                                 {{ order.total | currency }}

@@ -26,8 +26,8 @@
                                         class="panel-heading">{{product.unitPrice | currency}}</span></div>
                             </li>
                             <li class="list-group-item">
-                                <div class="panel-heading">库存: <span
-                                        class="panel-heading">{{inventoryNum}}</span></div>
+                                <div class="panel-heading">库存: <span id="inventoryNum" ng-model="inventoryNum"
+                                        class="panel-heading">{{inventoryNum}}</span> 件</div>
                             </li>
                             <li class="list-group-item">
                                 <div class="panel-heading">产品编号: <span class="panel-heading">{{product.productId}}</span>
@@ -36,21 +36,21 @@
                             <li class="list-group-item">
                                 <form ng-submit="addToCart()" ng-controller="AddToCartCtrl" ng-if="product.inStock">
                                     <div class="panel-heading form-inline">
-                                        <div class="form-group"><input type="text" ng-model="qty" placeholder="QTY"
-                                                                       class="form-control qty-text"></div>
+                                        <div class="form-group">
+                                            <input type="text" ng-model="qty"
+                                                                       class="form-control qty-text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                        </div>
                                         <input type="hidden" ng-model="productId" value="{{product.productId}}"/>
                                         <button class="btn btn-primary" id="addToCart" type="submit">加入购物车
                                         </button>
                                         <div class="form-group">
-                                            <div id="addProductAlert" class="alert alert-success fade" role="alert">
-                                                <p>产品已加入购物车</p>
-                                            </div>
+                                            <div id="addProductAlert" class="alert alert-success fade" role="alert"></div>
                                         </div>
                                     </div>
                                 </form>
                                 <div ng-if="!product.inStock">
                                     <div class="panel-heading out-of-stock">
-                                        Out of stock
+                                        此产品不在库存！
                                     </div>
                                 </div>
                             </li>
@@ -90,12 +90,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">{{product.name}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="item-label col-md-12">产品价格:</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">{{product.unitPrice}}</div>
                         </div>
                     </div>
                 </div>

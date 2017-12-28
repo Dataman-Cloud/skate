@@ -11,7 +11,7 @@ fi
 
 BASE_IMAGE_PREFIX=""
 
-HOST_IP="192.168.31.72"
+#HOST_IP="192.168.31.72"
 if [ $p1 = "test" ] ;then
 	IMAGE_PREFIX="192.168.31.34/skate/"
 	SKATE_VERSION="latest"
@@ -34,7 +34,7 @@ fi
 
 # Export the active docker machine IP
 
-#HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'|tr -s ["\n"]|tr -d [":"]`
+HOST_IP=`ifconfig | grep 'inet'| grep -v '127.0.0.1'|grep -v '172.' | cut -d: -f2 | awk '{ print $2}'|tr -s ["\n"]|tr -d [":"] | sed '1d'`
 
 # docker-machine doesn't exist in Linux, assign default ip if it's not set
 DOCKER_IP=${HOST_IP:-192.168.31.46}
@@ -51,9 +51,9 @@ docker-compose -f docker-compose.yml up -d config-service
 
 while [ -z ${CONFIG_SERVICE_READY} ]; do
   echo "Waiting for config service..."
-  if [ "$(curl --silent $DOCKER_IP:8888/health 2>&1 | grep -q '\"status\":\"UP\"'; echo $?)" = 0 ]; then
-      CONFIG_SERVICE_READY=true;
-  fi
+      if [ "$(curl --silent $DOCKER_IP:8888/health 2>&1 | grep -q '\"status\":\"UP\"'; echo $?)" = 0 ]; then
+          CONFIG_SERVICE_READY=true;
+      fi
   sleep 2
 done
 

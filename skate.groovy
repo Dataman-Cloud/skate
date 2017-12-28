@@ -11,14 +11,14 @@ def imagePrefix = "${registryUrl}/skate"
 def regHarborUsername = "admin"
 def registryPassword = "Harbor12345"
 def recvEmail = "dxlu@dataman-inc.com"
-def publicIp="106.75.90.26"
-def test_Node_IP="192.168.31.72"
+def publicIp = "106.75.90.26"
+def test_Node_IP = "192.168.31.72"
 
 targetdockerfile = "target/docker/"
 sourcedockerfile = "src/main/docker"
 
 //环境版本设置
-envfile="src/main/resources/static/assets/js/env.js"
+envfile = "src/main/resources/static/assets/js/env.js"
 
 node("master") {
     stage("Common") {
@@ -72,7 +72,7 @@ if (params.ENV != "release") {
             // 1. 从Git中clone代码
             git branch: "dev", url: "${gitRepo}"
 
-						// 2. 运行Maven构建
+            // 2. 运行Maven构建
             if (params.SUB_PROJECT == "all") {
                 sh "mvn clean package deploy -Dspring.profiles.active=development"
             } else {
@@ -80,7 +80,7 @@ if (params.ENV != "release") {
             }
         }
 
-				// 3. sonar
+        // 3. sonar
         stage("Sonar") {
             if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
                 sh "mvn -f hystrix-dashboard sonar:sonar"
@@ -126,16 +126,16 @@ if (params.ENV != "release") {
                 sh "mvn -f order-service sonar:sonar"
             }
 
-			if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
+            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "octopus-service") {
                 sh "mvn -f octopus-service sonar:sonar"
-            }           
+            }
 
- 			if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
+            if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "common-service") {
                 sh "mvn -f common-service sonar:sonar"
             }
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard"){
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "hystrix-dashboard") {
             stage("img-hystrix") {
                 sh "docker build -t ${imagePrefix}/hystrix-dashboard hystrix-dashboard/${targetdockerfile}"
                 sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
@@ -143,7 +143,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service")  {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "config-service") {
             stage("img-config") {
                 sh "docker build -t ${imagePrefix}/config-service config-service/${targetdockerfile}"
                 sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
@@ -151,7 +151,7 @@ if (params.ENV != "release") {
             }
         }
 
-        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service")  {
+        if (params.SUB_PROJECT == "all" || params.SUB_PROJECT == "discovery-service") {
             stage("img-discovery") {
                 sh "docker build -t ${imagePrefix}/discovery-service discovery-service/${targetdockerfile}"
                 sh "docker login -u ${regHarborUsername} -p ${registryPassword} ${registryUrl}"
@@ -300,9 +300,9 @@ if (params.ENV == "test") {
 
 
 
-        if (params.SUB_PROJECT == "all"){
-						sh "sh ./skate_stop.sh test"
-						sh "sh ./skaterun.sh test"
+        if (params.SUB_PROJECT == "all") {
+            sh "sh ./skate_stop.sh test"
+            sh "sh ./skaterun.sh test"
         }
     }
 }
@@ -346,7 +346,7 @@ def replaceVersion() {
 //5. 发布到生产(prod)环境: 只有打包master分支, 才进行prod环境部署
 if (params.ENV == "release" && params.BRANCH == "origin/master") {
     node("master") {
-				sh "echo release for master"
+        sh "echo release for master"
         def tagVersion = "${projectName}-V${VERSION}"
 
         stage("Prepare") {
@@ -434,7 +434,7 @@ if (params.ENV == "release" && params.BRANCH == "origin/master") {
 
 
         stage("Cleanup") {
-						sh "echo Cleanup"
+            sh "echo Cleanup"
             //5. 打tag
             sh "git tag ${tagVersion} -m 'Release ${tagVersion}'"
             sh "git push origin master"

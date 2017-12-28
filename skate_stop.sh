@@ -10,6 +10,7 @@ fi
 
 BASE_IMAGE_PREFIX=""
 SKATE_VERSION="latest"
+WEB_IP="192.168.31.72"
 
 if [ $p1 = "test" ] ;then
 	echo "stop test demo!"

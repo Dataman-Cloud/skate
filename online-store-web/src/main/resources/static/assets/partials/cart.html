@@ -30,17 +30,16 @@
                     <div class="col-md-3 col-xs-3 cart-item-qty">
                         <form ng-submit="updateCart()" ng-controller="UpdateCartCtrl">
                             <div class="form-inline">
-                                <div class="form-group"><input type="text" ng-model="item.quantity" placeholder="QTY"
-                                                               class="form-control qty-text"></div>
+                                <div class="form-group"><input type="text" ng-model="item.quantity"
+                                                               class="form-control qty-text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></div>
                                 <input type="hidden" ng-model="item.productId" value="{{item.productId}}"/>
                                 <input type="hidden" ng-model="originalQuantity" value="{{item.quantity}}"/>
                                 <button class="btn btn-primary" id="updateCart-{{item.productId}}" type="submit">
                                     更新
                                 </button>
                                 <div>
-                                    <div id="updateProductAlert" class="{{item.productId}} alert alert-success fade"
+                                    <div id="updateProductAlert" class="alert alert-success fade"
                                          role="alert">
-                                        <p>购物车已更新!</p>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +56,7 @@
                 <div class="row">
                     <div class="col-md-12"><label>购物车总额: </label>{{cart.total | currency}}</div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-md-12">
                         <form ng-submit="checkout()" ng-controller="CheckoutCtrl">
                             <button class="btn btn-primary" id="" type="submit">
@@ -65,7 +64,7 @@
                             </button>
                         </form>
                     </div>
-                </div>
+                </div>-->
             </li>
         </ul>
     </div>

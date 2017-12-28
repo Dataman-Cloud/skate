@@ -36,13 +36,13 @@
 <div class="container">
 
     <form name="f" class="form-signin" action="login" method="post">
-        <h2 class="form-signin-heading">注册</h2>
+        <h2 class="form-signin-heading"></h2>
         <label for="username" class="sr-only">用户名：</label>
         <input type="text" id="username" name="username" class="form-control" placeholder="Username"/>
         <label for="password" class="sr-only">密  码：</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password"/>
         <#--<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-        <input class="btn btn-lg btn-primary btn-block" value="Sign in" type="submit"/>
+        <input class="btn btn-lg btn-primary btn-block" value="登陆" type="submit"/>
     </form>
 
 </div> <!-- /container -->
